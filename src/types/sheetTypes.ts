@@ -16,8 +16,12 @@ export interface sheetProps {
     canManageSheetProps: boolean;
   };
 }
-interface userProps {
+export interface userProps {
   id: string;
+  role: string;
+  email: string;
+}
+export interface NewUserProps {
   role: string;
   email: string;
 }
@@ -52,7 +56,7 @@ export interface sheetItemProps {
   description: string;
   name: string;
 }
-export interface newSheetItemProps{
+export interface newSheetItemProps {
   value: number;
   author: string;
   type: string;
@@ -84,5 +88,11 @@ export type sheetAction =
         users: userProps[];
       };
     }
-  | { type: "onChangeUser"; payload: string } | {type: "refreshItems"; payload: sheetItemProps[]}
-export type shortingTypes = "ascending" | "descending" | "date ascending" | "date descending"
+  | { type: "onChangeUser"; payload: string }
+  | { type: "refreshItems"; payload: sheetItemProps[] }
+  | { type: "refreshUsers"; payload: userProps[] };
+export type shortingTypes =
+  | "ascending"
+  | "descending"
+  | "date ascending"
+  | "date descending";
