@@ -6,7 +6,6 @@ import useSheets from "../data/hook/useSheets";
 import { sheetItemProps } from "../types/sheetTypes";
 export default function Home() {
   const {
-    createNewSheet,
     sheet,
     loadSheet,
     deleteItem,

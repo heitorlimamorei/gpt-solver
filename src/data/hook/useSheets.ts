@@ -245,6 +245,30 @@ export default function useSheets() {
         );
     }
   }
+  function filterByName(name: string, currentItems?: sheetItemProps[]) {
+    const items = currentItems !== undefined ? currentItems : state.items;
+    if (name.trim().length === 0) return items;
+    return items.filter((item: sheetItemProps) => {
+      const nameReady = name.toLowerCase().replace(/\s+/g, "");
+      const currentNameReady = item.name.toLowerCase().replace(/\s+/g, "");
+      return currentNameReady.includes(nameReady);
+    });
+  }
+  function filterByDescription(
+    description: string,
+    currentItems?: sheetItemProps[]
+  ) {
+    const items = currentItems !== undefined ? currentItems : state.items;
+    if (description.trim().length === 0) return items;
+    return items.filter((item: sheetItemProps) => {
+      if (item.description.trim().length === 0) return false;
+      const descriptionReady = description.toLowerCase().replace(/\s+/g, "");
+      const currentDescriptionReady = item.description
+        .toLowerCase()
+        .replace(/\s+/g, "");
+      return currentDescriptionReady.includes(descriptionReady);
+    });
+  }
   return {
     sheet: state,
     createNewSheet,
@@ -259,5 +283,7 @@ export default function useSheets() {
     getBalance,
     getSortedItems,
     updateItem,
+    filterByName,
+    filterByDescription
   };
 }
