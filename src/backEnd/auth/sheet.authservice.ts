@@ -63,7 +63,7 @@ async function deleteUser(sheetId: string, userId: string) {
   return await sheetAuthrepo.deleteUser(sheetId, userId);
 }
 async function updateUser(user: userProps, sheetId: string) {
-  return await sheetAuthrepo.updateUser(user, sheetId);
+  return (await sheetAuthrepo.updateUser(user, sheetId))[0];;
 }
 async function getUsers(sheetId: string) {
   return await sheetAuthrepo.getUsers(sheetId);

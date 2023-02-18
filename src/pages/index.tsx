@@ -136,7 +136,9 @@ export default function Home() {
               <li
                 className="bg-white w-1/4 px-4 py-1 flex-1 m-2 rounded-lg justify-center flex flex-col shadow-xl cursor-pointer"
                 key={item.id}
-                onClick={() => setEditMode(item)}
+                onClick={() =>
+                  sheet.session.canEditItems ? setEditMode(item) : false
+                }
               >
                 <h1 className="text-lg">{item.name}</h1>
                 <p className="text-gray-600">{item.description}</p>
@@ -151,7 +153,7 @@ export default function Home() {
                     }`}
                     onClick={async (ev) => {
                       ev.stopPropagation();
-                      await deleteItem(item.id)
+                      await deleteItem(item.id);
                     }}
                     disabled={!sheet.session.canEditItems}
                   >
