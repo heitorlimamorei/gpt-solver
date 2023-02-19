@@ -6,6 +6,8 @@ import {
   NewSheetProps,
   newSheetItemProps,
   shortingTypes,
+  NewUserProps,
+  userProps,
 } from "../../types/sheetTypes";
 import _ from "lodash";
 import axios from "axios";
@@ -44,6 +46,11 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
       return {
         ...state,
         items: action.payload,
+      };
+    case "refreshUsers":
+      return {
+        ...state,
+        users: action.payload,
       };
     case "onChangeUser":
       return {
@@ -149,6 +156,28 @@ export default function useSheets() {
       }
     );
     dispacht({ type: "refreshItems", payload: items });
+  }
+  async function createUser(newUser: NewUserProps) {
+    const { data: users } = await axios.post(
+      `localhost:3000/api/sheets/${state.data.id}/auth`,
+      {
+        ...newUser,
+      }
+    );
+    dispacht({type:"refreshUsers", payload: users});
+  }
+  async function updateUser(user: userProps) {
+    const { data: users } = await axios.put(
+      `localhost:3000/api/sheets/${state.data.id}/auth`,
+      {
+        ...user,
+      }
+    );
+    dispacht({type:"refreshUsers", payload: users});
+  }
+  async function deleteUser(user: userProps) {
+    const { data: users } = await axios.delete(`localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`);
+    dispacht({type:"refreshUsers", payload: users});
   }
   async function deleteItem(id: string) {
     const { data: items } = await axios.post(
@@ -284,6 +313,9 @@ export default function useSheets() {
     getSortedItems,
     updateItem,
     filterByName,
-    filterByDescription
+    filterByDescription,
+    createUser,
+    updateUser,
+    deleteUser
   };
 }
