@@ -9,7 +9,7 @@ type TypeAppContextProvider = {
 };
 
 const AppContext = createContext<AppContextProps>({
-  tema: "",
+  tema: "dark",
   alternarTema: null
 });
 
