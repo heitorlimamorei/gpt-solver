@@ -1,4 +1,4 @@
-import CabecalhoHome from "../components/Home/CabeçalhoHome";
+import CabecalhoHome from "../components/home/CabecalhoHome";
 import useAppData from "../data/hook/useAppData";
 
 function Login() {
