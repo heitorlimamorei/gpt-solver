@@ -2,7 +2,7 @@ import ButtonDark from "../ButtonDark";
 import Image from "next/image";
 import { loginIcon } from "../icons/Icones";
 import logoWhite from '../../../public/images/logo-no-background.png'
-import logoBlack from '../../public/images/logo-no-background-black.png'
+import logoBlack from '../../../public/images/logo-no-background-black.png'
 import BotaoTema from "../template/BotaoTema";
 import useAppData from "../../data/hook/useAppData";
 
@@ -13,7 +13,7 @@ function CabecalhoHome() {
                 <header className="items-center w-[100%] h-[10vh]">
                     <div className="flex flex-row items-center  w-[100%] h-[10vh]">
                         <div className="ml-[2rem] self-center"> 
-                            <Image src={logoWhite} alt="" width="400" height="50" className=""></Image>
+                            <Image src={tema  === "" ? (logoBlack) : (logoWhite)} alt="" width="400" height="50" className=""></Image>
                         </div>
                         <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="dark:ml-[65rem] ml-[65rem]"/>
                         <ButtonDark 
