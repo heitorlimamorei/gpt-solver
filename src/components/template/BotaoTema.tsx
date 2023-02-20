@@ -2,57 +2,47 @@ import { SunIcon, MoonIcon } from "../icons/Icones";
 interface BotaTemaProps {
   tema: string;
   alternarTema: () => void;
+  ClassName: string;
 }
 export default function BotaoTema(props: BotaTemaProps) {
   return props.tema === "dark" ? (
     <div
       onClick={props.alternarTema}
       className={`
-        hidden sm:flex items-center cursor-pointer
-        bg-gradient-to-r from-yellow-300 to-yellow-600
-         w-14 lg:w-24 h-8 p-1 rounded-full
+         w-[6rem] h-[3rem] bg-[#232323] shadow-[inset_31px_31px_61px_#121212,inset_-31px_-31px_61px_#343434] rounded-full flex items-center ${props.ClassName} hover:cursor-pointer
         `}
     >
-      <div
-        className={`
-            flex items-center justify-center 
-            bg-white text-yellow-600 w-6 h-6 rounded-full
+      <div className="dark:bg-[#232323] bg-[#E0E5EC] rounded-full w-9 h-9 ml-1 flex items-center justify-center">
+        <div
+          className={`
+              flex items-center justify-center 
+              text-[#FFE600] w-8 h-8 rounded-full
             `}
-      >
-        {SunIcon(4)}
+        >
+          {MoonIcon(8)}
+        </div>
       </div>
-      <div
-        className={`
-            hidden lg:flex items-center ml-4 text-white
-            `}
-      >
-        <span>Claro</span>
-      </div>
+      <div className={`flex items-center justify-center 
+        text-[#00F0FF] w-8 h-8 rounded-full ml-5`}>
+          {SunIcon(8)}
+        </div>
     </div>
   ) : (
     <div
-      onClick={props.alternarTema}
-      className={`
-        hidden sm:flex items-center justify-end cursor-pointer
-        bg-gradient-to-r from-gray-500 to-gray-900
-         w-14 lg:w-24 h-8 p-1 rounded-full
-        `}
-    >
-      <div
-        className={`
-            hidden lg:flex items-center mr-2 text-gray-300
-            `}
-      >
-        <span>Escuro</span>
-      </div>
-      <div
-        className={`
-            flex items-center justify-center 
-            bg-black text-yellow-300 w-6 h-6 rounded-full
-            `}
-      >
-        {MoonIcon(4)}
+    onClick={props.alternarTema}
+    className={`
+       w-[6rem] h-[3rem] bg-[#E0E5EC] shadow-[inset_31px_31px_61px_#727578,inset_-31px_-31px_61px_#ffffff] rounded-full flex items-center ${props.ClassName } hover:cursor-pointer
+      `}
+  >
+    <div className={`flex items-center ml-1.5 text-[#5344FF] w-8 h-8 rounded-full`}>
+        {MoonIcon(8)}
+    </div>
+    <div className="dark:bg-[#232323] bg-[#E0E5EC] rounded-full w-9 h-9 ml-5 flex items-center justify-center">
+      <div className={`flex items-center justify-center text-[#ff8000] w-8 h-8 rounded-full`}>
+        {SunIcon(8)}
       </div>
     </div>
+    
+  </div>
   );
 }
