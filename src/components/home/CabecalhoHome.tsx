@@ -9,13 +9,13 @@ import useAppData from "../../data/hook/useAppData";
 function CabecalhoHome() {
     const {tema, alternarTema} = useAppData()
     return ( 
-        <div className={`dark:bg-[#232323] bg-[#E0E5EC] w-[100vw] h-[10vh]`}>
-                <header className="items-center w-[100%] h-[10vh]">
-                    <div className="flex flex-row items-center  w-[100%] h-[10vh]">
-                        <div className="ml-[2rem] self-center"> 
+        <div className={`dark:bg-[#232323] bg-[#E0E5EC] w-full h-[10%]`}>
+                <header className="items-center w-full h-[10vh]">
+                    <div className="flex flex-row items-center  w-full h-[10vh]">
+                        <div className="ml-[2rem]"> 
                             <Image src={tema  === "" ? (logoBlack) : (logoWhite)} alt="" width="400" height="50" className=""></Image>
                         </div>
-                        <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="dark:ml-[65rem] ml-[65rem]"/>
+                        <BotaoTema tema={tema} alternarTema={alternarTema} ClassName=""/>
                         <ButtonDark 
                         icon={loginIcon} 
                         text="Log In / Sign Up"
