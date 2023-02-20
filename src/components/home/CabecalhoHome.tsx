@@ -1,19 +1,30 @@
 import ButtonDark from "../ButtonDark";
+import { useEffect } from "react";
 import Image from "next/image";
 import { loginIcon } from "../icons/Icones";
 import logoWhite from '../../../public/images/logo-no-background.png'
 import logoBlack from '../../../public/images/logo-no-background-black.png'
 import BotaoTema from "../template/BotaoTema";
 import useAppData from "../../data/hook/useAppData";
+import iconWhite from "../../../public/images/icon-white-no-bg.png"
+import iconBlack from "../../../public/images/icon-black-no-bg.png"
+
+useEffect(() => {
+        var scren = window.innerWidth
+    })
 
 function CabecalhoHome() {
     const {tema, alternarTema} = useAppData()
+    
     return ( 
         <div className={`dark:bg-[#232323] bg-[#E0E5EC] w-full h-[10%]`}>
-                <header className="items-center w-full h-[10vh]">
-                    <div className="flex flex-row items-center  w-full h-[10vh]">
-                        <div className="ml-[2rem]"> 
-                            <Image src={tema  === "" ? (logoBlack) : (logoWhite)} alt="" width="400" height="50" className=""></Image>
+                <header className="items-center w-full h-[10%]">
+                    <div className="flex flex-row items-center w-full">
+                        <div className="ml-[2rem]">
+                            {scren > 766 ? 
+                                (<Image src={tema  === "" ? (logoBlack) : (logoWhite)} alt="" width="400" height="50" className=""></Image>) : 
+                                (<Image alt="" src={tema === "" ? (iconWhite) : (iconBlack)}></Image>)
+                            } 
                         </div>
                         <BotaoTema tema={tema} alternarTema={alternarTema} ClassName=""/>
                         <ButtonDark 
