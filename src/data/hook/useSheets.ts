@@ -71,6 +71,7 @@ export default function useSheets() {
       owner: "",
       totalValue: 0,
       type: "personal",
+      name: ""
     },
     session: {
       authenticated: false,

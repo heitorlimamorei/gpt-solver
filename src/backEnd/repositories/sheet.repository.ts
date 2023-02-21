@@ -15,12 +15,14 @@ interface sheetProps{
     tiposDeGastos: string[];
     totalValue: number;
     type: string;
+    name: string;
 }
 interface NewSheetProps{
     owner: string;
     tiposDeGastos: string[];
     totalValue: number;
     type: string;
+    name: string;
 }
 async function getSheets(){
     let normalizado = []
@@ -66,6 +68,7 @@ async function updateSheet(sheet){
     const docRef = await updateDoc(sheetRef, {
         tiposDeGastos: sheet.tiposDeGastos,
         totalValue: sheet.totalValue,
+        name: sheet.name
     })
     return await getSheets()
 }

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trashIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
-import { sheetItemProps } from "../types/sheetTypes";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { sheetItemProps, sheetProps } from "../types/sheetTypes";
 export default function Home() {
   const {
     sheet,
@@ -16,6 +18,11 @@ export default function Home() {
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [sheets, setSheets] = useState<sheetProps[]>([]);
+  const [sheetIds, setSheetIds] = useState<string[]>([]);
+  const session = useSession();
+  let email = session.data?.user.email;
+  let name = session.data?.user.name;
   const [currentEditingItem, setCurrentEditingItem] =
     useState<sheetItemProps>(null);
   const [formData, setFormData] = useState({
@@ -82,6 +89,56 @@ export default function Home() {
     setCurrentEditingItem(null);
     handleToggle();
   };
+  useEffect(() => {
+    if (email !== undefined) {
+      if (email.length > 0) {
+        axios
+          .post(`http://localhost:3000/api/users/login`, {
+            email: email,
+            name: name,
+          })
+          .then((response) => {
+            let sheets: string[] = response.data.sheetIds;
+            setSheetIds(sheets);
+          });
+      }
+    }
+  }, [email]);
+  async function getSheets() {
+    let requests = [];
+    if (sheetIds !== undefined) {
+      if (sheetIds.length > 0) {
+        sheetIds.forEach((sheetId) => {
+          const currentSheet = axios.post(
+            `http://localhost:3000/api/sheets/${sheetId}`,
+            {
+              email: sheet.currentUser,
+              mode: "GET",
+            }
+          );
+          requests.push(currentSheet);
+        });
+        const responseArray = await Promise.all(requests);
+        let finalReponse = responseArray.map((response) => response.data);
+        return finalReponse;
+      }
+    }
+  }
+  async function loader() {
+    const sheetsResp: any = await getSheets();
+    if(sheetsResp.length > 0) {
+      setSheets(sheetsResp);
+    }
+  }
+  useEffect(() => {
+    if (sheetIds !== undefined) {
+      if (sheetIds.length > 0) {
+        loader();
+        
+      }
+    }
+  }, [sheetIds]);
+  console.log(sheets);
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -130,6 +187,14 @@ export default function Home() {
         </div>
         <span>R${getBalance()}</span>
         <div>
+          <ul className="flex flex-row mt-2">
+            {sheets.length > 0 && (sheets.map(currentSheet => {
+              return <li  className="px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer" key={currentSheet.data.id} onClick={async () => await loadSheet(currentSheet.data.id)}>
+                <h2 className="font-bold text-white">{currentSheet.data.name}</h2>
+                <p className="font-bold text-gray-400">#{currentSheet.data.id}</p>
+              </li>
+            }))}
+          </ul>
           <ul className="flex  flex-wrap mt-4 w-full">
             {getSortedItems("date descending").map((item) => (
               <li

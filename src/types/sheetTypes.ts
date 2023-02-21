@@ -5,6 +5,7 @@ export interface sheetProps {
     type: string;
     tiposDeGastos: string[];
     totalValue: number;
+    name: string;
   };
   session: {
     authenticated: boolean;
@@ -32,6 +33,7 @@ export interface FinalSheetProps {
     type: string;
     tiposDeGastos: string[];
     totalValue: number;
+    name: string;
   };
   session: {
     authenticated: boolean;
@@ -70,6 +72,7 @@ export interface NewSheetProps {
   tiposDeGastos: string[];
   totalValue: number;
   type: string;
+  name: string;
 }
 export type sheetAction =
   | {

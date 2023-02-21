@@ -5,16 +5,18 @@ interface sheetProps {
   tiposDeGastos: string[];
   totalValue: number;
   type: string;
+  name: string;
 }
 interface NewSheetProps {
   owner: string;
   tiposDeGastos: string[];
   totalValue: number;
   type: string;
+  name: string;
 }
 function isValidSheetProps(sheet, newSheet = true) {
   if (newSheet) {
-    if ((sheet.owner && sheet.tiposDeGastos, sheet.totalValue && sheet.type)) {
+    if ((sheet.owner && sheet.tiposDeGastos, sheet.totalValue && sheet.type && sheet.name)) {
       return true;
     } else {
       return false;
@@ -22,7 +24,7 @@ function isValidSheetProps(sheet, newSheet = true) {
   } else {
     if (
       (sheet.id && sheet.owner && sheet.tiposDeGastos,
-      sheet.totalValue && sheet.type)
+      sheet.totalValue && sheet.type && sheet.name)
     ) {
       return true;
     } else {

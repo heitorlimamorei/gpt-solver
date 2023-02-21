@@ -6,6 +6,7 @@ interface sheetProps {
   tiposDeGastos: string[];
   totalValue: number;
   type: string;
+  name:string;
 }
 async function getAllSheets() {
   return await sheetRepository.getSheets();

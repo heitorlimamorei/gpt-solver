@@ -1,7 +1,7 @@
 import sheetAuthrepo from "./sheet.authrepo";
 import RolesService from "./Roles";
 import Roles from "./Roles";
-
+import userService from "../services/user.service";
 interface userProps {
   email: string;
   role: string;
@@ -51,6 +51,7 @@ async function getSessionData(email: string, sheetId: string) {
 async function createUser(newUser: newUser) {
   if (!(await userAlreadyExists(newUser.sheetId, newUser.email))) {
     if(newUser.role !== Roles.roles[0].name){
+      await userService.addSheetIntoTheList(newUser.email, newUser.sheetId);
       return await sheetAuthrepo.createUser(newUser);
     } else {
       throw new Error(`User role: ${newUser.role} not allowed!`)
@@ -60,6 +61,8 @@ async function createUser(newUser: newUser) {
   }
 }
 async function deleteUser(sheetId: string, userId: string) {
+  const user = await getUser(sheetId, userId);
+  await userService.removeSheetFromTheList(user.email, sheetId);
   return await sheetAuthrepo.deleteUser(sheetId, userId);
 }
 async function updateUser(user: userProps, sheetId: string) {
