@@ -5,8 +5,8 @@ import useAppData from "../data/hook/useAppData";
 function Login() {
     const {tema, alternarTema} = useAppData()
     return (
-        <div className={`${tema} w-full dark:bg-[#232323] bg-[#E0E5EC]`}>
-            <div className=" w-full pb-10 dark:bg-[#232323] bg-[#E0E5EC] ">
+        <div className={`${tema} w-full h-full dark:bg-[#232323] bg-[#E0E5EC]`}>
+            <div className=" w-full transition-all duration-500 ease-linear dark:bg-[#232323] bg-[#E0E5EC] pb-[4.15rem]">
                 <CabecalhoHome/>
                 <BodyHome/>
             </div>
