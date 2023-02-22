@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, {memo} from "react";
 import { loginIcon } from "./icons/Icones";
 
 function Button(props) {
@@ -20,4 +20,4 @@ function Button(props) {
     );
 }
 
-export default Button;
+export default memo(Button);

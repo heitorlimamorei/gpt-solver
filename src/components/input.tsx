@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 interface inputProps {
     ClassName: string
     name: string
@@ -23,4 +24,4 @@ function Input(props: inputProps) {
     );
 }
 
-export default Input;
+export default memo(Input);

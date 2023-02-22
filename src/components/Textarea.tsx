@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 interface textareaProps {
     className: string
     name: string
@@ -24,4 +25,4 @@ function Textarea(props: textareaProps) {
     );
 }
 
-export default Textarea;
+export default memo(Textarea);
