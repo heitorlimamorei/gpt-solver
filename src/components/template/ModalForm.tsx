@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import Textarea from "../Textarea";
 import Input from "../input";
 import Button from "../Button";
+import Select from "./Select";
 interface IFormData {
   name: string;
   type: string;
@@ -17,6 +18,7 @@ interface ModalFormProps {
   setFormData: (formData: IFormData) => void;
   isEditMode?: boolean;
   onCancel: () => void;
+  spentOptions: string[]
 }
 const ModalForm = (props: ModalFormProps) => {
   const {
@@ -27,7 +29,8 @@ const ModalForm = (props: ModalFormProps) => {
     handleSubmit,
     setFormData,
     isEditMode,
-    onCancel
+    onCancel,
+    spentOptions
   } = props;
   return (
     <div className="relative">
@@ -59,13 +62,12 @@ const ModalForm = (props: ModalFormProps) => {
                 >
                   Tipo
                 </label>
-                <Input
-                  ClassName=""
-                  type="text"
-                  id="type"
-                  name="type"
-                  value={formData.type}
-                  onChange={handleChange}
+                <Select
+                options={spentOptions}
+                id="type"
+                selected={formData.type}
+                handleselected={handleChange}
+                name="type"
                 />
               </div>
               <div className="mb-5">
@@ -124,4 +126,4 @@ const ModalForm = (props: ModalFormProps) => {
     </div>
   );
 };
-export default ModalForm;
+export default memo(ModalForm);

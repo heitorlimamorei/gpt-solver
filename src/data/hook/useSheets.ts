@@ -299,6 +299,9 @@ export default function useSheets() {
       return currentDescriptionReady.includes(descriptionReady);
     });
   }
+  function filterBySpentType(spentType:string, currentItems?: sheetItemProps[]){
+    return _.filter((currentItems ?? state.items), (item: sheetItemProps) => item.type.includes(spentType));
+  }
   return {
     sheet: state,
     createNewSheet,
@@ -317,6 +320,7 @@ export default function useSheets() {
     filterByDescription,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    filterBySpentType
   };
 }
