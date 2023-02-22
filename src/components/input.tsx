@@ -13,7 +13,7 @@ function Input(props: inputProps) {
         <input 
         id={props.id} 
         name={props.name} 
-        className={`dark:bg-[#232323] bg-[#E0E5EC] rounded-xl h-[2.4rem] p-3
+        className={`dark:bg-[#232323] bg-[#E0E5EC] rounded-xl w-full h-[2.4rem] py-4 p-3 
         shadow-[inset_9px_9px_18px_#5a5c5e,inset_-9px_-9px_18px_#ffffff]
         dark:shadow-[inset_9px_9px_18px_#0e0e0e,inset_-9px_-9px_18px_#383838]`}
         value={props.value}

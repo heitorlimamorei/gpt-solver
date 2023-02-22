@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { trashIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
@@ -31,17 +31,19 @@ export default function Home() {
     value: 0,
     description: "",
   });
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
+  const handleToggle = useCallback(() => {
+    setIsOpen((current) => !current);
+  }, []);
 
-  const handleChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
+  const handleChange = useCallback((event) => {
+    setFormData((current) => {
+      return {
+        ...current,
+        [event.target.name]: event.target.value,
+      };
     });
-  };
-  const handleCancel = () => {
+  }, []);
+  const handleCancel = useCallback(() => {
     handleToggle();
     setFormData({
       name: "",
@@ -50,8 +52,8 @@ export default function Home() {
       description: "",
     });
     setCurrentEditingItem(null);
-  };
-  function setEditMode(currentItem: sheetItemProps) {
+  }, []);
+  const setEditMode = useCallback((currentItem: sheetItemProps) => {
     setCurrentEditingItem(currentItem);
     setFormData({
       name: currentItem.name,
@@ -60,35 +62,38 @@ export default function Home() {
       description: currentItem.description,
     });
     setIsOpen((current) => !current);
-  }
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!currentEditingItem) {
-      createNewItem({
-        ...formData,
-        value: Number(formData.value),
-        sheetId: sheet.data.id,
-        author: sheet.currentUser,
-        date: new Date(),
+  }, []);
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (!currentEditingItem) {
+        createNewItem({
+          ...formData,
+          value: Number(formData.value),
+          sheetId: sheet.data.id,
+          author: sheet.currentUser,
+          date: new Date(),
+        });
+      } else {
+        updateItem({
+          ...currentEditingItem,
+          value: formData.value,
+          description: formData.description,
+          type: formData.type,
+          name: formData.name,
+        });
+      }
+      setFormData({
+        name: "",
+        type: "",
+        value: 0,
+        description: "",
       });
-    } else {
-      updateItem({
-        ...currentEditingItem,
-        value: formData.value,
-        description: formData.description,
-        type: formData.type,
-        name: formData.name,
-      });
-    }
-    setFormData({
-      name: "",
-      type: "",
-      value: 0,
-      description: "",
-    });
-    setCurrentEditingItem(null);
-    handleToggle();
-  };
+      setCurrentEditingItem(null);
+      handleToggle();
+    },
+    [currentEditingItem, formData, sheet]
+  );
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {
@@ -104,7 +109,7 @@ export default function Home() {
       }
     }
   }, [email]);
-  async function getSheets() {
+  const getSheets = useCallback(async () => {
     let requests = [];
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
@@ -123,22 +128,20 @@ export default function Home() {
         return finalReponse;
       }
     }
-  }
-  async function loader() {
+  }, [sheetIds]);
+  const loader = useCallback(async () => {
     const sheetsResp: any = await getSheets();
-    if(sheetsResp.length > 0) {
+    if (sheetsResp.length > 0) {
       setSheets(sheetsResp);
     }
-  }
+  }, [getSheets]);
   useEffect(() => {
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
         loader();
-        
       }
     }
   }, [sheetIds]);
-  console.log(sheets);
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -188,12 +191,23 @@ export default function Home() {
         <span>R${getBalance()}</span>
         <div>
           <ul className="flex flex-row mt-2">
-            {sheets.length > 0 && (sheets.map(currentSheet => {
-              return <li  className="px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer" key={currentSheet.data.id} onClick={async () => await loadSheet(currentSheet.data.id)}>
-                <h2 className="font-bold text-white">{currentSheet.data.name}</h2>
-                <p className="font-bold text-gray-400">#{currentSheet.data.id}</p>
-              </li>
-            }))}
+            {sheets.length > 0 &&
+              sheets.map((currentSheet) => {
+                return (
+                  <li
+                    className="px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer"
+                    key={currentSheet.data.id}
+                    onClick={async () => await loadSheet(currentSheet.data.id)}
+                  >
+                    <h2 className="font-bold text-white">
+                      {currentSheet.data.name}
+                    </h2>
+                    <p className="font-bold text-gray-400">
+                      #{currentSheet.data.id}
+                    </p>
+                  </li>
+                );
+              })}
           </ul>
           <ul className="flex  flex-wrap mt-4 w-full">
             {getSortedItems("date descending").map((item) => (
