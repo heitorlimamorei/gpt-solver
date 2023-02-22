@@ -14,7 +14,7 @@ function Textarea(props: textareaProps) {
         <textarea 
         id={props.id} 
         name={props.name} 
-        className={`dark:bg-[#232323] bg-[#E0E5EC] rounded-3xl w-full
+        className={`dark:bg-[#232323] bg-[#E0E5EC] rounded-3xl w-full p-3
         shadow-[inset_9px_9px_18px_#5a5c5e,inset_-9px_-9px_18px_#ffffff]
         dark:shadow-[inset_9px_9px_18px_#0e0e0e,inset_-9px_-9px_18px_#383838]`}
         cols={props.cols}
