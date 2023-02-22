@@ -23,7 +23,7 @@ export default function BotaoTema(props: BotaTemaProps) {
         </div>
       </div>
       <div className={`flex items-center justify-center 
-        text-[#00F0FF] w-8 h-8 rounded-full ml-5 transition-all duration-500 ease-linear`}>
+        text-[#00F0FF] w-8 h-8 rounded-full ml-5`}>
           {SunIcon(8)}
         </div>
     </div>

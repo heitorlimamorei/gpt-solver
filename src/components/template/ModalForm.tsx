@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Textarea from "../Textarea";
+import Input from "../input";
+import Button from "../Button";
 interface IFormData {
   name: string;
   type: string;
@@ -29,8 +32,9 @@ const ModalForm = (props: ModalFormProps) => {
   return (
     <div className="relative">
       {isOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75">
-          <div className="max-w-md mx-auto my-10 p-10 bg-white rounded-lg shadow-lg">
+        <div className="fixed top-0 left-0 w-full h-full dark:bg-[#232323] bg-[#E0E5EC] bg-opacity-100">
+          <div className="max-w-md mx-auto my-10 p-10 bg-[#E0E5EC] dark:bg-[#232323] rounded-lg dark:shadow-[12px_12px_32px_#0f0f0f,-12px_-12px_32px_#373737]
+          shadow-[12px_12px_32px_#5e6063,-12px_-12px_32px_#ffffff] dark:text-white">
             <form onSubmit={handleSubmit}>
               <div className="mb-5">
                 <label
@@ -39,14 +43,13 @@ const ModalForm = (props: ModalFormProps) => {
                 >
                   Nome
                 </label>
-                <input
-                  className="border border-gray-400 p-2 w-full"
+                <Input
+                  ClassName=""
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div className="mb-5">
@@ -56,14 +59,13 @@ const ModalForm = (props: ModalFormProps) => {
                 >
                   Tipo
                 </label>
-                <input
-                  className="border border-gray-400 p-2 w-full"
+                <Input
+                  ClassName=""
                   type="text"
                   id="type"
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div className="mb-5">
@@ -73,14 +75,13 @@ const ModalForm = (props: ModalFormProps) => {
                 >
                   Valor
                 </label>
-                <input
-                  className="border border-gray-400 p-2 w-full"
+                <Input
+                  ClassName=""
                   type="number"
                   id="value"
                   name="value"
                   value={formData.value}
                   onChange={handleChange}
-                  required
                 />
               </div>
               <div className="mb-5">
@@ -90,8 +91,8 @@ const ModalForm = (props: ModalFormProps) => {
                 >
                   Descrição
                 </label>
-                <textarea
-                  className="border border-gray-400 p-2 w-full"
+                <Textarea
+                  className="w-full"
                   id="description"
                   name="description"
                   cols={2}
@@ -101,18 +102,20 @@ const ModalForm = (props: ModalFormProps) => {
                 />
               </div>
               <div className="flex justify-between">
-                <button
-                  className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-400 rounded-md"
+                <Button
+                  ClassName="px-4 py-2 rounded-md"
                   onClick={handleSubmit}
+                  text={isEditMode ? "Atualizar gasto" : "Criar gasto"}
+                  textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
                 >
-                 {isEditMode ? "Atualizar gasto" : "Criar gasto" }
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white hover:bg-red-400 rounded-md"
+                </Button>
+                <Button
+                  ClassName="px-4 py-2 rounded-md"
                   onClick={onCancel}
+                  text="Cancelar"
+                  textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
                 >
-                  Cancelar
-                </button>
+                </Button>
               </div>
             </form>
           </div>

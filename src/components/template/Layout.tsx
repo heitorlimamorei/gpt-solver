@@ -1,5 +1,4 @@
 import Cabecalho from "./Cabecalho";
-import MenuLateral from "./MenuLateral";
 import Conteudo from "./Conteudo";
 import useAppData from "../../data/hook/useAppData";
 import ForcarAutenticacao from "../auth/ForcarAutenticacao";
@@ -14,11 +13,10 @@ export default function Template(props: TemplateProps) {
   return (
     <ForcarAutenticacao>
       <div className={` ${tema} flex h-screen w-screen `}>
-        <MenuLateral />
         <div
-          className={`flex flex-col w-full p-7 bg-gray-300 dark:bg-gray-800 `}
+          className={`flex flex-col w-full bg-[#E0E5EC] dark:bg-[#232323] transition-all duration-500 ease-linear`}
         >
-          <Cabecalho titulo={props.titulo} subtitulo={props.subtitulo} />
+          <Cabecalho/>
           <Conteudo>{props.children}</Conteudo>
         </div>
       </div>

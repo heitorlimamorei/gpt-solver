@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "../../../node_modules/next/link"
 import { useSession } from "next-auth/react"
 import { userAvatarDefault } from '../icons/Icones'

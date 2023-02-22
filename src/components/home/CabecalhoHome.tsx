@@ -1,4 +1,4 @@
-import ButtonDark from "../ButtonDark";
+import ButtonDark from "../Button";
 import Image from "next/image";
 import { loginIcon } from "../icons/Icones";
 import logoWhite from "../../../public/images/logo-no-background.png";
