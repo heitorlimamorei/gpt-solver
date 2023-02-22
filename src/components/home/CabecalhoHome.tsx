@@ -37,7 +37,7 @@ function CabecalhoHome(props) {
           <div className="flex flex-row w-full mt-8 justify-end items-center">
             <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="" />
             <ButtonDark
-              icon={loginIcon}
+              icon={loginIcon()}
               text="Log In / Sign Up"
               ClassName={`md:w-[13rem] w-[35%] h-[50px] font-bold rounded-[41px] self-center ml-3 lg:ml-[5rem] transition-all duration-500 ease-linear lg:mr-7 mr-3 lg:text-base text-[9px]`}
               iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
