@@ -17,7 +17,7 @@ export default function Home() {
     getBalance,
     getSortedItems,
     updateItem,
-    filterBySpentType
+    filterBySpentType,
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -147,7 +147,7 @@ export default function Home() {
   }, [sheetIds]);
   const itemsReady = useMemo(() => filterBySpentType("", getSortedItems("date descending")), [sheet]); // SIMULANDO FILTROS EM CASCATA
   return (
-    <div className={`h-full w-full `}>
+    <div className={`h-full w-full`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"

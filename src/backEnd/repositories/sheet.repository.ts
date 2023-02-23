@@ -1,4 +1,5 @@
 import { db } from "../../firebase/config";
+import itemRepository from "./item.repository";
 import {
   collection,
   doc,
@@ -53,6 +54,7 @@ async function createSheet(newSheet:NewSheetProps): Promise<sheetProps> {
         `planilhas/${sheetRef.id}/items`
     );
     const itenVazioRef = await addDoc(itemsRef, {});
+    await itemRepository.deleteItem(sheetRef.id, itenVazioRef.id);
     const usersRef = collection(
         db,
         `planilhas/${sheetRef.id}/users`
