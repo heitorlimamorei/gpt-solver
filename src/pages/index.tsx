@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { sheetItemProps, sheetProps } from "../types/sheetTypes";
 import { editIcon } from "../components/icons/Icones";
+import FormModalContent from "../components/template/FormModalContent";
 
 export default function Home() {
   const {
@@ -145,24 +146,26 @@ export default function Home() {
       }
     }
   }, [sheetIds]);
-  const itemsReady = useMemo(() => filterBySpentType("", getSortedItems("date descending")), [sheet]); // SIMULANDO FILTROS EM CASCATA
+  const itemsReady = useMemo(
+    () => filterBySpentType("", getSortedItems("date descending")),
+    [sheet]
+  ); // SIMULANDO FILTROS EM CASCATA
   return (
     <div className={`h-full w-full`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
       >
-        <ModalForm
-          formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          isOpen={isOpen}
-          handleToggle={handleToggle}
-          setFormData={setFormData}
-          isEditMode={currentEditingItem != null}
-          onCancel={handleCancel}
-          spentOptions={sheet.data.tiposDeGastos}
-        />
+        <ModalForm isOpen={isOpen}>
+          <FormModalContent
+            formData={formData}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            isEditMode={currentEditingItem != null}
+            onCancel={handleCancel}
+            spentOptions={sheet.data.tiposDeGastos}
+          />
+        </ModalForm>
         <label htmlFor="sheetid">Digite o código da planilhas</label>
         <div className="flex flex-1 w-full">
           <input
