@@ -302,6 +302,15 @@ export default function useSheets() {
   function filterBySpentType(spentType:string, currentItems?: sheetItemProps[]){
     return _.filter((currentItems ?? state.items), (item: sheetItemProps) => item.type.includes(spentType));
   }
+  function getStats(){
+    const objAgrupado = _.groupBy(state.items, (item: sheetItemProps) => item.type);
+    const arrayAgrupado = Object.entries(objAgrupado);
+    return arrayAgrupado.map(type => {
+      let sumOfSpents = 0;
+      type[1].forEach(item => sumOfSpents += item.value);
+      return {name: type[0], value: Number(sumOfSpents.toFixed(2)), length: type[1].length}
+    })
+  }
   return {
     sheet: state,
     createNewSheet,
@@ -321,6 +330,7 @@ export default function useSheets() {
     createUser,
     updateUser,
     deleteUser,
-    filterBySpentType
+    filterBySpentType,
+    getStats
   };
 }

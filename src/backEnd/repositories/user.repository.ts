@@ -61,5 +61,26 @@ async function updateSheetList(id: string, sheetIdsUpdated: string[]) {
   const docRef = await updateDoc(userRef, {
     sheetIds: sheetIdsUpdated,
   });
+  return await getUserById(id);
 }
-export default { getUserByEmail, getAllUsers, createUser, updateSheetList };
+async function updateUser(updateUser: userProps) {
+  const userRef = doc(db, `users/${updateUser.id}`);
+  const docRef = await updateDoc(userRef, {
+    name: updateUser.name,
+    email: updateUser.email,
+    sheetIds: updateUser.sheetIds,
+  });
+  return await getUserById(updateUser.id);
+}
+async function deleteUser(id: string) {
+  const userRef = doc(db, `user/${id}`);
+  const docRef = await deleteDoc(userRef);
+}
+export default {
+  getUserByEmail,
+  getAllUsers,
+  createUser,
+  updateSheetList,
+  updateUser,
+  deleteUser,
+};

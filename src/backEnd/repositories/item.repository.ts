@@ -62,7 +62,7 @@ async function createForeignItem(item: ItemProps, sheetId: string)  {
     name: item.name,
     description:  item.description,
     value: item.value,
-    author: item.value,
+    author: item.author,
     sheetId: sheetId,
     date: item.date,
     type: item.type

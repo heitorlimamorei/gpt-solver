@@ -16,7 +16,10 @@ interface NewSheetProps {
 }
 function isValidSheetProps(sheet, newSheet = true) {
   if (newSheet) {
-    if ((sheet.owner && sheet.tiposDeGastos, sheet.totalValue && sheet.type && sheet.name)) {
+    if (
+      (sheet.owner && sheet.tiposDeGastos,
+      sheet.totalValue && sheet.type && sheet.name)
+    ) {
       return true;
     } else {
       return false;
@@ -36,7 +39,13 @@ function isValidSheetProps(sheet, newSheet = true) {
 async function createSheet(newSheet: NewSheetProps) {
   try {
     if (isValidSheetProps(newSheet, true)) {
-      return await sheetService.createSheet(newSheet);
+      return await sheetService.createSheet({
+        owner: newSheet.owner,
+        tiposDeGastos: newSheet.tiposDeGastos,
+        totalValue: newSheet.totalValue,
+        type: newSheet.type,
+        name: newSheet.name,
+      });
     } else {
       throw new Error("Planilha fora de formato!");
     }
