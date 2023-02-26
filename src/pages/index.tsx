@@ -19,6 +19,7 @@ export default function Home() {
     getSortedItems,
     updateItem,
     filterBySpentType,
+    loadSheetByUserSeletion
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -207,7 +208,7 @@ export default function Home() {
                   <li
                     className=" px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer"
                     key={currentSheet.data.id}
-                    onClick={async () => await loadSheet(currentSheet.data.id)}
+                    onClick={async () => await loadSheetByUserSeletion(currentSheet)}
                   >
                     <h2 className="font-bold text-white">
                       {currentSheet.data.name}
