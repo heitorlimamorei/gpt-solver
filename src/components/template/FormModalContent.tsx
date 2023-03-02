@@ -51,6 +51,7 @@ function FormModalContent(props:FormModalContentProps) {
           selected={formData.type}
           handleselected={handleChange}
           name="type"
+          ClassName="p-3"
         />
       </div>
       <div className="mb-5">
