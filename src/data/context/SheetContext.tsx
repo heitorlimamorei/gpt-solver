@@ -63,6 +63,13 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         ...state,
         currentUser: action.payload,
       };
+    case "onUpdate":
+      return{
+        ...state,
+        data: {
+          ...action.payload.data
+        }
+      };
     default:
       return state;
   }

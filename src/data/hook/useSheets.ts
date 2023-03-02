@@ -6,6 +6,7 @@ import {
   NewUserProps,
   userProps,
   sheetProps,
+  upadatedSheetProps,
 } from "../../types/sheetTypes";
 import _ from "lodash";
 import axios from "axios";
@@ -47,6 +48,22 @@ export default function useSheets() {
       },
     });
   }
+  async function updateSheet(updatedSheet: upadatedSheetProps) {
+    const finalUpdatedSheet = {
+      ...state.data,
+      name: updatedSheet.name,
+      totalValue: updatedSheet.totalValue,
+      tiposDeGastos: updatedSheet.tiposDeGastos,
+    };
+    const { data: updatedsheetf } = await axios.put(
+      `http://localhost:3000/api/sheets`,
+      {
+        email: state.currentUser,
+        ...finalUpdatedSheet,
+      }
+    );
+    dispatch({ type: "onUpdate", payload: updatedsheetf });
+  }
   async function loadSheet(id: string) {
     const { data: sheet } = await axios.post(
       `http://localhost:3000/api/sheets/${id}`,
@@ -74,7 +91,9 @@ export default function useSheets() {
       },
     });
   }
-  async function loadSheetByUserSeletion(seletedSheet: sheetProps): Promise<void> {
+  async function loadSheetByUserSeletion(
+    seletedSheet: sheetProps
+  ): Promise<void> {
     const { data: items } = await axios.post(
       `http://localhost:3000/api/sheets/${seletedSheet.data.id}/items`,
       {
@@ -85,11 +104,14 @@ export default function useSheets() {
     const { data: users } = await axios.get(
       `http://localhost:3000/api/sheets/${seletedSheet.data.id}/auth`
     );
-    dispatch({ type: "refresh", payload: {
-      sheet: seletedSheet,
-      items: items,
-      users: users
-    } })
+    dispatch({
+      type: "refresh",
+      payload: {
+        sheet: seletedSheet,
+        items: items,
+        users: users,
+      },
+    });
   }
   async function refreshSheet() {
     await loadSheet(state.data.id);
@@ -293,5 +315,6 @@ export default function useSheets() {
     deleteUser,
     filterBySpentType,
     getStats,
+    updateSheet,
   };
 }

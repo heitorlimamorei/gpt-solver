@@ -52,6 +52,11 @@ export interface sheetProps {
     canManageSheetProps: boolean;
   };
 }
+export interface upadatedSheetProps {
+  tiposDeGastos: string[];
+  totalValue: number;
+  name: string;
+}
 export interface userProps {
   id: string;
   role: string;
@@ -126,6 +131,12 @@ export type sheetAction =
         users: userProps[];
       };
     }
+    |
+    {
+      type: "onUpdate";
+      payload: sheetProps
+    }
+  
   | { type: "onChangeUser"; payload: string }
   | { type: "refreshItems"; payload: sheetItemProps[] }
   | { type: "refreshUsers"; payload: userProps[] };
