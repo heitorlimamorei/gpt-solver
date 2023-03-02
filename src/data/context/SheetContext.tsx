@@ -67,7 +67,7 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
       return{
         ...state,
         data: {
-          ...action.payload.data
+          ...action.payload
         }
       };
     default:

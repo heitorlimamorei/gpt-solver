@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { trashIcon } from "../components/icons/Icones";
+import { IconeAjustes, trashIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { sheetItemProps, sheetProps } from "../types/sheetTypes";
 import { editIcon } from "../components/icons/Icones";
 import FormModalContent from "../components/template/FormModalContent";
+import ManageSheetProps from "../components/template/ManageSheetProps";
 
 export default function Home() {
   const {
@@ -23,6 +24,7 @@ export default function Home() {
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const session = useSession();
@@ -39,7 +41,9 @@ export default function Home() {
   const handleToggle = useCallback(() => {
     setIsOpen((current) => !current);
   }, []);
-
+  const handleToggleManageProps = useCallback(() => {
+    setIsOpen2(current => !current);
+  }, []);
   const handleChange = useCallback((event) => {
     setFormData((current) => {
       return {
@@ -153,6 +157,7 @@ export default function Home() {
     [sheet]
   );
  // SIMULANDO FILTROS EM CASCATA
+ console.log(sheet)
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -168,6 +173,9 @@ export default function Home() {
             onCancel={handleCancel}
             spentOptions={sheet.data.tiposDeGastos}
           />
+        </ModalForm>
+        <ModalForm isOpen={isOpen2}>
+          <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
         </ModalForm>
         <label htmlFor="sheetid">Digite o código da planilhas</label>
         <div className="flex flex-1 w-full">
@@ -196,6 +204,14 @@ export default function Home() {
               </button>
             ) : (
               <></>
+            )}
+            {sheet.session.canManageSheetProps && (
+              <button
+              className="bg-blue-700 px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center text-white w-1/6"
+              onClick={handleToggleManageProps}
+            >
+             <span>{IconeAjustes}</span>
+            </button>
             )}
           </div>
         </div>

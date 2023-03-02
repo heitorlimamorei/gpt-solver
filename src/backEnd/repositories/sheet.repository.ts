@@ -72,7 +72,7 @@ async function updateSheet(sheet){
         totalValue: sheet.totalValue,
         name: sheet.name
     })
-    return await getSheets()
+    return await getSheetById(sheetRef.id);
 }
 async function sheetExists(id:string){
     const docRef = doc(db, `planilhas/${id}`)
