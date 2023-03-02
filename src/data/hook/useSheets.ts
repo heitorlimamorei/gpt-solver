@@ -1,91 +1,21 @@
 import {
   sheetItemProps,
-  sheetProps,
-  sheetAction,
-  FinalSheetProps,
   NewSheetProps,
   newSheetItemProps,
   shortingTypes,
   NewUserProps,
   userProps,
+  sheetProps,
+  upadatedSheetProps,
 } from "../../types/sheetTypes";
 import _ from "lodash";
 import axios from "axios";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-function sheetReducer(state: FinalSheetProps, action: sheetAction) {
-  switch (action.type) {
-    case "create":
-      return {
-        ...state,
-        data: {
-          ...action.payload.sheet.data,
-        },
-        session: {
-          ...action.payload.sheet.session,
-        },
-        users: {
-          ...action.payload.users,
-        },
-      };
-    case "refresh":
-      return {
-        ...state,
-        data: {
-          ...action.payload.sheet.data,
-        },
-        session: {
-          ...action.payload.sheet.session,
-        },
-        users: {
-          ...action.payload.users,
-        },
-        items: action.payload.items,
-      };
-    case "refreshItems":
-      return {
-        ...state,
-        items: action.payload,
-      };
-    case "refreshUsers":
-      return {
-        ...state,
-        users: action.payload,
-      };
-    case "onChangeUser":
-      return {
-        ...state,
-        currentUser: action.payload,
-      };
-    default:
-      return state;
-  }
-}
-
+import useSheetsCtx from "./useSheetsCtx";
 export default function useSheets() {
   const session = useSession();
-  const [state, dispacht] = useReducer(sheetReducer, {
-    data: {
-      id: "",
-      tiposDeGastos: [""],
-      owner: "",
-      totalValue: 0,
-      type: "personal",
-      name: ""
-    },
-    session: {
-      authenticated: false,
-      role: "",
-      canView: false,
-      canDelete: false,
-      canEditItems: false,
-      canEditUsers: false,
-      canManageSheetProps: false,
-    },
-    items: [],
-    users: [],
-    currentUser: "",
-  });
+  const { state, dispatch } = useSheetsCtx();
   const email = session.data?.user.email;
   useEffect(() => {
     if (email) {
@@ -109,7 +39,7 @@ export default function useSheets() {
     const { data: users } = await axios.get(
       `http://localhost:3000/api/sheets/${sheet.data.id}/auth`
     );
-    dispacht({
+    dispatch({
       type: "create",
       payload: {
         sheet,
@@ -117,6 +47,22 @@ export default function useSheets() {
         users,
       },
     });
+  }
+  async function updateSheet(updatedSheet: upadatedSheetProps) {
+    const finalUpdatedSheet = {
+      ...state.data,
+      name: updatedSheet.name,
+      totalValue: updatedSheet.totalValue,
+      tiposDeGastos: updatedSheet.tiposDeGastos,
+    };
+    const { data: updatedsheetf } = await axios.put(
+      `http://localhost:3000/api/sheets`,
+      {
+        email: state.currentUser,
+        ...finalUpdatedSheet,
+      }
+    );
+    dispatch({ type: "onUpdate", payload: updatedsheetf });
   }
   async function loadSheet(id: string) {
     const { data: sheet } = await axios.post(
@@ -136,12 +82,34 @@ export default function useSheets() {
     const { data: users } = await axios.get(
       `http://localhost:3000/api/sheets/${id}/auth`
     );
-    dispacht({
+    dispatch({
       type: "refresh",
       payload: {
         sheet,
         items,
         users,
+      },
+    });
+  }
+  async function loadSheetByUserSeletion(
+    seletedSheet: sheetProps
+  ): Promise<void> {
+    const { data: items } = await axios.post(
+      `http://localhost:3000/api/sheets/${seletedSheet.data.id}/items`,
+      {
+        email: state.currentUser,
+        mode: "GET",
+      }
+    );
+    const { data: users } = await axios.get(
+      `http://localhost:3000/api/sheets/${seletedSheet.data.id}/auth`
+    );
+    dispatch({
+      type: "refresh",
+      payload: {
+        sheet: seletedSheet,
+        items: items,
+        users: users,
       },
     });
   }
@@ -156,7 +124,7 @@ export default function useSheets() {
         mode: "GET",
       }
     );
-    dispacht({ type: "refreshItems", payload: items });
+    dispatch({ type: "refreshItems", payload: items });
   }
   async function createUser(newUser: NewUserProps) {
     const { data: users } = await axios.post(
@@ -165,7 +133,7 @@ export default function useSheets() {
         ...newUser,
       }
     );
-    dispacht({type:"refreshUsers", payload: users});
+    dispatch({ type: "refreshUsers", payload: users });
   }
   async function updateUser(user: userProps) {
     const { data: users } = await axios.put(
@@ -174,11 +142,13 @@ export default function useSheets() {
         ...user,
       }
     );
-    dispacht({type:"refreshUsers", payload: users});
+    dispatch({ type: "refreshUsers", payload: users });
   }
   async function deleteUser(user: userProps) {
-    const { data: users } = await axios.delete(`localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`);
-    dispacht({type:"refreshUsers", payload: users});
+    const { data: users } = await axios.delete(
+      `localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`
+    );
+    dispatch({ type: "refreshUsers", payload: users });
   }
   async function deleteItem(id: string) {
     const { data: items } = await axios.post(
@@ -188,10 +158,10 @@ export default function useSheets() {
         mode: "DELETE",
       }
     );
-    dispacht({ type: "refreshItems", payload: items });
+    dispatch({ type: "refreshItems", payload: items });
   }
   function onChangeUser(newUser: string) {
-    dispacht({ type: "onChangeUser", payload: newUser });
+    dispatch({ type: "onChangeUser", payload: newUser });
   }
   async function createNewItem(newItem: newSheetItemProps) {
     const { data: items } = await axios.post(
@@ -202,7 +172,7 @@ export default function useSheets() {
         newItem: newItem,
       }
     );
-    dispacht({ type: "refreshItems", payload: items });
+    dispatch({ type: "refreshItems", payload: items });
   }
   async function updateItem(item: sheetItemProps) {
     const { data: items } = await axios.put(
@@ -215,7 +185,7 @@ export default function useSheets() {
         },
       }
     );
-    dispacht({ type: "refreshItems", payload: items });
+    dispatch({ type: "refreshItems", payload: items });
   }
   function sumAllItems(): number {
     return _.sumBy(state.items, (item: sheetItemProps) =>
@@ -299,17 +269,39 @@ export default function useSheets() {
       return currentDescriptionReady.includes(descriptionReady);
     });
   }
-  function filterBySpentType(spentType:string, currentItems?: sheetItemProps[]){
-    return _.filter((currentItems ?? state.items), (item: sheetItemProps) => item.type.includes(spentType));
+  function filterBySpentType(
+    spentType: string,
+    currentItems?: sheetItemProps[]
+  ) {
+    return _.filter(currentItems ?? state.items, (item: sheetItemProps) =>
+      item.type.includes(spentType)
+    );
+  }
+  function getStats() {
+    const objAgrupado = _.groupBy(
+      state.items,
+      (item: sheetItemProps) => item.type
+    );
+    const arrayAgrupado = Object.entries(objAgrupado);
+    return arrayAgrupado.map((type) => {
+      let sumOfSpents = 0;
+      type[1].forEach((item) => (sumOfSpents += item.value));
+      return {
+        name: type[0],
+        value: Number(sumOfSpents.toFixed(2)),
+        length: type[1].length,
+      };
+    });
   }
   return {
     sheet: state,
     createNewSheet,
     refreshSheet,
     onChangeUser,
-    dispacht,
+    dispatch,
     refreshItems,
     loadSheet,
+    loadSheetByUserSeletion,
     deleteItem,
     createNewItem,
     sumAllItems,
@@ -321,6 +313,8 @@ export default function useSheets() {
     createUser,
     updateUser,
     deleteUser,
-    filterBySpentType
+    filterBySpentType,
+    getStats,
+    updateSheet,
   };
 }

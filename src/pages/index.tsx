@@ -19,6 +19,7 @@ export default function Home() {
     getSortedItems,
     updateItem,
     filterBySpentType,
+    loadSheetByUserSeletion
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -108,6 +109,7 @@ export default function Home() {
           })
           .then((response) => {
             let sheets: string[] = response.data.sheetIds;
+            console.log(sheets);
             setSheetIds(sheets);
           });
       }
@@ -149,7 +151,8 @@ export default function Home() {
   const itemsReady = useMemo(
     () => filterBySpentType("", getSortedItems("date descending")),
     [sheet]
-  ); // SIMULANDO FILTROS EM CASCATA
+  );
+ // SIMULANDO FILTROS EM CASCATA
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -205,7 +208,7 @@ export default function Home() {
                   <li
                     className=" px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer"
                     key={currentSheet.data.id}
-                    onClick={async () => await loadSheet(currentSheet.data.id)}
+                    onClick={async () => await loadSheetByUserSeletion(currentSheet)}
                   >
                     <h2 className="font-bold text-white">
                       {currentSheet.data.name}
@@ -222,7 +225,7 @@ export default function Home() {
               <li
                 className="transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] w-1/4 px-4 py-3 flex-1 m-2 rounded-lg justify-center flex flex-col  lg:mb-5 
                 shadow-[4.5px_4.5px_40px_#A5A8AD,_-4.5px_-4.5px_40px_#FFFFFF]
-                dark:shadow-[3px_3px_16px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] "
+                dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] min-w-max "
                 key={item.id}
               >
                 <h1 className="text-3xl dark:text-white font-extrabold">

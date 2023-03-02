@@ -27,7 +27,7 @@ function FormModalContent(props:FormModalContentProps) {
     spentOptions,
   } = props;
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={`w-full h-full`}>
       <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="name">
           Nome

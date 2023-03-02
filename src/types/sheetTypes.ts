@@ -1,3 +1,38 @@
+export interface SheetContextProps {
+  sheet: FinalSheetProps;
+  createNewSheet: (payload: NewSheetProps) => Promise<void>;
+  refreshSheet: () => void;
+  onChangeUser: (newUser: string) => void;
+  dispacht: any;
+  refreshItems: () => Promise<void>;
+  loadSheet: (id: string) => Promise<void>;
+  deleteItem: (id: string) => Promise<void>;
+  createNewItem: (newItem: newSheetItemProps) => Promise<void>;
+  sumAllItems: () => number;
+  getBalance: () => number;
+  getSortedItems: (sortType: shortingTypes) => sheetItemProps[];
+  updateItem: (item: sheetItemProps) => Promise<void>;
+  filterByName: (
+    name: string,
+    currentItems?: sheetItemProps[]
+  ) => sheetItemProps[];
+  filterByDescription: (
+    description: string,
+    currentItems?: sheetItemProps[]
+  ) => sheetItemProps[];
+  createUser: (newUser: NewUserProps) => Promise<void>;
+  updateUser: (user: userProps) => Promise<void>;
+  deleteUser: (user: userProps) => Promise<void>;
+  filterBySpentType: (
+    spentType: string,
+    currentItems?: sheetItemProps[]
+  ) => sheetItemProps[];
+  getStats: () => {
+    name: string;
+    value: number;
+    length: number;
+  }[];
+}
 export interface sheetProps {
   data: {
     id: string;
@@ -16,6 +51,11 @@ export interface sheetProps {
     canEditUsers: boolean;
     canManageSheetProps: boolean;
   };
+}
+export interface upadatedSheetProps {
+  tiposDeGastos: string[];
+  totalValue: number;
+  name: string;
 }
 export interface userProps {
   id: string;
@@ -91,6 +131,12 @@ export type sheetAction =
         users: userProps[];
       };
     }
+    |
+    {
+      type: "onUpdate";
+      payload: sheetProps
+    }
+  
   | { type: "onChangeUser"; payload: string }
   | { type: "refreshItems"; payload: sheetItemProps[] }
   | { type: "refreshUsers"; payload: userProps[] };
