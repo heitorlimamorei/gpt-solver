@@ -9,6 +9,7 @@ import { sheetItemProps, sheetProps } from "../types/sheetTypes";
 import { editIcon } from "../components/icons/Icones";
 import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
+import Button from "../components/Button";
 
 export default function Home() {
   const {
@@ -187,31 +188,31 @@ export default function Home() {
             onChange={(ev) => setSheetId(ev.target.value)}
           />
           <div className="flex w-2/6">
-            <button
-              className="bg-green-700 px-4 py-1 mt-1 rounded-lg ml-2 text-white w-2/3 flex-1"
+            <Button
+              ClassName="bg-green-700 px-4 py-1 mt-1 rounded-lg ml-2 dark:text-white w-2/3 flex-1"
               onClick={async () => {
                 await loadSheet(sheetId);
               }}
+              text="Procurar"
             >
-              Procurar
-            </button>
+            </Button>
             {sheet.session.canEditItems ? (
-              <button
-                className="bg-blue-700 px-4 py-1 mt-1 rounded-lg ml-2 text-white w-1/3"
+              <Button
+                ClassName="px-4 py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
                 onClick={handleToggle}
+                text="Criar Gasto"
               >
-                Criar Gasto
-              </button>
+              </Button>
             ) : (
               <></>
             )}
             {sheet.session.canManageSheetProps && (
-              <button
-              className="bg-blue-700 px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center text-white w-1/6"
+              <Button
+              ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
               onClick={handleToggleManageProps}
+              icon={IconeAjustes}
             >
-             <span>{IconeAjustes}</span>
-            </button>
+            </Button>
             )}
           </div>
         </div>
@@ -222,11 +223,13 @@ export default function Home() {
               sheets.map((currentSheet) => {
                 return (
                   <li
-                    className=" px-2 py-1 bg-gray-700 rounded-md mx-1 shadow-xl hover:bg-gray-600 cursor-pointer"
+                    className=" px-2 py-1 dark:bg-[#232323] bg-[#E0E5EC] 
+                    dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
+                    shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-1  cursor-pointer"
                     key={currentSheet.data.id}
                     onClick={async () => await loadSheetByUserSeletion(currentSheet)}
                   >
-                    <h2 className="font-bold text-white">
+                    <h2 className="font-bold dark:text-white">
                       {currentSheet.data.name}
                     </h2>
                     <p className="font-bold text-gray-400">
@@ -260,21 +263,22 @@ export default function Home() {
                   <strong>Tipo:</strong> {item.type}
                 </p>
                 <div className="flex w-full">
-                  <button
-                    className={`transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
+                  <Button
+                    ClassName={`transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
                     shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
                     dark:shadow-[5px_5px_10px_#1A1A1A,_-5px_-5px_10px_#2C2C2C]
                      dark:text-white hover:text-red-600 ${
                        !sheet.session.canEditItems ? "cursor-not-allowed" : ""
                      }`}
+                     icon={trashIcon(8)}
                     onClick={async (ev) => {
                       ev.stopPropagation();
                       await deleteItem(item.id);
                     }}
                     disabled={!sheet.session.canEditItems}
                   >
-                    {trashIcon(8)}
-                  </button>
+
+                  </Button>
                   <button
                     className={`ml-5 transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
                   shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
