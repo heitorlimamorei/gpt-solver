@@ -10,6 +10,7 @@ import { editIcon } from "../components/icons/Icones";
 import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
 import Button from "../components/Button";
+import ManageUsers from "../components/template/ManageUsers";
 
 export default function Home() {
   const {
@@ -157,8 +158,8 @@ export default function Home() {
     () => filterBySpentType("", getSortedItems("date descending")),
     [sheet]
   );
+  console.log(sheet.users)
  // SIMULANDO FILTROS EM CASCATA
- console.log(sheet)
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -176,7 +177,8 @@ export default function Home() {
           />
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
-          <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
+       
+          <ManageUsers toggleIsOpen={handleToggleManageProps} />
         </ModalForm>
         <label htmlFor="sheetid">Digite o código da planilhas</label>
         <div className="flex flex-1 w-full">

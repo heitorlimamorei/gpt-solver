@@ -30,9 +30,9 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         session: {
           ...action.payload.sheet.session,
         },
-        users: {
+        users: [
           ...action.payload.users,
-        },
+        ],
       };
     case "refresh":
       return {
@@ -43,9 +43,9 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         session: {
           ...action.payload.sheet.session,
         },
-        users: {
-          ...action.payload.users,
-        },
+        users: [
+          ...action.payload.users
+        ],
         items: action.payload.items,
       };
     case "refreshItems":

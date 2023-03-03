@@ -146,7 +146,7 @@ export default function useSheets() {
   }
   async function deleteUser(user: userProps) {
     const { data: users } = await axios.delete(
-      `localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`
+      `http://localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`
     );
     dispatch({ type: "refreshUsers", payload: users });
   }
