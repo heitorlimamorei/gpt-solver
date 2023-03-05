@@ -30,9 +30,8 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         session: {
           ...action.payload.sheet.session,
         },
-        users: [
-          ...action.payload.users,
-        ],
+        users: [...action.payload.users],
+        items: [...action.payload.items],
       };
     case "refresh":
       return {
@@ -43,9 +42,7 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         session: {
           ...action.payload.sheet.session,
         },
-        users: [
-          ...action.payload.users
-        ],
+        users: [...action.payload.users],
         items: action.payload.items,
       };
     case "refreshItems":
@@ -64,11 +61,11 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
         currentUser: action.payload,
       };
     case "onUpdate":
-      return{
+      return {
         ...state,
         data: {
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     default:
       return state;

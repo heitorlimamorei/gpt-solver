@@ -11,7 +11,8 @@ import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
 import Button from "../components/Button";
 import ManageUsers from "../components/template/ManageUsers";
-
+import CreateSheet from "../components/template/CreateSheet";
+import _ from "lodash";
 export default function Home() {
   const {
     sheet,
@@ -22,13 +23,14 @@ export default function Home() {
     getSortedItems,
     updateItem,
     filterBySpentType,
-    loadSheetByUserSeletion
+    loadSheetByUserSeletion,
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
+  const [isOpen3, setIsOpen3] = useState(false);
   const session = useSession();
   let email = session.data?.user.email;
   let name = session.data?.user.name;
@@ -44,7 +46,7 @@ export default function Home() {
     setIsOpen((current) => !current);
   }, []);
   const handleToggleManageProps = useCallback(() => {
-    setIsOpen2(current => !current);
+    setIsOpen2((current) => !current);
   }, []);
   const handleChange = useCallback((event) => {
     setFormData((current) => {
@@ -158,8 +160,19 @@ export default function Home() {
     () => filterBySpentType("", getSortedItems("date descending")),
     [sheet]
   );
-  console.log(sheet.users)
- // SIMULANDO FILTROS EM CASCATA
+  useEffect(() => {
+    if(sheet.data.id !== undefined && sheet.data.id.length > 0) {
+      if(_.findIndex(sheets, (csheet => csheet.data.id === sheet.data.id)) < 0){
+        setSheets((current: any) => {
+          return [
+            { data: { ...sheet.data }, seesion: { ...sheet.session } },
+            ...current,
+          ];
+        })
+      }
+    }
+  }, [sheet])
+  // SIMULANDO FILTROS EM CASCATA
   return (
     <div className={`h-full w-full`}>
       <Layout
@@ -177,8 +190,10 @@ export default function Home() {
           />
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
-       
-          <ManageUsers toggleIsOpen={handleToggleManageProps} />
+          <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
+        </ModalForm>
+        <ModalForm isOpen={isOpen3}>
+          <CreateSheet toggleIsOpen={() => setIsOpen3((current) => !current)} addSheetIntoTheList={setSheets} />
         </ModalForm>
         <label htmlFor="sheetid">Digite o código da planilhas</label>
         <div className="flex flex-1 w-full">
@@ -196,25 +211,22 @@ export default function Home() {
                 await loadSheet(sheetId);
               }}
               text="Procurar"
-            >
-            </Button>
+            ></Button>
             {sheet.session.canEditItems ? (
               <Button
                 ClassName="px-4 py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
                 onClick={handleToggle}
                 text="Criar Gasto"
-              >
-              </Button>
+              ></Button>
             ) : (
               <></>
             )}
             {sheet.session.canManageSheetProps && (
               <Button
-              ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
-              onClick={handleToggleManageProps}
-              icon={IconeAjustes}
-            >
-            </Button>
+                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
+                onClick={handleToggleManageProps}
+                icon={IconeAjustes}
+              ></Button>
             )}
           </div>
         </div>
@@ -229,7 +241,9 @@ export default function Home() {
                     dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
                     shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-1  cursor-pointer"
                     key={currentSheet.data.id}
-                    onClick={async () => await loadSheetByUserSeletion(currentSheet)}
+                    onClick={async () =>
+                      await loadSheetByUserSeletion(currentSheet)
+                    }
                   >
                     <h2 className="font-bold dark:text-white">
                       {currentSheet.data.name}
@@ -240,6 +254,16 @@ export default function Home() {
                   </li>
                 );
               })}
+            <li
+              className=" px-2 py-1 dark:bg-[#232323] bg-[#E0E5EC] 
+                    dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
+                    shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-1  cursor-pointer"
+            onClick={() => setIsOpen3(true)}
+            >
+              <h2 className="font-bold dark:text-white">
+                Criar uma nova planilha
+              </h2>
+            </li>
           </ul>
           <ul className="flex  flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
             {itemsReady.map((item) => (
@@ -272,15 +296,13 @@ export default function Home() {
                      dark:text-white hover:text-red-600 ${
                        !sheet.session.canEditItems ? "cursor-not-allowed" : ""
                      }`}
-                     icon={trashIcon(8)}
+                    icon={trashIcon(8)}
                     onClick={async (ev) => {
                       ev.stopPropagation();
                       await deleteItem(item.id);
                     }}
                     disabled={!sheet.session.canEditItems}
-                  >
-
-                  </Button>
+                  ></Button>
                   <button
                     className={`ml-5 transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
                   shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
