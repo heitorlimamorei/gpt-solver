@@ -51,8 +51,9 @@ async function getSessionData(email: string, sheetId: string) {
 async function createUser(newUser: newUser) {
   if (!(await userAlreadyExists(newUser.sheetId, newUser.email))) {
     if(newUser.role !== Roles.roles[0].name){
+      const resp = await sheetAuthrepo.createUser(newUser);
       await userService.addSheetIntoTheList(newUser.email, newUser.sheetId);
-      return await sheetAuthrepo.createUser(newUser);
+      return resp
     } else {
       throw new Error(`User role: ${newUser.role} not allowed!`)
     }

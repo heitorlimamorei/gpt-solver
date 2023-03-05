@@ -21,30 +21,57 @@ function ManageUsers(props: ManageSheetProps) {
   const [currentEditingUser, setCurrentEditingUser] =
     useState<currentEditingUserProps>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { sheet, updateUser, createUser, deleteUser } = useSheets();
-  const handleSubmit = useCallback(async(ev, formData: formDataProps) => {
-    ev.preventDefault();
-    if(!isEditMode){
-      await createUser(formData);
-    } else {
-      await updateUser(formData);
-    }
-    setIsEditMode(false);
-    setCurrentEditingUser(null);
-  }, [])
+  const { sheet, deleteUser } = useSheets();
   function renderModalContent() {
     if (!!currentEditingUser) {
-      return <CreateNewUser currentUser={currentEditingUser} handleSubmit={handleSubmit} isEditMode={isEditMode} />;
-    } else {
       return (
-        <UsersManageFeed
-          sheet={sheet}
-          deleteUser={deleteUser}
-          setCurrentEditingUser={setCurrentEditingUser}
+        <CreateNewUser
+          currentUser={currentEditingUser}
+          isEditMode={isEditMode}
+          toggleIsOpen={toggleIsOpen}
+          setIsEditMode={setIsEditMode}
+          setCurrentUser={setCurrentEditingUser}
         />
       );
+    } else {
+      return (
+        <>
+          <UsersManageFeed
+            setEditMode={setIsEditMode}
+            sheet={sheet}
+            deleteUser={deleteUser}
+            setCurrentEditingUser={setCurrentEditingUser}
+            
+          />
+          <div className="flex justify-between">
+            <Button
+              ClassName="px-4 py-2 rounded-md"
+              onClick={toggleIsOpen}
+              text="Fechar"
+              textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
+              iconClassName={""}
+              icon={undefined}
+            ></Button>
+             <Button
+              ClassName="px-4 py-2 rounded-md"
+              onClick={() => {
+                setCurrentEditingUser({
+                  email: "",
+                  role: "viewer",
+                  id: ""
+                })
+                setIsEditMode(false);
+              }}
+              text="Criar novo usuário"
+              textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
+              iconClassName={""}
+              icon={undefined}
+            ></Button>
+          </div>
+        </>
+      );
     }
-  } 
+  }
   return (
     <div>
       <div className="mb-5">
@@ -53,16 +80,6 @@ function ManageUsers(props: ManageSheetProps) {
         </label>
       </div>
       {renderModalContent()}
-      <div className="flex justify-between">
-        <Button
-          ClassName="px-4 py-2 rounded-md"
-          onClick={toggleIsOpen}
-          text="Fechar"
-          textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
-          iconClassName={""}
-          icon={undefined}
-        ></Button>
-      </div>
     </div>
   );
 }

@@ -128,7 +128,7 @@ export default function useSheets() {
   }
   async function createUser(newUser: NewUserProps) {
     const { data: users } = await axios.post(
-      `localhost:3000/api/sheets/${state.data.id}/auth`,
+      `http://localhost:3000/api/sheets/${state.data.id}/auth`,
       {
         ...newUser,
       }
@@ -137,7 +137,7 @@ export default function useSheets() {
   }
   async function updateUser(user: userProps) {
     const { data: users } = await axios.put(
-      `localhost:3000/api/sheets/${state.data.id}/auth`,
+      `http://localhost:3000/api/sheets/${state.data.id}/auth`,
       {
         ...user,
       }
