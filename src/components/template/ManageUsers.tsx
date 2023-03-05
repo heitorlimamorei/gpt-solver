@@ -11,11 +11,6 @@ interface currentEditingUserProps {
   email: string;
   role: string;
 }
-interface formDataProps {
-  email: string;
-  role: string;
-  id: string;
-}
 function ManageUsers(props: ManageSheetProps) {
   const { toggleIsOpen } = props;
   const [currentEditingUser, setCurrentEditingUser] =
