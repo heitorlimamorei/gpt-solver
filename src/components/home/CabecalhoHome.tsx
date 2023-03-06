@@ -7,6 +7,7 @@ import BotaoTema from "../template/BotaoTema";
 import useAppData from "../../data/hook/useAppData";
 import iconWhite from "../../../public/images/icon-white-no-bg.png";
 import iconBlack from "../../../public/images/icon-black-no-bg.png";
+import Button from "../Button";
 
 function CabecalhoHome(props) {
   const { tema, alternarTema } = props;
@@ -36,13 +37,13 @@ function CabecalhoHome(props) {
           </div>
           <div className="flex flex-row w-full mt-8 justify-end items-center">
             <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="" />
-            <ButtonDark
+            <Button
               icon={loginIcon()}
               text="Log In / Sign Up"
               ClassName={`md:w-[13rem] w-[35%] h-[50px] font-bold rounded-[41px] self-center ml-3 lg:ml-[5rem] transition-all duration-500 ease-linear lg:mr-7 mr-3 lg:text-base text-[9px]`}
               iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
               textClassName="transition-all duration-500 ease-linear text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-            ></ButtonDark>
+            ></Button>
           </div>
         </div>
       </header>

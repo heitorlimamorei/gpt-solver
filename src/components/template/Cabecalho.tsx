@@ -6,6 +6,7 @@ import logoWhite from "../../../public/images/logo-no-background.png";
 import logoBlack from "../../../public/images/logo-no-background-black.png";
 import iconWhite from "../../../public/images/icon-white-no-bg.png";
 import iconBlack from "../../../public/images/icon-black-no-bg.png";
+import Button from '../Button';
 interface CabecalhoProps {
     children?: any;
 }
@@ -30,13 +31,13 @@ export default function Cabecalho(props:CabecalhoProps){
             <Image
               src={tema === "dark" ? iconWhite : iconBlack}
               alt=""
-              width="150"
-              height="100"
+              width="90"
+              height="60"
               className=""
             ></Image>
           </div>
           <div className="flex flex-row w-full mt-8 justify-end items-center">
-            <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="mr-5" />
+            <BotaoTema tema={tema} alternarTema={alternarTema} ClassName="mr-5 w-[6rem]" />
             <Avatar
                 className='dark:shadow-[11px_11px_16px_#1e1e1e,-11px_-11px_16px_#282828]
                 shadow-[11px_11px_16px_#bec3c9,-11px_-11px_16px_#ffffff]

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconeAjustes, trashIcon } from "../components/icons/Icones";
+import { IconeAjustes, plusIcon, trashIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
@@ -174,7 +174,7 @@ export default function Home() {
   }, [sheet])
   // SIMULANDO FILTROS EM CASCATA
   return (
-    <div className={`h-full w-full`}>
+    <div className={`h-[500vh] w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
@@ -195,29 +195,39 @@ export default function Home() {
         <ModalForm isOpen={isOpen3}>
           <CreateSheet toggleIsOpen={() => setIsOpen3((current) => !current)} addSheetIntoTheList={setSheets} />
         </ModalForm>
-        <label htmlFor="sheetid">Digite o código da planilhas</label>
-        <div className="flex flex-1 w-full">
+        <label className="mt-6 md:flex hidden" htmlFor="sheetid">Digite o código da planilha</label>
+        <div className="flex flex-1 w-full mt-3">
           <input
             id="sheetid"
             type="text"
-            className="rounded-lg py-1 px-2 mt-1 w-4/6"
+            className="hidden md:flex rounded-lg py-1 px-2 mt-1 w-4/6"
             value={sheetId}
             onChange={(ev) => setSheetId(ev.target.value)}
           />
-          <div className="flex w-2/6">
+          <div className="flex w-full">
             <Button
-              ClassName="bg-green-700 px-4 py-1 mt-1 rounded-lg ml-2 dark:text-white w-2/3 flex-1"
+              ClassName="bg-green-700 px-4 py-1 mt-1 rounded-lg lg:flex hidden ml-2 dark:text-white w-2/3 flex-1"
               onClick={async () => {
                 await loadSheet(sheetId);
               }}
               text="Procurar"
+              textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
             ></Button>
-            {sheet.session.canEditItems ? (
-              <Button
-                ClassName="px-4 py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
-                onClick={handleToggle}
-                text="Criar Gasto"
+            <Button
+                ClassName="md:px-4 md:py-1 mt-1 py-3 px-4 rounded-lg ml-2 dark:text-white w-[50%]"
+                onClick={() => setIsOpen3(true)}
+                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
+                icon={plusIcon(6)}
+                text="Criar Planilha"
+                textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
               ></Button>
+            {sheet.session.canEditItems ? (
+                <Button
+                  ClassName="md:px-4 md:py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
+                  onClick={handleToggle}
+                  text="Criar Gasto"
+                  textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+                ></Button>
             ) : (
               <></>
             )}
@@ -226,18 +236,22 @@ export default function Home() {
                 ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
                 onClick={handleToggleManageProps}
                 icon={IconeAjustes}
+                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
               ></Button>
             )}
           </div>
         </div>
-        <span>R${getBalance()}</span>
+        <div className="flex justify-center items-center w-full h-[5rem]">
+          <h2 className="dark:text-white font-bold text-3xl">R${getBalance()}</h2>
+        </div>
+        
         <div>
-          <ul className="flex flex-row mt-2">
+          <ul className="flex flex-row flex-wrap mt-2">
             {sheets.length > 0 &&
               sheets.map((currentSheet) => {
                 return (
                   <li
-                    className=" px-2 py-1 dark:bg-[#232323] bg-[#E0E5EC] 
+                    className="my-2 p-1 w-full dark:bg-[#232323] bg-[#E0E5EC] 
                     dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
                     shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-1  cursor-pointer"
                     key={currentSheet.data.id}
@@ -254,26 +268,16 @@ export default function Home() {
                   </li>
                 );
               })}
-            <li
-              className=" px-2 py-1 dark:bg-[#232323] bg-[#E0E5EC] 
-                    dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
-                    shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-1  cursor-pointer"
-            onClick={() => setIsOpen3(true)}
-            >
-              <h2 className="font-bold dark:text-white">
-                Criar uma nova planilha
-              </h2>
-            </li>
           </ul>
-          <ul className="flex  flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
+          <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
             {itemsReady.map((item) => (
               <li
-                className="transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] w-1/4 px-4 py-3 flex-1 m-2 rounded-lg justify-center flex flex-col  lg:mb-5 
+                className="shrink-0 transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] p-3 flex-1 m-1 rounded-lg justify-center flex flex-col  lg:mb-5 min-w-max 
                 shadow-[4.5px_4.5px_40px_#A5A8AD,_-4.5px_-4.5px_40px_#FFFFFF]
-                dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] min-w-max "
+                dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A]  "
                 key={item.id}
               >
-                <h1 className="text-3xl dark:text-white font-extrabold">
+                <h1 className="text-3xl dark:text-white font-extrabold w-full">
                   {item.name}
                 </h1>
                 <p className="text-base text-gray-600 dark:text-gray-400 my-1/2">
