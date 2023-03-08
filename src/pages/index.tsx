@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconeAjustes, plusIcon, trashIcon } from "../components/icons/Icones";
+import { IconeAjustes, plusIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { sheetItemProps, sheetProps } from "../types/sheetTypes";
-import { editIcon } from "../components/icons/Icones";
 import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
 import Button from "../components/Button";
@@ -15,6 +14,7 @@ import CreateSheet from "../components/template/CreateSheet";
 import _ from "lodash";
 import SheetOption from "../components/SheetOption";
 import CardItem from "../components/CardItem";
+import Switch from "../components/template/Switch";
 export default function Home() {
   const {
     sheet,
@@ -32,6 +32,7 @@ export default function Home() {
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [selected, setSelected] = useState<"users" | "properties">("properties");
   const session = useSession();
   let email = session.data?.user.email;
   let name = session.data?.user.name;
@@ -193,7 +194,8 @@ export default function Home() {
           />
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
-         <ManageUsers toggleIsOpen={handleToggleManageProps} />
+          <Switch className="" selected={selected} setSelected={setSelected} />
+        {selected === "properties" ? (<ManageSheetProps toggleIsOpen={handleToggleManageProps} />) : (<ManageUsers  toggleIsOpen={handleToggleManageProps}/>)}
         </ModalForm>
         <ModalForm isOpen={isOpen3}>
           <CreateSheet
