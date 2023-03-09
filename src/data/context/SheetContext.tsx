@@ -67,6 +67,29 @@ function sheetReducer(state: FinalSheetProps, action: sheetAction) {
           ...action.payload,
         },
       };
+    case "onDeleteSheet":
+      return  {
+        data: {
+          id: "",
+          tiposDeGastos: [""],
+          owner: "",
+          totalValue: 0,
+          type: "personal",
+          name: "",
+        },
+        session: {
+          authenticated: false,
+          role: "",
+          canView: false,
+          canDelete: false,
+          canEditItems: false,
+          canEditUsers: false,
+          canManageSheetProps: false,
+        },
+        items: [],
+        users: [],
+        currentUser: state.currentUser,
+      }
     default:
       return state;
   }

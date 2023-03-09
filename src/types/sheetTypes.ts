@@ -145,7 +145,8 @@ export type sheetAction =
     }
   | { type: "onChangeUser"; payload: string }
   | { type: "refreshItems"; payload: sheetItemProps[] }
-  | { type: "refreshUsers"; payload: userProps[] };
+  | { type: "refreshUsers"; payload: userProps[] } 
+  | {type: "onDeleteSheet"};
 export type shortingTypes =
   | "ascending"
   | "descending"

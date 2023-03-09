@@ -4,7 +4,7 @@ import { loginIcon } from "./icons/Icones";
 
 function Button(props) {
     return (
-        <button className={`
+        <button disabled={props.disabled ?? false} className={`
         ${props.ClassName}
         dark:bg-[#232323] bg-[#E0E5EC] 
         dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
