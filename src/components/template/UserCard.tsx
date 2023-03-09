@@ -21,12 +21,12 @@ function UserCard(props: UserCardProps) {
       `flex flex-row my-3 rounded-xl items-center bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
       dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] h-[4rem]`}
     >
-      <h1 className="mx-4 w-[80%]">{user.email}</h1>
+      <h1 className="md:mx-4 mx-1 md:text-base text-xs w-[70%]">{user.email}</h1>
       <p className={
-        user.role === "owner" ? "text-red-600 font-bold" : 
-        user.role === "admin" ? "text-green-600 font-bold" : 
-        user.role === "editor" ? "text-blue-600 font-bold" : 
-        "text-gray-600 font-bold"
+        user.role === "owner" ? "text-red-600 font-bold md:text-base text-xs" : 
+        user.role === "admin" ? "text-green-600 font-bold md:text-base text-xs" : 
+        user.role === "editor" ? "text-blue-600 font-bold md:text-base text-xs" : 
+        "text-gray-600 font-bold md:text-base text-xs"
       }>{Capitalize(user.role)}</p>
       <div className="w-full flex flex-row items-end justify-end">
         {user.role === "owner" ? (
@@ -37,7 +37,7 @@ function UserCard(props: UserCardProps) {
               iconClassName="text-red-600"
               ClassName="dark:bg-[#232323] bg-[#E0E5EC] 
                   dark:shadow-[3px_3px_12px_#0e0e0e,-3px_-3px_12px_#383838]
-                  shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] rounded-xl p-1 justify-self-end mr-5 my-1"
+                  shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] rounded-xl p-1 justify-self-end ml-3 mr-2 my-1"
               onClick={
                 user.role === "owner"
                   ? false
@@ -50,7 +50,7 @@ function UserCard(props: UserCardProps) {
               iconClassName="text-green-600"
               ClassName="dark:bg-[#232323] bg-[#E0E5EC] 
                   dark:shadow-[3px_3px_12px_#0e0e0e,-3px_-3px_12px_#383838]
-                  shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] rounded-xl p-1 justify-self-end mr-5 my-1"
+                  shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] rounded-xl p-1 justify-self-end mr-3 my-1"
               onClick={
                 user.role === "owner"
                   ? false

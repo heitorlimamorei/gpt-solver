@@ -38,9 +38,9 @@ function ManageUsers(props: ManageSheetProps) {
             setCurrentEditingUser={setCurrentEditingUser}
             
           />
-          <div className="flex justify-between mt-5"> 
+          <div className="flex justify-between mt-5 flex-wrap"> 
           <Button
-              ClassName=" px-4 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+              ClassName=" px-3 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
               dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
               onClick={() => {
                 setCurrentEditingUser({
@@ -56,7 +56,7 @@ function ManageUsers(props: ManageSheetProps) {
               icon={undefined}
             ></Button>
             <Button
-              ClassName="px-4 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+              ClassName="px-3 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
               dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
               onClick={toggleIsOpen}
               text="Fechar"
