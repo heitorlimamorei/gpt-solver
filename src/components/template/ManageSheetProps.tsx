@@ -13,7 +13,8 @@ function ManageSheetProps(props: ManageSheetProps) {
   const [totalValue, setTotalValue] = useState(0);
   const [tiposDeGastos, setTiposDeGastos] = useState(["X"]);
   const [newSpent, setNewSpent] = useState("");
-  const { sheet, updateSheet } = useSheets();
+  const [canDelete, setCanDelete] = useState(false);
+  const { sheet, updateSheet, deleteSheet } = useSheets();
   useEffect(() => {
     const {
       name: nameCurrent,
@@ -48,6 +49,19 @@ function ManageSheetProps(props: ManageSheetProps) {
     arrayClone.push(newSpent);
     setTiposDeGastos(arrayClone);
     setNewSpent("");
+  }
+  async function handleDeleteSheet(){
+    if(canDelete){
+      if(sheet.session.canDelete){
+        await deleteSheet();
+        toggleIsOpen();
+      }
+    } else {
+      toggleCanDelete();
+    }
+  }
+  function toggleCanDelete(){
+    setCanDelete(current => !canDelete)
   }
   return (
     <div>
@@ -127,6 +141,12 @@ function ManageSheetProps(props: ManageSheetProps) {
           text={"Salvar alterações"}
           textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
+        {sheet.session.canDelete ? ( <Button
+          ClassName="px-4 py-2 rounded-md"
+          onClick={handleDeleteSheet}
+          text="Deletar tudo"
+          textClassName={`font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252] ${!canDelete ? "cursor-not-allowed" : ""}`}
+        ></Button>) : (<></>)}
         <Button
           ClassName="px-4 py-2 rounded-md"
           onClick={toggleIsOpen}

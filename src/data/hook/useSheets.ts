@@ -293,9 +293,17 @@ export default function useSheets() {
       };
     });
   }
+  async function deleteSheet(){
+    const resp = await axios.post(`http://localhost:3000/api/sheets/${state.data.id}`, {
+      email: state.currentUser,
+      mode: "DELETE"
+    });
+    dispatch({type: "onDeleteSheet"});
+  }
   return {
     sheet: state,
     createNewSheet,
+    deleteSheet,
     refreshSheet,
     onChangeUser,
     dispatch,
