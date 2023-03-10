@@ -274,7 +274,7 @@ export default function Home() {
           </ul>
           <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
             {itemsReady.map((item) => (
-              <CardItem key={index} item={item} setEditMode={setEditMode}/>
+              <CardItem  item={item} setEditMode={setEditMode}/>
             ))}
           </ul>
         </div>
