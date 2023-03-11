@@ -199,6 +199,12 @@ export default function Home() {
           </div>
         {selected === "properties" ? (<ManageSheetProps toggleIsOpen={handleToggleManageProps} />) : (<ManageUsers  toggleIsOpen={handleToggleManageProps}/>)}
         </ModalForm>
+        <ModalForm isOpen={isOpen3}>
+          <CreateSheet
+            toggleIsOpen={() => setIsOpen3((current) => !current)}
+            addSheetIntoTheList={setSheets}
+          />
+        </ModalForm>
         <label className="mt-6 md:flex hidden dark:text-white" htmlFor="sheetid">
           Digite o código da planilha
         </label>
@@ -221,9 +227,7 @@ export default function Home() {
             ></Button>
             <Button
               ClassName="md:px-4 md:py-1 mt-1 py-3 px-4 rounded-lg ml-2 dark:text-white w-[50%]"
-              onClick={function () {
-                  window.location.href="/criarPlanilha";  
-              }}
+              onClick={() => setIsOpen3(true)}
               iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
               icon={plusIcon(6)}
               text="Criar Planilha"
