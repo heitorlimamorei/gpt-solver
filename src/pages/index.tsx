@@ -40,7 +40,7 @@ export default function Home() {
     useState<sheetItemProps>(null);
   const [formData, setFormData] = useState({
     name: "",
-    type: "",
+    type: sheet.data.tiposDeGastos[0],
     value: 0,
     description: "",
   });
