@@ -5,6 +5,7 @@ import useSheets from "../../data/hook/useSheets";
 import { trashIcon } from "../icons/Icones";
 import { useSession } from "next-auth/react";
 import { sheetProps } from "../../types/sheetTypes";
+import { link } from "fs";
 interface ManageSheetProps {
   toggleIsOpen: () => void;
   addSheetIntoTheList: (sheet: any) => void;
@@ -33,8 +34,11 @@ function CreateSheet(props: ManageSheetProps) {
       type: "pessoal",
       owner: seesion.data.user.email,
     })
-    toggleIsOpen();
+    toggleIsOpen;
   }
+  function redirect() {
+    window.location.href="/";  
+    }
   function filterByIndex(index: number) {
     const arrayClone = [...tiposDeGastos].filter((spent, i) => i !== index);
     setTiposDeGastos(arrayClone);
@@ -122,10 +126,14 @@ function CreateSheet(props: ManageSheetProps) {
       <div className="flex justify-between">
         <Button
           ClassName="px-4 py-2 rounded-md"
-          onClick={handleSubmit}
+          onClick={function(){
+            handleSubmit();
+            redirect();
+          }}
           text={"Criar"}
           textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-        ></Button>
+        >
+        </Button>
         <Button
           ClassName="px-4 py-2 rounded-md"
           onClick={toggleIsOpen}
