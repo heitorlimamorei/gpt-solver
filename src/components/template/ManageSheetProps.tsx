@@ -65,8 +65,8 @@ function ManageSheetProps(props: ManageSheetProps) {
   }
   return (
     <div>
-      <div className="mb-5">
-        <label className="block font-medium text-lg mb-2" htmlFor="name">
+      <div className="mb-1">
+        <label className="block font-medium text-lg mb-1" htmlFor="name">
           Nome da planilha
         </label>
         <Input
@@ -78,8 +78,8 @@ function ManageSheetProps(props: ManageSheetProps) {
           onChange={(ev) => setName(ev.target.value)}
         />
       </div>
-      <div className="mb-5">
-        <label className="block font-medium text-lg mb-2" htmlFor="value">
+      <div className="mb-1">
+        <label className="block font-medium text-lg mb-1" htmlFor="value">
           Valor total estimado
         </label>
         <Input
@@ -93,14 +93,14 @@ function ManageSheetProps(props: ManageSheetProps) {
           }
         />
       </div>
-      <div className="mb-5">
+      <div className="mb-1">
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Modifique os tipos de gastos
         </label>
         <ul>
           {tiposDeGastos.map((tipo, i) => {
             return (
-              <li className="flex flex-row my-3 rounded-xl items-center transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[4.5px_4.5px_10px_#f6f7fb,_-4.5px_-4.5px_10px_#FFFFFF]
+              <li className="flex flex-row my-2 rounded-xl items-center transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[4.5px_4.5px_10px_#f6f7fb,_-4.5px_-4.5px_10px_#FFFFFF]
               dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A]" key={tipo}>
                 <h1 className="mx-4 w-[80%]">{tipo}</h1>
                 <div className="w-full flex flex-row items-end justify-end">
@@ -127,7 +127,7 @@ function ManageSheetProps(props: ManageSheetProps) {
             onChange={(ev) => setNewSpent(ev.target.value)}
           />
           <button
-            className="px-2 ml-1 py-5 rounded-xl bg-green-600 text-white h-[2.4rem] flex items-center"
+            className="px-2 ml-1 py-3 rounded-xl bg-green-600 text-white h-[2.4rem] flex items-center"
             onClick={addSpentIntoTheList}
           >
             +

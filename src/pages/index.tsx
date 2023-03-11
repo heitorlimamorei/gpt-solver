@@ -225,7 +225,7 @@ export default function Home() {
         <ModalForm isOpen={isOpen2}>
           <div className=" flex flex-row">
             <Switch
-              className="self-start mb-12"
+              className="self-start mb-2"
               selected={selected}
               setSelected={setSelected}
             />
