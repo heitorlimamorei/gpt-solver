@@ -5,7 +5,11 @@ import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { sheetItemProps, sheetProps } from "../types/sheetTypes";
+import {
+  sheetItemProps,
+  sheetProps,
+  itemRenderOptions,
+} from "../types/sheetTypes";
 import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
 import Button from "../components/Button";
@@ -15,6 +19,7 @@ import _ from "lodash";
 import SheetOption from "../components/SheetOption";
 import CardItem from "../components/CardItem";
 import Switch from "../components/template/Switch";
+import ManageRenderOptions from "../components/template/ManageRenderOptions";
 export default function Home() {
   const {
     sheet,
@@ -25,6 +30,8 @@ export default function Home() {
     updateItem,
     filterBySpentType,
     loadSheetByUserSeletion,
+    filterByDescription,
+    filterByName,
   } = useSheets();
   const [sheetId, setSheetId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +39,17 @@ export default function Home() {
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
-  const [selected, setSelected] = useState<"users" | "properties">("properties");
+  const [isOpen4, setIsOpen4] = useState(false);
+  const [itemsRenderOptions, setItemsRenderOptions] =
+    useState<itemRenderOptions>({
+      name: "",
+      type: "",
+      description: "",
+      sortMode: "date descending",
+    });
+  const [selected, setSelected] = useState<"users" | "properties">(
+    "properties"
+  );
   const session = useSession();
   let email = session.data?.user.email;
   let name = session.data?.user.name;
@@ -158,10 +175,16 @@ export default function Home() {
       }
     }
   }, [sheetIds]);
-  const itemsReady = useMemo(
-    () => filterBySpentType("", getSortedItems("date descending")),
-    [sheet]
-  );
+  const renderItems = useCallback(() => {
+    const { name, description, type, sortMode } = itemsRenderOptions;
+    const itemsReady = filterByDescription(
+      description,
+      filterByName(name, filterBySpentType(type, getSortedItems(sortMode)))
+    );
+    return itemsReady.map((item) => (
+      <CardItem key={item.id} item={item} setEditMode={setEditMode} />
+    ));
+  }, [sheet, itemsRenderOptions]);
   useEffect(() => {
     if (sheet.data.id !== undefined && sheet.data.id.length > 0) {
       if (
@@ -176,13 +199,19 @@ export default function Home() {
       }
     }
   }, [sheet]);
-  // SIMULANDO FILTROS EM CASCATA
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
       >
+        <ModalForm isOpen={isOpen4}>
+          <ManageRenderOptions
+            itemsRenderOptions={itemsRenderOptions}
+            setItemsRenderOptions={setItemsRenderOptions}
+            toggleIsOpen={() => setIsOpen4((current) => !current)}
+          />
+        </ModalForm>
         <ModalForm isOpen={isOpen}>
           <FormModalContent
             formData={formData}
@@ -195,9 +224,17 @@ export default function Home() {
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
           <div className=" flex flex-row">
-            <Switch className="self-start mb-12" selected={selected} setSelected={setSelected} />
+            <Switch
+              className="self-start mb-12"
+              selected={selected}
+              setSelected={setSelected}
+            />
           </div>
-        {selected === "properties" ? (<ManageSheetProps toggleIsOpen={handleToggleManageProps} />) : (<ManageUsers  toggleIsOpen={handleToggleManageProps}/>)}
+          {selected === "properties" ? (
+            <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
+          ) : (
+            <ManageUsers toggleIsOpen={handleToggleManageProps} />
+          )}
         </ModalForm>
         <ModalForm isOpen={isOpen3}>
           <CreateSheet
@@ -205,7 +242,10 @@ export default function Home() {
             addSheetIntoTheList={setSheets}
           />
         </ModalForm>
-        <label className="mt-6 md:flex hidden dark:text-white" htmlFor="sheetid">
+        <label
+          className="mt-6 md:flex hidden dark:text-white"
+          htmlFor="sheetid"
+        >
           Digite o código da planilha
         </label>
         <div className="flex flex-1 w-full mt-3">
@@ -251,6 +291,14 @@ export default function Home() {
                 iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
               ></Button>
             )}
+            {sheet.session.authenticated && (
+              <Button
+                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
+                onClick={() => setIsOpen4(true)}
+                text={"Filtrar"}
+                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
+              ></Button>
+            )}
           </div>
         </div>
         <div className="flex justify-center items-center w-full h-[5rem]">
@@ -273,9 +321,7 @@ export default function Home() {
               })}
           </ul>
           <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
-            {itemsReady.map((item) => (
-              <CardItem  item={item} setEditMode={setEditMode}/>
-            ))}
+            {renderItems()}
           </ul>
         </div>
       </Layout>

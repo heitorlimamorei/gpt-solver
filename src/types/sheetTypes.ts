@@ -152,3 +152,9 @@ export type shortingTypes =
   | "descending"
   | "date ascending"
   | "date descending";
+export interface itemRenderOptions {
+  name: string;
+  type: string;
+  description: string;
+  sortMode: shortingTypes
+}
