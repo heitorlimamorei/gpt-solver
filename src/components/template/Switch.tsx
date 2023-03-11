@@ -15,10 +15,8 @@ const Switch = (props:SwitchProps) => {
       <button
         className={`px-4 py-2 rounded-l-lg ${
           selected === "users"
-            ? `dark:shadow-[inset_7px_7px_7px_#0e0e0e,inset_-7px_-7px_7px_#383838] dark:bg-[#232323]  dark:text-white
-            shadow-[inset_7px_7px_7px_#5a5c5e,inset_-7px_-7px_7px_#ffffff]`
-            : `dark:shadow-[7px_7px_7px_#0e0e0e,-7px_-7px_7px_#383838] dark:bg-[#232323] dark:text-white text-gray-7004
-            shadow-[7px_7px_12px_#5a5c5e,-7px_-7px_12px_#ffffff] bg-[#E0E5EC]`
+            ? "dark:bg-[#232323] dark:shadow-[inset_7px_7px_14px_#0e0e0e,inset_-7px_-7px_14px_#383838] bg-[#E0ECE5] shadow-[inset_-7px_7px_14px_#5a5c5e,inset_7px_-7px_14px_#ffffff] dark:text-white"
+            : "dark:bg-[#232323] dark:shadow-[7px_7px_14px_#0e0e0e,-7px_-7px_14px_#383838] dark:text-white bg-[#E0ECE5] shadow-[-7px_7px_14px_#5a5c5e,7px_-7px_14px_#ffffff]"
         }`}
         onClick={() => handleSelection("users")}
       >
@@ -27,10 +25,8 @@ const Switch = (props:SwitchProps) => {
       <button
         className={`px-4 py-2 rounded-r-lg ${
           selected === "properties"
-            ? `dark:shadow-[inset_7px_7px_7px_#0e0e0e,inset_-7px_-7px_7px_#383838] dark:bg-[#232323] dark:text-white
-            shadow-[inset_7px_7px_7px_#5a5c5e,inset_-7px_-7px_7px_#ffffff]`
-            : `dark:shadow-[7px_7px_7px_#0e0e0e,-7px_-7px_7px_#383838] dark:bg-[#232323] dark:text-white text-gray-700
-            shadow-[7px_7px_12px_#5a5c5e,-7px_-7px_12px_#ffffff] bg-[#E0E5EC]`
+            ? "dark:bg-[#232323] dark:shadow-[inset_7px_7px_14px_#0e0e0e,inset_-7px_-7px_14px_#383838] bg-[#E0ECE5] shadow-[inset_-7px_7px_14px_#5a5c5e,inset_7px_-7px_14px_#ffffff] dark:text-white"
+            : "dark:bg-[#232323] dark:shadow-[-7px_7px_14px_#0e0e0e,7px_-7px_14px_#383838] dark:text-white bg-[#E0ECE5] shadow-[-7px_7px_14px_#5a5c5e,7px_-7px_14px_#ffffff]"
         }`}
         onClick={() => handleSelection("properties")}
       >

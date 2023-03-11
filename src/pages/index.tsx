@@ -194,7 +194,9 @@ export default function Home() {
           />
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
-          <Switch className="" selected={selected} setSelected={setSelected} />
+          <div className=" flex flex-row">
+            <Switch className="self-start mb-12" selected={selected} setSelected={setSelected} />
+          </div>
         {selected === "properties" ? (<ManageSheetProps toggleIsOpen={handleToggleManageProps} />) : (<ManageUsers  toggleIsOpen={handleToggleManageProps}/>)}
         </ModalForm>
         <ModalForm isOpen={isOpen3}>
@@ -203,7 +205,7 @@ export default function Home() {
             addSheetIntoTheList={setSheets}
           />
         </ModalForm>
-        <label className="mt-6 md:flex hidden" htmlFor="sheetid">
+        <label className="mt-6 md:flex hidden dark:text-white" htmlFor="sheetid">
           Digite o código da planilha
         </label>
         <div className="flex flex-1 w-full mt-3">
@@ -263,6 +265,7 @@ export default function Home() {
               sheets.map((currentSheet) => {
                 return (
                   <SheetOption
+                    key={currentSheet.data.id}
                     currentSheet={currentSheet}
                     loadSheetByUserSeletion={loadSheetByUserSeletion}
                   />
@@ -271,7 +274,7 @@ export default function Home() {
           </ul>
           <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
             {itemsReady.map((item) => (
-              <CardItem item={item} setEditMode={setEditMode}/>
+              <CardItem  item={item} setEditMode={setEditMode}/>
             ))}
           </ul>
         </div>
