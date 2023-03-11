@@ -65,8 +65,8 @@ function ManageSheetProps(props: ManageSheetProps) {
   }
   return (
     <div>
-      <div className="mb-2">
-        <label className="block font-medium text-lg mb-1" htmlFor="name">
+      <div className="mb-5">
+        <label className="block font-medium text-lg mb-2" htmlFor="name">
           Nome da planilha
         </label>
         <Input
@@ -78,7 +78,7 @@ function ManageSheetProps(props: ManageSheetProps) {
           onChange={(ev) => setName(ev.target.value)}
         />
       </div>
-      <div className="mb-2">
+      <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Valor total estimado
         </label>
@@ -93,7 +93,7 @@ function ManageSheetProps(props: ManageSheetProps) {
           }
         />
       </div>
-      <div className="mb-2">
+      <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Modifique os tipos de gastos
         </label>
