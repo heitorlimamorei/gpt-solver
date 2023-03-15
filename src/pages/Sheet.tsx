@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconeAjustes, plusIcon } from "../components/icons/Icones";
+import { IconeAjustes } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
+import CardItem from "../components/CardItem";
+import _ from "lodash";
 import axios from "axios";
 import {
   sheetItemProps,
@@ -14,13 +16,10 @@ import FormModalContent from "../components/template/FormModalContent";
 import ManageSheetProps from "../components/template/ManageSheetProps";
 import Button from "../components/Button";
 import ManageUsers from "../components/template/ManageUsers";
-import CreateSheet from "../components/template/CreateSheet";
-import _ from "lodash";
-import SheetOption from "../components/SheetOption";
-import CardItem from "../components/CardItem";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
-export default function Home() {
+
+function Sheet() {
   const {
     sheet,
     loadSheet,
@@ -38,7 +37,6 @@ export default function Home() {
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
-  const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
   const [itemsRenderOptions, setItemsRenderOptions] =
     useState<itemRenderOptions>({
@@ -236,41 +234,71 @@ export default function Home() {
             <ManageUsers toggleIsOpen={handleToggleManageProps} />
           )}
         </ModalForm>
-        <ModalForm isOpen={isOpen3}>
-          <CreateSheet
-            toggleIsOpen={() => setIsOpen3((current) => !current)}
-            addSheetIntoTheList={setSheets}
-          />
-        </ModalForm>
- 
+        <label
+          className="mt-6 md:flex hidden dark:text-white"
+          htmlFor="sheetid"
+        >
+          Digite o código da planilha
+        </label>
         <div className="flex flex-1 w-full mt-3">
+          <input
+            id="sheetid"
+            type="text"
+            className="hidden md:flex rounded-lg py-1 px-2 mt-1 w-5/6"
+            value={sheetId}
+            onChange={(ev) => setSheetId(ev.target.value)}
+          />
           <div className="flex w-full">
             <Button
-              ClassName="md:px-4 md:py-1 mt-1 py-3 px-4 rounded-lg ml-2 dark:text-white w-[50%]"
-              onClick={() => setIsOpen3(true)}
-              iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
-              icon={plusIcon(6)}
-              text="Criar Planilha"
+              ClassName="bg-green-700 px-4 py-1 mt-1 rounded-lg lg:flex hidden ml-2 dark:text-white w-[30%] flex-1"
+              onClick={async () => {
+                await loadSheet(sheetId);
+              }}
+              text="Procurar"
               textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
             ></Button>
+            {sheet.session.canEditItems ? (
+              <Button
+                ClassName="md:px-4 md:py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
+                onClick={handleToggle}
+                text="Criar Gasto"
+                textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+              ></Button>
+            ) : (
+              <></>
+            )}
+            {sheet.session.canManageSheetProps && (
+              <Button
+                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
+                onClick={handleToggleManageProps}
+                icon={IconeAjustes}
+                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
+              ></Button>
+            )}
+            {sheet.session.authenticated && (
+              <Button
+                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
+                onClick={() => setIsOpen4(true)}
+                text={"Filtrar"}
+                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
+              ></Button>
+            )}
           </div>
         </div>
-        <div className="mt-7">
-          <h1 className="font-bold text-2xl dark:text-white">Escolha a planilha!</h1>
-          <ul className="flex flex-row flex-wrap mt-2">
-            {sheets.length > 0 &&
-              sheets.map((currentSheet) => {
-                return (
-                  <SheetOption
-                    key={currentSheet.data.id}
-                    currentSheet={currentSheet}
-                    loadSheetByUserSeletion={loadSheetByUserSeletion}
-                  />
-                );
-              })}
+        <div className="flex justify-center items-center w-full h-[5rem]">
+          <h2 className="dark:text-white font-bold text-3xl">
+            R${getBalance()}
+          </h2>
+        </div>
+
+        <div>
+          <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
+            {renderItems()}
           </ul>
         </div>
       </Layout>
     </div>
   );
 }
+
+export default Sheet;
