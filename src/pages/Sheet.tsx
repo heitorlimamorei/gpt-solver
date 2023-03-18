@@ -18,6 +18,7 @@ import Button from "../components/Button";
 import ManageUsers from "../components/template/ManageUsers";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
+import ControllBar from "../components/template/ControllBar";
 
 function Sheet() {
   const {
@@ -183,20 +184,6 @@ function Sheet() {
       <CardItem key={item.id} item={item} setEditMode={setEditMode} />
     ));
   }, [sheet, itemsRenderOptions]);
-  useEffect(() => {
-    if (sheet.data.id !== undefined && sheet.data.id.length > 0) {
-      if (
-        _.findIndex(sheets, (csheet) => csheet.data.id === sheet.data.id) < 0
-      ) {
-        setSheets((current: any) => {
-          return [
-            { data: { ...sheet.data }, seesion: { ...sheet.session } },
-            ...current,
-          ];
-        });
-      }
-    }
-  }, [sheet]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
@@ -234,57 +221,11 @@ function Sheet() {
             <ManageUsers toggleIsOpen={handleToggleManageProps} />
           )}
         </ModalForm>
-        <label
-          className="mt-6 md:flex hidden dark:text-white"
-          htmlFor="sheetid"
-        >
-          Digite o código da planilha
-        </label>
-        <div className="flex flex-1 w-full mt-3">
-          <input
-            id="sheetid"
-            type="text"
-            className="hidden md:flex rounded-lg py-1 px-2 mt-1 w-5/6"
-            value={sheetId}
-            onChange={(ev) => setSheetId(ev.target.value)}
-          />
-          <div className="flex w-full">
-            <Button
-              ClassName="bg-green-700 px-4 py-1 mt-1 rounded-lg lg:flex hidden ml-2 dark:text-white w-[30%] flex-1"
-              onClick={async () => {
-                await loadSheet(sheetId);
-              }}
-              text="Procurar"
-              textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-            ></Button>
-            {sheet.session.canEditItems ? (
-              <Button
-                ClassName="md:px-4 md:py-1 mt-1 rounded-lg ml-2 dark:text-white w-1/3"
-                onClick={handleToggle}
-                text="Criar Gasto"
-                textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-              ></Button>
-            ) : (
-              <></>
-            )}
-            {sheet.session.canManageSheetProps && (
-              <Button
-                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
-                onClick={handleToggleManageProps}
-                icon={IconeAjustes}
-                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
-              ></Button>
-            )}
-            {sheet.session.authenticated && (
-              <Button
-                ClassName="px-2 py-1 mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-1/6"
-                onClick={() => setIsOpen4(true)}
-                text={"Filtrar"}
-                iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
-              ></Button>
-            )}
-          </div>
-        </div>
+        <ControllBar
+          handleToggle={handleToggle}
+          handleToggleManageProps={handleToggleManageProps}
+          setIsOpen4={setIsOpen4}
+        />
         <div className="flex justify-center items-center w-full h-[5rem]">
           <h2 className="dark:text-white font-bold text-3xl">
             R${getBalance()}

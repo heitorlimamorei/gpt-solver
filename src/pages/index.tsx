@@ -185,20 +185,6 @@ export default function Home() {
       <CardItem key={item.id} item={item} setEditMode={setEditMode} />
     ));
   }, [sheet, itemsRenderOptions]);
-  useEffect(() => {
-    if (sheet.data.id !== undefined && sheet.data.id.length > 0) {
-      if (
-        _.findIndex(sheets, (csheet) => csheet.data.id === sheet.data.id) < 0
-      ) {
-        setSheets((current: any) => {
-          return [
-            { data: { ...sheet.data }, seesion: { ...sheet.session } },
-            ...current,
-          ];
-        });
-      }
-    }
-  }, [sheet]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
