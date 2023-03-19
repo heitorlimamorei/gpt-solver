@@ -6,6 +6,7 @@ import logoWhite from "../../../public/images/logo-no-background.png";
 import logoBlack from "../../../public/images/logo-no-background-black.png";
 import iconWhite from "../../../public/images/icon-white-no-bg.png";
 import iconBlack from "../../../public/images/icon-black-no-bg.png";
+import router from 'next/router';
 import Button from '../Button';
 interface CabecalhoProps {
     children?: any;
@@ -18,7 +19,7 @@ export default function Cabecalho(props:CabecalhoProps){
         >   
       <header className="flex items-center w-full h-[10vh]">
         <div className="flex flex-row items-center justify-start h-full w-full">
-          <div className="ml-[4rem] w-[30%] hidden lg:flex">
+          <div className="ml-[4rem] mt-5 w-[30%] hidden cursor-pointer lg:flex" onClick={() => router.push("/")}>
             <Image
               src={tema === "dark" ? logoWhite : logoBlack}
               alt=""
@@ -27,7 +28,7 @@ export default function Cabecalho(props:CabecalhoProps){
               className=""
             ></Image>
           </div>
-          <div className="ml-3 mt-8 lg:hidden">
+          <div className="ml-3 mt-8 lg:hidden" onClick={() => router.push("/")}>
             <Image
               src={tema === "dark" ? iconWhite : iconBlack}
               alt=""

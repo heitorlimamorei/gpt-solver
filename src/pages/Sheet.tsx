@@ -221,17 +221,22 @@ function Sheet() {
             <ManageUsers toggleIsOpen={handleToggleManageProps} />
           )}
         </ModalForm>
-        <ControllBar
-          handleToggle={handleToggle}
-          handleToggleManageProps={handleToggleManageProps}
-          setIsOpen4={setIsOpen4}
-        />
+        <div className="transition-all duration-500 ease-linear flex justify-center">
+          <div className="flex justify-center align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
+          dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white ">
+            <h1 className="font-bold text-3xl uppercase">{sheet.data.name}</h1>
+          </div>
+        </div>
         <div className="flex justify-center items-center w-full h-[5rem]">
           <h2 className="dark:text-white font-bold text-3xl">
             R${getBalance()}
           </h2>
         </div>
-
+        <ControllBar
+          handleToggle={handleToggle}
+          handleToggleManageProps={handleToggleManageProps}
+          setIsOpen4={setIsOpen4}
+        />
         <div>
           <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
             {renderItems()}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../input";
 import Button from "../Button";
 import Select from "./Select";
+import router from "next/router";
 import useSheets from "../../data/hook/useSheets";
 import { trashIcon } from "../icons/Icones";
 interface ManageSheetProps {
@@ -55,6 +56,7 @@ function ManageSheetProps(props: ManageSheetProps) {
       if(sheet.session.canDelete){
         await deleteSheet();
         toggleIsOpen();
+        router.push("/");
       }
     } else {
       toggleCanDelete();

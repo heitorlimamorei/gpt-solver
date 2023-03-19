@@ -14,8 +14,10 @@ function Button(props) {
         justify-center
         items-center`}
         onClick={props.onClick}>
-            <p className={props.iconClassName}>{props.icon}</p>
+            <p className={props.iconClassName}>{props.icon}</p>            
+            <p className={props.classChildren}>{props.children}</p>
             <p className={props.textClassName}>{props.text}</p>
+
         </button>
     );
 }
