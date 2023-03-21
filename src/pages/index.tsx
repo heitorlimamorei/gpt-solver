@@ -20,6 +20,7 @@ import SheetOption from "../components/SheetOption";
 import CardItem from "../components/CardItem";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
+import variaveis from "../model/variaveis";
 export default function Home() {
   const {
     sheet,
@@ -33,7 +34,7 @@ export default function Home() {
     filterByDescription,
     filterByName,
   } = useSheets();
-  const [sheetId, setSheetId] = useState("");
+  const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
@@ -130,7 +131,7 @@ export default function Home() {
     if (email !== undefined) {
       if (email.length > 0) {
         axios
-          .post(`http://localhost:3000/api/users/login`, {
+          .post(`${BASE_URL}/api/users/login`, {
             email: email,
             name: name,
           })
@@ -148,7 +149,7 @@ export default function Home() {
       if (sheetIds.length > 0) {
         sheetIds.forEach((sheetId) => {
           const currentSheet = axios.post(
-            `http://localhost:3000/api/sheets/${sheetId}`,
+            `${BASE_URL}/api/sheets/${sheetId}`,
             {
               email: sheet.currentUser,
               mode: "GET",

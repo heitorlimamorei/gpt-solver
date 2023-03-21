@@ -19,6 +19,7 @@ import ManageUsers from "../components/template/ManageUsers";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
 import ControllBar from "../components/template/ControllBar";
+import variaveis from "../model/variaveis";
 
 function Sheet() {
   const {
@@ -33,7 +34,7 @@ function Sheet() {
     filterByDescription,
     filterByName,
   } = useSheets();
-  const [sheetId, setSheetId] = useState("");
+  const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
@@ -129,7 +130,7 @@ function Sheet() {
     if (email !== undefined) {
       if (email.length > 0) {
         axios
-          .post(`http://localhost:3000/api/users/login`, {
+          .post(`${BASE_URL}/api/users/login`, {
             email: email,
             name: name,
           })
@@ -147,7 +148,7 @@ function Sheet() {
       if (sheetIds.length > 0) {
         sheetIds.forEach((sheetId) => {
           const currentSheet = axios.post(
-            `http://localhost:3000/api/sheets/${sheetId}`,
+            `${BASE_URL}/api/sheets/${sheetId}`,
             {
               email: sheet.currentUser,
               mode: "GET",
