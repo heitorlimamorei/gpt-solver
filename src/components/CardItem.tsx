@@ -17,7 +17,7 @@ export default function CardItem(props: CardItem) {
     dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A]  "
       key={item.id}
     >
-      <h1 className="text-3xl dark:text-white font-extrabold w-full">
+      <h1 className="text-3xl dark:text-white font-extrabold w-full break-all">
         {item.name}
       </h1>
       <p className="text-base text-gray-600 dark:text-gray-400 my-1/2">

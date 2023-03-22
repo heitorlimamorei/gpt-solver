@@ -222,7 +222,7 @@ function Sheet() {
           )}
         </ModalForm>
         <div className="transition-all duration-500 ease-linear flex justify-center">
-          <div className="flex justify-center align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
+          <div className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
           dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white ">
             <h1 className="font-bold text-3xl uppercase">{sheet.data.name}</h1>
           </div>

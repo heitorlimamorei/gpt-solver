@@ -136,21 +136,21 @@ function ManageSheetProps(props: ManageSheetProps) {
           </button>
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex mt-5">
         <Button
-          ClassName="px-4 py-2 rounded-md"
+          ClassName="px-2 rounded-md mr-3"
           onClick={handleSubmit}
           text={"Salvar alterações"}
-          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+          textClassName="px-2 mx-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         {sheet.session.canDelete ? ( <Button
-          ClassName="px-4 py-2 rounded-md"
+          ClassName="px-2 rounded-md mr-3"
           onClick={handleDeleteSheet}
           text="Deletar tudo"
           textClassName={`font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252] ${!canDelete ? "cursor-not-allowed" : ""}`}
         ></Button>) : (<></>)}
         <Button
-          ClassName="px-4 py-2 rounded-md"
+          ClassName="px-2 py-5 rounded-md"
           onClick={toggleIsOpen}
           text="Cancelar"
           textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
