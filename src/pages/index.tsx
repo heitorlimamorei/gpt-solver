@@ -233,7 +233,7 @@ export default function Home() {
         <div className="flex flex-1 w-full mt-3">
           <div className="flex w-full justify-end">
             <Button
-              ClassName="md:px-4 md:py-1 mt-1 py-3 px-4 rounded-lg ml-2 dark:text-white md:w-[15%]"
+              ClassName="md:px-4 md:py-1 py-3 px-4 w-full h-[3rem] rounded-lg ml-2 mt-5 mb-3 dark:text-white md:w-[15%]"
               onClick={() => setIsOpen3(true)}
               iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
               icon={plusIcon(6)}
@@ -244,7 +244,7 @@ export default function Home() {
         </div>
         <div className="mt-3">
           <h1 className="font-bold text-2xl dark:text-white">Escolha a planilha!</h1>
-          <ul className="flex flex-row flex-wrap mt-2">
+          <ul className="flex md:flex-row flex-col md:flex-wrap mt-2">
             {sheets.length > 0 &&
               sheets.map((currentSheet) => {
                 return (

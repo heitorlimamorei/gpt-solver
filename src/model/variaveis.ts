@@ -1,3 +1,3 @@
 export default {
-    BASE_URL: "https://financial-controller-tau.vercel.app"
+    BASE_URL: "http://localhost:3000/"
 }

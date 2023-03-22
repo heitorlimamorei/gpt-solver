@@ -12,15 +12,15 @@ export default function CardItem(props: CardItem) {
   const { sheet, deleteItem } = useSheets();
   return (
     <li
-      className="shrink-0 transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] p-3 flex-1 m-1 rounded-lg justify-center flex flex-col  lg:mb-5 md:min-w-max
+      className="my-2 shrink-0 transition-all duration-500 ease-linear bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] p-3 flex-1 m-1 rounded-lg justify-center flex flex-col  lg:mb-5 min-w-fit
     shadow-[4.5px_4.5px_40px_#A5A8AD,_-4.5px_-4.5px_40px_#FFFFFF]
     dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A]  "
       key={item.id}
     >
-      <h1 className="text-3xl dark:text-white font-extrabold w-full break-all">
+      <h1 className="text-3xl dark:text-white font-extrabold w-full break-normal">
         {item.name}
       </h1>
-      <p className="text-base text-gray-600 dark:text-gray-400 my-1/2 w-[90%] break-words">
+      <p className="text-base text-gray-600 dark:text-gray-400 my-1/2 w-[90%] break-normal">
         {item.description.length > 0 ? (
           <>
             <strong>Descrição: </strong>
