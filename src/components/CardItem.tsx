@@ -20,7 +20,7 @@ export default function CardItem(props: CardItem) {
       <h1 className="text-3xl dark:text-white font-extrabold w-full break-all">
         {item.name}
       </h1>
-      <p className="text-base text-gray-600 dark:text-gray-400 my-1/2 w-[30%] break-words">
+      <p className="text-base text-gray-600 dark:text-gray-400 my-1/2 w-[90%] break-words">
         {item.description.length > 0 ? (
           <>
             <strong>Descrição: </strong>
@@ -33,11 +33,11 @@ export default function CardItem(props: CardItem) {
         )}
       </p>
 
-      <p className="dark:text-white font-light text-lg my-1 w-[30%]">
+      <p className="dark:text-white font-light text-lg my-1 w-[90%]">
         <strong>Valor:</strong> R${item.value}
       </p>
 
-      <p className="dark:text-white mb-2 w-[30%]">
+      <p className="dark:text-white mb-2 w-[90%]">
         <strong>Tipo:</strong> {item.type}
       </p>
       <div className="flex w-full">
