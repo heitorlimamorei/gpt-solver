@@ -13,8 +13,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useSheetsCtx from "./useSheetsCtx";
+import variaveis from "../../model/variaveis";
 export default function useSheets() {
   const session = useSession();
+  const { BASE_URL } = variaveis;
   const { state, dispatch } = useSheetsCtx();
   const email = session.data?.user.email;
   useEffect(() => {
@@ -24,20 +26,20 @@ export default function useSheets() {
   }, [email]);
   async function createNewSheet(payload: NewSheetProps) {
     const { data: sheet } = await axios.post(
-      "http://localhost:3000/api/sheets",
+     `${BASE_URL}/api/sheets`,
       {
         ...payload,
       }
     );
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${sheet.data.id}/items`,
+      `${BASE_URL}/api/sheets/${sheet.data.id}/items`,
       {
         email: sheet.data.owner,
         mode: "GET",
       }
     );
     const { data: users } = await axios.get(
-      `http://localhost:3000/api/sheets/${sheet.data.id}/auth`
+      `${BASE_URL}/api/sheets/${sheet.data.id}/auth`
     );
     dispatch({
       type: "create",
@@ -56,7 +58,7 @@ export default function useSheets() {
       tiposDeGastos: updatedSheet.tiposDeGastos,
     };
     const { data: updatedsheetf } = await axios.put(
-      `http://localhost:3000/api/sheets`,
+      `${BASE_URL}/api/sheets`,
       {
         email: state.currentUser,
         ...finalUpdatedSheet,
@@ -66,21 +68,21 @@ export default function useSheets() {
   }
   async function loadSheet(id: string) {
     const { data: sheet } = await axios.post(
-      `http://localhost:3000/api/sheets/${id}`,
+      `${BASE_URL}/api/sheets/${id}`,
       {
         email: state.currentUser,
         mode: "GET",
       }
     );
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${id}/items`,
+      `${BASE_URL}/api/sheets/${id}/items`,
       {
         email: state.currentUser,
         mode: "GET",
       }
     );
     const { data: users } = await axios.get(
-      `http://localhost:3000/api/sheets/${id}/auth`
+      `${BASE_URL}/api/sheets/${id}/auth`
     );
     dispatch({
       type: "refresh",
@@ -95,14 +97,14 @@ export default function useSheets() {
     seletedSheet: sheetProps
   ): Promise<void> {
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${seletedSheet.data.id}/items`,
+      `${BASE_URL}/api/sheets/${seletedSheet.data.id}/items`,
       {
         email: state.currentUser,
         mode: "GET",
       }
     );
     const { data: users } = await axios.get(
-      `http://localhost:3000/api/sheets/${seletedSheet.data.id}/auth`
+      `${BASE_URL}/api/sheets/${seletedSheet.data.id}/auth`
     );
     dispatch({
       type: "refresh",
@@ -118,7 +120,7 @@ export default function useSheets() {
   }
   async function refreshItems() {
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${state.data.id}/items`,
+      `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         email: state.currentUser,
         mode: "GET",
@@ -128,7 +130,7 @@ export default function useSheets() {
   }
   async function createUser(newUser: NewUserProps) {
     const { data: users } = await axios.post(
-      `http://localhost:3000/api/sheets/${state.data.id}/auth`,
+      `${BASE_URL}/api/sheets/${state.data.id}/auth`,
       {
         ...newUser,
       }
@@ -137,7 +139,7 @@ export default function useSheets() {
   }
   async function updateUser(user: userProps) {
     const { data: users } = await axios.put(
-      `http://localhost:3000/api/sheets/${state.data.id}/auth`,
+      `${BASE_URL}/api/sheets/${state.data.id}/auth`,
       {
         ...user,
       }
@@ -146,13 +148,13 @@ export default function useSheets() {
   }
   async function deleteUser(user: userProps) {
     const { data: users } = await axios.delete(
-      `http://localhost:3000/api/sheets/${state.data.id}/auth/${user.id}`
+      `${BASE_URL}/api/sheets/${state.data.id}/auth/${user.id}`
     );
     dispatch({ type: "refreshUsers", payload: users });
   }
   async function deleteItem(id: string) {
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${state.data.id}/items/${id}`,
+      `${BASE_URL}/api/sheets/${state.data.id}/items/${id}`,
       {
         email: state.currentUser,
         mode: "DELETE",
@@ -165,7 +167,7 @@ export default function useSheets() {
   }
   async function createNewItem(newItem: newSheetItemProps) {
     const { data: items } = await axios.post(
-      `http://localhost:3000/api/sheets/${state.data.id}/items`,
+      `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         email: state.currentUser,
         mode: "POST",
@@ -176,7 +178,7 @@ export default function useSheets() {
   }
   async function updateItem(item: sheetItemProps) {
     const { data: items } = await axios.put(
-      `http://localhost:3000/api/sheets/${state.data.id}/items`,
+      `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         method: "PUT",
         email: state.currentUser,
@@ -294,7 +296,7 @@ export default function useSheets() {
     });
   }
   async function deleteSheet(){
-    const resp = await axios.post(`http://localhost:3000/api/sheets/${state.data.id}`, {
+    const resp = await axios.post(`${BASE_URL}/api/sheets/${state.data.id}`, {
       email: state.currentUser,
       mode: "DELETE"
     });

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import ItemService from "../../../../../backEnd/services/Item.service";
-import ItemController from "../../../../../backEnd/controller/ItemController"
+import ItemController from "../../../../../backEnd/controller/itemController"
 export default async function SheetIdRouter(
   req: NextApiRequest,
   res: NextApiResponse
