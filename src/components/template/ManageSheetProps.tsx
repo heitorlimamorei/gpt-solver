@@ -136,7 +136,7 @@ function ManageSheetProps(props: ManageSheetProps) {
           </button>
         </div>
       </div>
-      <div className="flex mt-5">
+      <div className="flex mt-5 justify-between">
         <Button
           ClassName="px-2 rounded-md mr-3"
           onClick={handleSubmit}

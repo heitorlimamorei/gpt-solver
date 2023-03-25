@@ -19,6 +19,8 @@ import ManageRenderOptions from "../../../components/template/ManageRenderOption
 import ControllBar from "../../../components/template/ControllBar";
 import variaveis from "../../../model/variaveis";
 import { useRouter } from "next/router";
+import Switch2 from "../../../components/template/Switch2";
+import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
 
 function Sheet() {
   const {
@@ -47,6 +49,9 @@ function Sheet() {
     });
   const [selected, setSelected] = useState<"users" | "properties">(
     "properties"
+  );
+  const [selected2, setSelected2] = useState<"createItem" | "import">(
+    "createItem"
   );
   const router = useRouter();
   const session = useSession();
@@ -186,10 +191,10 @@ function Sheet() {
   }, []);
   useEffect(() => {
     if (email !== undefined && email !== null && email.length > 0) {
-      let id:any = router.query.sheetId;
+      let id: any = router.query.sheetId;
       console.log(email);
       console.log(router.query.sheetId);
-      ReloadSheet(id, email)
+      ReloadSheet(id, email);
     }
   }, [email]);
   return (
@@ -206,14 +211,28 @@ function Sheet() {
           />
         </ModalForm>
         <ModalForm isOpen={isOpen}>
-          <FormModalContent
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            isEditMode={currentEditingItem != null}
-            onCancel={handleCancel}
-            spentOptions={sheet.data.tiposDeGastos}
-          />
+          <div className=" flex flex-row mb-1">
+            <Switch2
+              className="self-start mb-2"
+              selected={selected2}
+              setSelected={setSelected2}
+            />
+          </div>
+          {selected2 === "createItem" ? (
+            <FormModalContent
+              formData={formData}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              isEditMode={currentEditingItem != null}
+              onCancel={handleCancel}
+              spentOptions={sheet.data.tiposDeGastos}
+            />
+          ) : (
+            <ImportForeignItemsModal
+              toggleIsOpen={handleToggle}
+              sheetOptions={sheets}
+            />
+          )}
         </ModalForm>
         <ModalForm isOpen={isOpen2}>
           <div className=" flex flex-row">

@@ -330,6 +330,13 @@ export default function useSheets() {
     });
     dispatch({type: "onDeleteSheet"});
   }
+  async function cloneForeignItems(foreignId){
+    const { data } = await axios.post(`${BASE_URL}/api/sheets/${state.data.id}/items/clone`, {
+      email: state.currentUser,
+      foreignId: foreignId
+    })
+    dispatch({type: "refreshItems", payload: data});
+  }
   return {
     sheet: state,
     createNewSheet,
@@ -354,6 +361,7 @@ export default function useSheets() {
     filterBySpentType,
     getStats,
     updateSheet,
-    sheetReLoader
+    sheetReLoader,
+    cloneForeignItems
   };
 }
