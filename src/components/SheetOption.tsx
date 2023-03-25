@@ -17,7 +17,7 @@ export default function SheetOption(props:SheetOptionProps) {
     shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] rounded-md mx-3  cursor-pointer"
     key={currentSheet.data.id}
     onClick={async () =>{
-      router.push(`/Sheet`)
+      router.push(`/sheet/${currentSheet.data.id}`)
       await loadSheetByUserSeletion(currentSheet)
     }
     }

@@ -49,6 +49,7 @@ export default function useSheets() {
         users,
       },
     });
+    return sheet
   }
   async function updateSheet(updatedSheet: upadatedSheetProps) {
     const finalUpdatedSheet = {
@@ -78,6 +79,33 @@ export default function useSheets() {
       `${BASE_URL}/api/sheets/${id}/items`,
       {
         email: state.currentUser,
+        mode: "GET",
+      }
+    );
+    const { data: users } = await axios.get(
+      `${BASE_URL}/api/sheets/${id}/auth`
+    );
+    dispatch({
+      type: "refresh",
+      payload: {
+        sheet,
+        items,
+        users,
+      },
+    });
+  }
+  async function sheetReLoader(id: string, currentUser:string) {
+    const { data: sheet } = await axios.post(
+      `${BASE_URL}/api/sheets/${id}`,
+      {
+        email: currentUser,
+        mode: "GET",
+      }
+    );
+    const { data: items } = await axios.post(
+      `${BASE_URL}/api/sheets/${id}/items`,
+      {
+        email: currentUser,
         mode: "GET",
       }
     );
@@ -326,5 +354,6 @@ export default function useSheets() {
     filterBySpentType,
     getStats,
     updateSheet,
+    sheetReLoader
   };
 }

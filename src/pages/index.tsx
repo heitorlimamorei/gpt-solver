@@ -176,16 +176,6 @@ export default function Home() {
       }
     }
   }, [sheetIds]);
-  const renderItems = useCallback(() => {
-    const { name, description, type, sortMode } = itemsRenderOptions;
-    const itemsReady = filterByDescription(
-      description,
-      filterByName(name, filterBySpentType(type, getSortedItems(sortMode)))
-    );
-    return itemsReady.map((item) => (
-      <CardItem key={item.id} item={item} setEditMode={setEditMode} />
-    ));
-  }, [sheet, itemsRenderOptions]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout

@@ -1,36 +1,34 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconeAjustes } from "../components/icons/Icones";
-import Layout from "../components/template/Layout";
-import ModalForm from "../components/template/ModalForm";
-import useSheets from "../data/hook/useSheets";
+import { useCallback, useEffect, useState } from "react";
+import Layout from "../../../components/template/Layout";
+import ModalForm from "../../../components/template/ModalForm";
+import useSheets from "../../../data/hook/useSheets";
 import { useSession } from "next-auth/react";
-import CardItem from "../components/CardItem";
+import CardItem from "../../../components/CardItem";
 import _ from "lodash";
 import axios from "axios";
 import {
   sheetItemProps,
   sheetProps,
   itemRenderOptions,
-} from "../types/sheetTypes";
-import FormModalContent from "../components/template/FormModalContent";
-import ManageSheetProps from "../components/template/ManageSheetProps";
-import Button from "../components/Button";
-import ManageUsers from "../components/template/ManageUsers";
-import Switch from "../components/template/Switch";
-import ManageRenderOptions from "../components/template/ManageRenderOptions";
-import ControllBar from "../components/template/ControllBar";
-import variaveis from "../model/variaveis";
+} from "../../../types/sheetTypes";
+import FormModalContent from "../../../components/template/FormModalContent";
+import ManageSheetProps from "../../../components/template/ManageSheetProps";
+import ManageUsers from "../../../components/template/ManageUsers";
+import Switch from "../../../components/template/Switch";
+import ManageRenderOptions from "../../../components/template/ManageRenderOptions";
+import ControllBar from "../../../components/template/ControllBar";
+import variaveis from "../../../model/variaveis";
+import { useRouter } from "next/router";
 
 function Sheet() {
   const {
     sheet,
-    loadSheet,
+    sheetReLoader,
     createNewItem,
     getBalance,
     getSortedItems,
     updateItem,
     filterBySpentType,
-    loadSheetByUserSeletion,
     filterByDescription,
     filterByName,
   } = useSheets();
@@ -50,6 +48,7 @@ function Sheet() {
   const [selected, setSelected] = useState<"users" | "properties">(
     "properties"
   );
+  const router = useRouter();
   const session = useSession();
   let email = session.data?.user.email;
   let name = session.data?.user.name;
@@ -147,13 +146,10 @@ function Sheet() {
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
         sheetIds.forEach((sheetId) => {
-          const currentSheet = axios.post(
-            `${BASE_URL}/api/sheets/${sheetId}`,
-            {
-              email: sheet.currentUser,
-              mode: "GET",
-            }
-          );
+          const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
+            email: sheet.currentUser,
+            mode: "GET",
+          });
           requests.push(currentSheet);
         });
         const responseArray = await Promise.all(requests);
@@ -185,6 +181,17 @@ function Sheet() {
       <CardItem key={item.id} item={item} setEditMode={setEditMode} />
     ));
   }, [sheet, itemsRenderOptions]);
+  const ReloadSheet = useCallback(async (currentId: any, currentEmail: any) => {
+    await sheetReLoader(currentId, currentEmail);
+  }, []);
+  useEffect(() => {
+    if (email !== undefined && email !== null && email.length > 0) {
+      let id:any = router.query.sheetId;
+      console.log(email);
+      console.log(router.query.sheetId);
+      ReloadSheet(id, email)
+    }
+  }, [email]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
@@ -223,8 +230,10 @@ function Sheet() {
           )}
         </ModalForm>
         <div className="transition-all duration-500 ease-linear flex justify-center">
-          <div className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
-          dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white ">
+          <div
+            className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
+          dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white "
+          >
             <h1 className="font-bold text-3xl uppercase">{sheet.data.name}</h1>
           </div>
         </div>
