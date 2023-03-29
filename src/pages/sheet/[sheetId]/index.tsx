@@ -103,6 +103,7 @@ function Sheet() {
     (event) => {
       event.preventDefault();
       if (!currentEditingItem) {
+        console.log(formData.type);
         createNewItem({
           ...formData,
           value: Number(formData.value),
@@ -187,8 +188,14 @@ function Sheet() {
     ));
   }, [sheet, itemsRenderOptions]);
   const ReloadSheet = useCallback(async (currentId: any, currentEmail: any) => {
-    await sheetReLoader(currentId, currentEmail);
-  }, []);
+    let reloadedSheet:sheetProps =  await sheetReLoader(currentId, currentEmail);
+    setFormData(current => {
+      return {
+        ...current,
+        type: reloadedSheet.data.tiposDeGastos[0]
+      }
+    })
+  }, [setFormData]);
   useEffect(() => {
     if (email !== undefined && email !== null && email.length > 0) {
       let id: any = router.query.sheetId;

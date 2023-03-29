@@ -17,7 +17,7 @@ interface FormModalContentProps {
   onCancel: () => void;
   spentOptions: string[];
 }
-function FormModalContent(props:FormModalContentProps) {
+function FormModalContent(props: FormModalContentProps) {
   const {
     formData,
     handleChange,

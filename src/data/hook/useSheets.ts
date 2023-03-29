@@ -120,6 +120,7 @@ export default function useSheets() {
         users,
       },
     });
+    return sheet;
   }
   async function loadSheetByUserSeletion(
     seletedSheet: sheetProps
