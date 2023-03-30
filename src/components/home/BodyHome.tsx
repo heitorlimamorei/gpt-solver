@@ -1,6 +1,8 @@
+import { MoneyIcon, MoneyIconC } from "../icons/Icones";
+
 function BodyHome() {
   return (
-    <div className=" w-full h-full">
+    <div className=" w-full lg:h-[81vh] h-full">
       <div className="transition-all duration-500 ease-linear flex lg:flex-row flex-col w-full h-full dark:bg-[#232323] bg-[#E0E5EC] dark:text-white text-black">
         <div className="flex flex-col items-center w-full h-[60%] lg:w-[40%]">
           <h1 className="lg:w-[80%] mt-10 w-full text-5xl px-3 font-bold ">
@@ -30,8 +32,12 @@ function BodyHome() {
             aliquam purus sit. Suspendisse interdum consectetur libero id.
           </p>
         </div>
-        <div className="w-full h-[50rem] lg:h-[50rem]  lg:w-[60%] flex items-start mt-5 lg:items-center justify-center transition-all duration-500 ease-linear">
-          <div className="dark:shadow-[inset_10px_10px_19px_#121212,inset_-10px_-10px_19px_#343434] shadow-[inset_10px_10px_19px_#727578,inset_-10px_-10px_19px_#FFFFFF] rounded-[5rem] w-[90%] lg:w-[80%] lg:h-[90%] h-[50%] flex items-center justify-center transition-all duration-500 ease-linear"></div>
+        <div className="w-full h-[50rem] lg:h-[50rem]  lg:w-[60%] flex items-start mt-[3rem] lg:items-center justify-center transition-all duration-500 ease-linear">
+          <div className=" rounded-full dark:shadow-[36px_36px_72px_#0e0e0e,-36px_-36px_72px_#383838] 
+          shadow-[36px_36px_72px_#5a5c5e,-36px_-36px_72px_#ffffff] bg-gradient-to-lr from-[#caced4] to-[#f0f5fd] dark:from-[#202020] dark:to-[#252525]">
+            <div className="hidden lg:flex">{MoneyIcon()}</div>
+            <div className=" lg:hidden">{MoneyIconC()}</div>
+          </div>
         </div>
       </div>
     </div>
