@@ -313,6 +313,7 @@ export default function useSheets() {
       state.items,
       (item: sheetItemProps) => item.type
     );
+    let total = sumAllItems();
     const arrayAgrupado = Object.entries(objAgrupado);
     return arrayAgrupado.map((type) => {
       let sumOfSpents = 0;
@@ -321,6 +322,7 @@ export default function useSheets() {
         name: type[0],
         value: Number(sumOfSpents.toFixed(2)),
         length: type[1].length,
+        percentOfSpents: parseFloat(((sumOfSpents / total) * 100).toFixed(2))
       };
     });
   }
