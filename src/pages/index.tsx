@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconeAjustes, plusIcon } from "../components/icons/Icones";
+import { useCallback, useEffect, useState } from "react";
+import { plusIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
+import useSWR from "swr";
 import axios from "axios";
 import {
   sheetItemProps,
@@ -17,22 +18,15 @@ import ManageUsers from "../components/template/ManageUsers";
 import CreateSheet from "../components/template/CreateSheet";
 import _ from "lodash";
 import SheetOption from "../components/SheetOption";
-import CardItem from "../components/CardItem";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
 import variaveis from "../model/variaveis";
 export default function Home() {
   const {
     sheet,
-    loadSheet,
     createNewItem,
-    getBalance,
-    getSortedItems,
     updateItem,
-    filterBySpentType,
     loadSheetByUserSeletion,
-    filterByDescription,
-    filterByName,
   } = useSheets();
   const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
@@ -85,16 +79,6 @@ export default function Home() {
       description: "",
     });
     setCurrentEditingItem(null);
-  }, []);
-  const setEditMode = useCallback((currentItem: sheetItemProps) => {
-    setCurrentEditingItem(currentItem);
-    setFormData({
-      name: currentItem.name,
-      type: currentItem.type,
-      value: currentItem.value,
-      description: currentItem.description,
-    });
-    setIsOpen((current) => !current);
   }, []);
   const handleSubmit = useCallback(
     (event) => {

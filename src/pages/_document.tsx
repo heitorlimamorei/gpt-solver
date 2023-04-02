@@ -13,7 +13,7 @@ class MyDocument extends Document {
   }
 
   render() {
-    const themeColor = "#333333"; // Defina a cor do tema aqui
+    const themeColor = "#232323"; // Defina a cor do tema aqui
     return (
       <Html lang="pt-br">
         <Head>
