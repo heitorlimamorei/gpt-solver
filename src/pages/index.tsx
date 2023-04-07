@@ -4,7 +4,6 @@ import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
 import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
-import useSWR from "swr";
 import axios from "axios";
 import {
   sheetItemProps,
@@ -21,13 +20,12 @@ import SheetOption from "../components/SheetOption";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
 import variaveis from "../model/variaveis";
+import Pacman from "../components/Clipers/Pacman";
+import BarCLiper from "../components/Clipers/BarLoader";
+import Cliper from "../components/Clipers/Cliper";
 export default function Home() {
-  const {
-    sheet,
-    createNewItem,
-    updateItem,
-    loadSheetByUserSeletion,
-  } = useSheets();
+  const { sheet, createNewItem, updateItem, loadSheetByUserSeletion } =
+    useSheets();
   const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
@@ -35,6 +33,7 @@ export default function Home() {
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
+  const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
   const [itemsRenderOptions, setItemsRenderOptions] =
     useState<itemRenderOptions>({
       name: "",
@@ -114,6 +113,7 @@ export default function Home() {
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {
+        setSheetIdsIsLoading(true);
         axios
           .post(`${BASE_URL}/api/users/login`, {
             email: email,
@@ -132,13 +132,10 @@ export default function Home() {
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
         sheetIds.forEach((sheetId) => {
-          const currentSheet = axios.post(
-            `${BASE_URL}/api/sheets/${sheetId}`,
-            {
-              email: sheet.currentUser,
-              mode: "GET",
-            }
-          );
+          const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
+            email: sheet.currentUser,
+            mode: "GET",
+          });
           requests.push(currentSheet);
         });
         const responseArray = await Promise.all(requests);
@@ -148,10 +145,13 @@ export default function Home() {
     }
   }, [sheetIds]);
   const loader = useCallback(async () => {
-    const sheetsResp: any = await getSheets();
-    if (sheetsResp.length > 0) {
-      setSheets(sheetsResp);
-    }
+    try {
+      const sheetsResp: any = await getSheets();
+      setSheetIdsIsLoading(false);
+      if (sheetsResp.length > 0) {
+        setSheets(sheetsResp);
+      }
+    } catch (err) {}
   }, [getSheets]);
   useEffect(() => {
     if (sheetIds !== undefined) {
@@ -203,7 +203,7 @@ export default function Home() {
             addSheetIntoTheList={setSheets}
           />
         </ModalForm>
- 
+
         <div className="flex flex-1 w-full mt-3">
           <div className="flex w-full justify-end">
             <Button
@@ -216,20 +216,28 @@ export default function Home() {
             ></Button>
           </div>
         </div>
-        <div className="mt-3">
-          <h1 className="font-bold text-2xl dark:text-white">Escolha a planilha!</h1>
-          <ul className="flex md:flex-row flex-col md:flex-wrap mt-2">
-            {sheets.length > 0 &&
-              sheets.map((currentSheet) => {
-                return (
-                  <SheetOption
-                    key={currentSheet.data.id}
-                    currentSheet={currentSheet}
-                    loadSheetByUserSeletion={loadSheetByUserSeletion}
-                  />
-                );
-              })}
-          </ul>
+        <div className="flex flex-col mt-3">
+          <h1 className="font-bold text-2xl dark:text-white">
+            Escolha a planilha!
+          </h1>
+          {sheetIdsIsLoading ? (
+            <div className="flex items-center justify-center mt-12">
+              <Cliper isLoading={sheetIdsIsLoading} size={60} />
+            </div>
+          ) : (
+            <ul className="flex md:flex-row flex-col md:flex-wrap mt-2">
+              {sheets.length > 0 &&
+                sheets.map((currentSheet) => {
+                  return (
+                    <SheetOption
+                      key={currentSheet.data.id}
+                      currentSheet={currentSheet}
+                      loadSheetByUserSeletion={loadSheetByUserSeletion}
+                    />
+                  );
+                })}
+            </ul>
+          )}
         </div>
       </Layout>
     </div>
