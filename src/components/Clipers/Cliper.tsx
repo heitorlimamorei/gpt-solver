@@ -5,12 +5,13 @@ interface PacmanLoaderProps {
   isLoading: boolean;
   color?: string;
   size: number;
+  className?: string;
 }
 export default function Cliper(props: PacmanLoaderProps) {
-  const { isLoading, size } = props;
+  const { isLoading, size, className } = props;
   const { tema } = useAppData();
   return (
-    <div className="flex justify-center items-center">
+    <div className={`flex justify-center items-center ${className}`}>
       <ClipLoader
         color={tema === "dark" ? "white" : "black"}
         loading={isLoading}

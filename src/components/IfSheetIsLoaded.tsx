@@ -10,6 +10,6 @@ function IfSheetIsLoaded({ children }) {
       setSheetIsLoading(false);
     }
   }, [sheet.users]);
-  return <>{sheetIsLoading ? <Cliper isLoading={sheetIsLoading} size={60} /> : <>{children}</>}</>;
+  return <>{sheetIsLoading ? <Cliper className="mt-12" isLoading={sheetIsLoading} size={60} /> : <>{children}</>}</>;
 }
 export default memo(IfSheetIsLoaded);

@@ -1,113 +1,23 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { plusIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
 import ModalForm from "../components/template/ModalForm";
-import useSheets from "../data/hook/useSheets";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import {
-  sheetItemProps,
-  sheetProps,
-  itemRenderOptions,
-} from "../types/sheetTypes";
-import FormModalContent from "../components/template/FormModalContent";
-import ManageSheetProps from "../components/template/ManageSheetProps";
+import { sheetProps } from "../types/sheetTypes";
 import Button from "../components/Button";
-import ManageUsers from "../components/template/ManageUsers";
 import CreateSheet from "../components/template/CreateSheet";
-import _ from "lodash";
-import SheetOption from "../components/SheetOption";
-import Switch from "../components/template/Switch";
-import ManageRenderOptions from "../components/template/ManageRenderOptions";
 import variaveis from "../model/variaveis";
-import Cliper from "../components/Clipers/Cliper";
+import SheetOptions from "../components/SheetOptions";
 export default function Home() {
-  const { sheet, createNewItem, updateItem, loadSheetByUserSeletion } =
-    useSheets();
   const { BASE_URL } = variaveis;
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
-  const [isOpen4, setIsOpen4] = useState(false);
-  const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
-  const [itemsRenderOptions, setItemsRenderOptions] =
-    useState<itemRenderOptions>({
-      name: "",
-      type: "",
-      description: "",
-      sortMode: "date descending",
-    });
-  const [selected, setSelected] = useState<"users" | "properties">(
-    "properties"
-  );
   const session = useSession();
+  const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
   let email = session.data?.user.email;
   let name = session.data?.user.name;
-  const [currentEditingItem, setCurrentEditingItem] =
-    useState<sheetItemProps>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    type: sheet.data.tiposDeGastos[0],
-    value: 0,
-    description: "",
-  });
-  const handleToggle = useCallback(() => {
-    setIsOpen((current) => !current);
-  }, []);
-  const handleToggleManageProps = useCallback(() => {
-    setIsOpen2((current) => !current);
-  }, []);
-  const handleChange = useCallback((event) => {
-    setFormData((current) => {
-      return {
-        ...current,
-        [event.target.name]: event.target.value,
-      };
-    });
-  }, []);
-  const handleCancel = useCallback(() => {
-    handleToggle();
-    setFormData({
-      name: "",
-      type: "",
-      value: 0,
-      description: "",
-    });
-    setCurrentEditingItem(null);
-  }, []);
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      if (!currentEditingItem) {
-        createNewItem({
-          ...formData,
-          value: Number(formData.value),
-          sheetId: sheet.data.id,
-          author: sheet.currentUser,
-          date: new Date(),
-        });
-      } else {
-        updateItem({
-          ...currentEditingItem,
-          value: formData.value,
-          description: formData.description,
-          type: formData.type,
-          name: formData.name,
-        });
-      }
-      setFormData({
-        name: "",
-        type: "",
-        value: 0,
-        description: "",
-      });
-      setCurrentEditingItem(null);
-      handleToggle();
-    },
-    [currentEditingItem, formData, sheet]
-  );
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {
@@ -125,76 +35,12 @@ export default function Home() {
       }
     }
   }, [email]);
-  const getSheets = useCallback(async () => {
-    let requests = [];
-    if (sheetIds !== undefined) {
-      if (sheetIds.length > 0) {
-        sheetIds.forEach((sheetId) => {
-          const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
-            email: sheet.currentUser,
-            mode: "GET",
-          });
-          requests.push(currentSheet);
-        });
-        const responseArray = await Promise.all(requests);
-        let finalReponse = responseArray.map((response) => response.data);
-        return finalReponse;
-      }
-    }
-  }, [sheetIds]);
-  const loader = useCallback(async () => {
-    try {
-      const sheetsResp: any = await getSheets();
-      setSheetIdsIsLoading(false);
-      if (sheetsResp.length > 0) {
-        setSheets(sheetsResp);
-      }
-    } catch (err) {}
-  }, [getSheets]);
-  useEffect(() => {
-    if (sheetIds !== undefined) {
-      if (sheetIds.length > 0) {
-        loader();
-      }
-    }
-  }, [sheetIds]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
       >
-        <ModalForm isOpen={isOpen4}>
-          <ManageRenderOptions
-            itemsRenderOptions={itemsRenderOptions}
-            setItemsRenderOptions={setItemsRenderOptions}
-            toggleIsOpen={() => setIsOpen4((current) => !current)}
-          />
-        </ModalForm>
-        <ModalForm isOpen={isOpen}>
-          <FormModalContent
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            isEditMode={currentEditingItem != null}
-            onCancel={handleCancel}
-            spentOptions={sheet.data.tiposDeGastos}
-          />
-        </ModalForm>
-        <ModalForm isOpen={isOpen2}>
-          <div className=" flex flex-row">
-            <Switch
-              className="self-start mb-2"
-              selected={selected}
-              setSelected={setSelected}
-            />
-          </div>
-          {selected === "properties" ? (
-            <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
-          ) : (
-            <ManageUsers toggleIsOpen={handleToggleManageProps} />
-          )}
-        </ModalForm>
         <ModalForm isOpen={isOpen3}>
           <CreateSheet
             toggleIsOpen={() => setIsOpen3((current) => !current)}
@@ -214,29 +60,13 @@ export default function Home() {
             ></Button>
           </div>
         </div>
-        <div className="flex flex-col mt-3">
-          <h1 className="font-bold text-2xl dark:text-white">
-            Escolha a planilha!
-          </h1>
-          {sheetIdsIsLoading ? (
-            <div className="flex items-center justify-center mt-12">
-              <Cliper isLoading={sheetIdsIsLoading} size={60} />
-            </div>
-          ) : (
-            <ul className="flex md:flex-row flex-col md:flex-wrap mt-2">
-              {sheets.length > 0 &&
-                sheets.map((currentSheet) => {
-                  return (
-                    <SheetOption
-                      key={currentSheet.data.id}
-                      currentSheet={currentSheet}
-                      loadSheetByUserSeletion={loadSheetByUserSeletion}
-                    />
-                  );
-                })}
-            </ul>
-          )}
-        </div>
+        <SheetOptions
+          sheetIds={sheetIds}
+          sheets={sheets}
+          sheetIdsIsLoading={sheetIdsIsLoading}
+          setSheetIdsIsLoading={setSheetIdsIsLoading}
+          setSheets={setSheets}
+        />
       </Layout>
     </div>
   );
