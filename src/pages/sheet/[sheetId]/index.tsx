@@ -21,6 +21,7 @@ import variaveis from "../../../model/variaveis";
 import { useRouter } from "next/router";
 import Switch2 from "../../../components/template/Switch2";
 import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
+import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
 
 function Sheet() {
   const {
@@ -40,6 +41,7 @@ function Sheet() {
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen4, setIsOpen4] = useState(false);
+
   const [itemsRenderOptions, setItemsRenderOptions] =
     useState<itemRenderOptions>({
       name: "",
@@ -187,15 +189,21 @@ function Sheet() {
       <CardItem key={item.id} item={item} setEditMode={setEditMode} />
     ));
   }, [sheet, itemsRenderOptions]);
-  const ReloadSheet = useCallback(async (currentId: any, currentEmail: any) => {
-    let reloadedSheet:sheetProps =  await sheetReLoader(currentId, currentEmail);
-    setFormData(current => {
-      return {
-        ...current,
-        type: reloadedSheet.data.tiposDeGastos[0]
-      }
-    })
-  }, [setFormData]);
+  const ReloadSheet = useCallback(
+    async (currentId: any, currentEmail: any) => {
+      let reloadedSheet: sheetProps = await sheetReLoader(
+        currentId,
+        currentEmail
+      );
+      setFormData((current) => {
+        return {
+          ...current,
+          type: reloadedSheet.data.tiposDeGastos[0],
+        };
+      });
+    },
+    [setFormData]
+  );
   useEffect(() => {
     if (email !== undefined && email !== null && email.length > 0) {
       let id: any = router.query.sheetId;
@@ -210,74 +218,78 @@ function Sheet() {
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
       >
-        <ModalForm isOpen={isOpen4}>
-          <ManageRenderOptions
-            itemsRenderOptions={itemsRenderOptions}
-            setItemsRenderOptions={setItemsRenderOptions}
-            toggleIsOpen={() => setIsOpen4((current) => !current)}
-          />
-        </ModalForm>
-        <ModalForm isOpen={isOpen}>
-          <div className=" flex flex-row mb-1">
-            <Switch2
-              className="self-start mb-2"
-              selected={selected2}
-              setSelected={setSelected2}
+        <IfSheetIsLoaded>
+          <ModalForm isOpen={isOpen4}>
+            <ManageRenderOptions
+              itemsRenderOptions={itemsRenderOptions}
+              setItemsRenderOptions={setItemsRenderOptions}
+              toggleIsOpen={() => setIsOpen4((current) => !current)}
             />
-          </div>
-          {selected2 === "createItem" ? (
-            <FormModalContent
-              formData={formData}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              isEditMode={currentEditingItem != null}
-              onCancel={handleCancel}
-              spentOptions={sheet.data.tiposDeGastos}
-            />
-          ) : (
-            <ImportForeignItemsModal
-              toggleIsOpen={handleToggle}
-              sheetOptions={sheets}
-            />
-          )}
-        </ModalForm>
-        <ModalForm isOpen={isOpen2}>
-          <div className=" flex flex-row">
-            <Switch
-              className="self-start mb-2"
-              selected={selected}
-              setSelected={setSelected}
-            />
-          </div>
-          {selected === "properties" ? (
-            <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
-          ) : (
-            <ManageUsers toggleIsOpen={handleToggleManageProps} />
-          )}
-        </ModalForm>
-        <div className="transition-all duration-500 ease-linear flex justify-center">
-          <div
-            className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
+          </ModalForm>
+          <ModalForm isOpen={isOpen}>
+            <div className=" flex flex-row mb-1">
+              <Switch2
+                className="self-start mb-2"
+                selected={selected2}
+                setSelected={setSelected2}
+              />
+            </div>
+            {selected2 === "createItem" ? (
+              <FormModalContent
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                isEditMode={currentEditingItem != null}
+                onCancel={handleCancel}
+                spentOptions={sheet.data.tiposDeGastos}
+              />
+            ) : (
+              <ImportForeignItemsModal
+                toggleIsOpen={handleToggle}
+                sheetOptions={sheets}
+              />
+            )}
+          </ModalForm>
+          <ModalForm isOpen={isOpen2}>
+            <div className=" flex flex-row">
+              <Switch
+                className="self-start mb-2"
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </div>
+            {selected === "properties" ? (
+              <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
+            ) : (
+              <ManageUsers toggleIsOpen={handleToggleManageProps} />
+            )}
+          </ModalForm>
+          <div className="transition-all duration-500 ease-linear flex justify-center">
+            <div
+              className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
           dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white "
-          >
-            <h1 className="font-bold text-3xl uppercase">{sheet.data.name}</h1>
+            >
+              <h1 className="font-bold text-3xl uppercase">
+                {sheet.data.name}
+              </h1>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center items-center w-full h-[5rem]">
-          <h2 className="dark:text-white font-bold text-3xl">
-            R${getBalance()}
-          </h2>
-        </div>
-        <ControllBar
-          handleToggle={handleToggle}
-          handleToggleManageProps={handleToggleManageProps}
-          setIsOpen4={setIsOpen4}
-        />
-        <div>
-          <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
-            {renderItems()}
-          </ul>
-        </div>
+          <div className="flex justify-center items-center w-full h-[5rem]">
+            <h2 className="dark:text-white font-bold text-3xl">
+              R${getBalance()}
+            </h2>
+          </div>
+          <ControllBar
+            handleToggle={handleToggle}
+            handleToggleManageProps={handleToggleManageProps}
+            setIsOpen4={setIsOpen4}
+          />
+          <div>
+            <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
+              {renderItems()}
+            </ul>
+          </div>
+        </IfSheetIsLoaded>
       </Layout>
     </div>
   );

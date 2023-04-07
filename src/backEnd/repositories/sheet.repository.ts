@@ -81,7 +81,7 @@ async function sheetExists(id:string){
 }
 async function deleteSheet(id:string){
     const sheetRef = doc(db, `planilhas/${id}`);
-    const docRef = await deleteDoc(sheetRef)
+    const docRef = await deleteDoc(sheetRef);
 }
 export default {
     getSheets,

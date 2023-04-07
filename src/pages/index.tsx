@@ -20,8 +20,6 @@ import SheetOption from "../components/SheetOption";
 import Switch from "../components/template/Switch";
 import ManageRenderOptions from "../components/template/ManageRenderOptions";
 import variaveis from "../model/variaveis";
-import Pacman from "../components/Clipers/Pacman";
-import BarCLiper from "../components/Clipers/BarLoader";
 import Cliper from "../components/Clipers/Cliper";
 export default function Home() {
   const { sheet, createNewItem, updateItem, loadSheetByUserSeletion } =
