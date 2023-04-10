@@ -24,9 +24,11 @@ export default function CardItem(props: CardItem) {
         {item.description.length > 0 ? (
           <>
             <strong>Descrição: </strong>
-            <p className="break-all">{item.description.length <= 45
-              ? item.description
-              : item.description.slice(0, 45) + "..."}</p>
+            <p className="break-all">
+              {item.description.length <= 45
+                ? item.description
+                : item.description.slice(0, 45) + "..."}
+            </p>
           </>
         ) : (
           <></>
@@ -40,35 +42,37 @@ export default function CardItem(props: CardItem) {
       <p className="dark:text-white mb-2 w-[90%]">
         <strong>Tipo:</strong> {item.type}
       </p>
-      <div className="flex w-full">
-        <Button
-          ClassName={`transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
+      {sheet.session.canEditItems && (
+        <div className="flex w-full">
+          <Button
+            ClassName={`transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
         shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
         dark:shadow-[5px_5px_10px_#1A1A1A,_-5px_-5px_10px_#2C2C2C]
          dark:text-white hover:text-red-600 ${
            !sheet.session.canEditItems ? "cursor-not-allowed" : ""
          }`}
-          icon={trashIcon(8)}
-          onClick={async (ev) => {
-            ev.stopPropagation();
-            await deleteItem(item.id);
-          }}
-          disabled={!sheet.session.canEditItems}
-        ></Button>
-        <button
-          className={`ml-5 transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
+            icon={trashIcon(8)}
+            onClick={async (ev) => {
+              ev.stopPropagation();
+              await deleteItem(item.id);
+            }}
+            disabled={!sheet.session.canEditItems}
+          ></Button>
+          <button
+            className={`ml-5 transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 
       shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
       dark:shadow-[5px_5px_10px_#1A1A1A,_-5px_-5px_10px_#2C2C2C]
       hover:text-blue-900 dark:text-white  ${
         !sheet.session.canEditItems ? "cursor-not-allowed" : ""
       }`}
-          onClick={() =>
-            sheet.session.canEditItems ? setEditMode(item) : false
-          }
-        >
-          {editIcon(8)}
-        </button>
-      </div>
+            onClick={() =>
+              sheet.session.canEditItems ? setEditMode(item) : false
+            }
+          >
+            {editIcon(8)}
+          </button>
+        </div>
+      )}
     </li>
   );
 }

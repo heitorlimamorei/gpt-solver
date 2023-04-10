@@ -11,7 +11,7 @@ import {
   sheetProps,
   itemRenderOptions,
 } from "../../../types/sheetTypes";
-import FormModalContent from "../../../components/template/FormModalContent";
+import CreateOrEditItem from "../../../components/template/CreateOrEditItem";
 import ManageSheetProps from "../../../components/template/ManageSheetProps";
 import ManageUsers from "../../../components/template/ManageUsers";
 import Switch from "../../../components/template/Switch";
@@ -28,7 +28,7 @@ function Sheet() {
     sheet,
     sheetReLoader,
     createNewItem,
-    getBalance,
+    sumAllItems,
     getSortedItems,
     updateItem,
     filterBySpentType,
@@ -205,13 +205,16 @@ function Sheet() {
     [setFormData]
   );
   useEffect(() => {
-    if (email !== undefined && email !== null && email.length > 0) {
-      let id: any = router.query.sheetId;
-      console.log(email);
-      console.log(router.query.sheetId);
-      ReloadSheet(id, email);
+    let id: any = router.query.sheetId;
+    if (email !== undefined && email !== null && email.length > 0 && id !== undefined) {
+     
+   
+        console.log(email);
+        console.log(router.query.sheetId);
+        ReloadSheet(id, email);
+      
     }
-  }, [email]);
+  }, [email, router.query]);
   return (
     <div className={`h-[500vh] w-[100%]`}>
       <Layout
@@ -228,14 +231,16 @@ function Sheet() {
           </ModalForm>
           <ModalForm isOpen={isOpen}>
             <div className=" flex flex-row mb-1">
-              <Switch2
-                className="self-start mb-2"
-                selected={selected2}
-                setSelected={setSelected2}
-              />
+              {!currentEditingItem && (
+                <Switch2
+                  className="self-start mb-2"
+                  selected={selected2}
+                  setSelected={setSelected2}
+                />
+              )}
             </div>
             {selected2 === "createItem" ? (
-              <FormModalContent
+              <CreateOrEditItem
                 formData={formData}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
@@ -276,7 +281,7 @@ function Sheet() {
           </div>
           <div className="flex justify-center items-center w-full h-[5rem]">
             <h2 className="dark:text-white font-bold text-3xl">
-              R${getBalance()}
+              R${sumAllItems()}
             </h2>
           </div>
           <ControllBar

@@ -17,7 +17,7 @@ interface FormModalContentProps {
   onCancel: () => void;
   spentOptions: string[];
 }
-function FormModalContent(props: FormModalContentProps) {
+function CreateOrEditItem(props: FormModalContentProps) {
   const {
     formData,
     handleChange,
@@ -98,4 +98,4 @@ function FormModalContent(props: FormModalContentProps) {
     </form>
   );
 }
-export default React.memo(FormModalContent);
+export default React.memo(CreateOrEditItem);
