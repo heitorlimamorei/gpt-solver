@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 interface inputProps {
   ClassName?: string;
   name: string;
@@ -7,13 +7,22 @@ interface inputProps {
   value: any;
   onChange: any;
   disabled?: boolean;
-  ref?: any;
+  checking: {
+    value: any;
+    condition: boolean;
+  };
 }
 
-function Input(props: inputProps) {
+function CheckingInput(props: inputProps) {
+  const checkingInputRef = useRef(null);
+  useEffect(() => {
+    if (props.checking.condition) {
+      checkingInputRef.current.focus();
+    }
+  }, [props.checking]);
   return (
     <input
-      ref={props.ref}
+      ref={checkingInputRef}
       disabled={props.disabled}
       id={props.id}
       name={props.name}
@@ -28,4 +37,4 @@ function Input(props: inputProps) {
   );
 }
 
-export default memo(Input);
+export default memo(CheckingInput);
