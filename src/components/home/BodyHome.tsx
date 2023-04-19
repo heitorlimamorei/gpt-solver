@@ -5,9 +5,9 @@ import Image from "next/image";
 
 function BodyHome() {
   return (
-    <div className=" dark dark:bg-[#232323]  flex items-center w-full h-full ">
-      <div className="flex items-center transition-all duration-500 ease-linear lg:flex-row flex-col w-full h-[51vh] dark:bg-[#232323] bg-[#E0E5EC] dark:text-white text-black">
-        <div className="flex items-center w-[90%] h-full">
+    <div className=" dark bg-[#232323]  flex items-center w-full h-full">
+      <div className="flex items-center transition-all duration-500 ease-linear lg:flex-row flex-col w-full h-full dark:bg-[#232323] text-white text-black">
+        <div className="flex items-center w-[90%] h-[30rem]">
           <div className="flex flex-col items-center justify-center w-full h-full bg-[#232323] rounded-2xl shadow-[18px_18px_55px_#0e0e0e,-18px_-18px_55px_#383838]">
             <div
               className={`flex flex-col items-center justify-center h-[50%] transition-all`}
