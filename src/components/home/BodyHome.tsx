@@ -1,35 +1,24 @@
+import { MoneyIcon, MoneyIconC } from "../icons/Icones";
+import Box from "./Box";
 import RoundedImage from "./RoundedImage";
-import Button from "../Button";
-import controller from "../../../public/images/bitmap.png";
-import Image from "next/image";
 
 function BodyHome() {
   return (
-    <div className=" dark dark:bg-[#232323]  flex items-center w-full h-full ">
-      <div className="flex items-center transition-all duration-500 ease-linear lg:flex-row flex-col w-full h-[51vh] dark:bg-[#232323] bg-[#E0E5EC] dark:text-white text-black">
-        <div className="flex items-center w-[90%] h-full">
-          <div className="flex flex-col items-center justify-center w-full h-full bg-[#232323] rounded-2xl shadow-[18px_18px_55px_#0e0e0e,-18px_-18px_55px_#383838]">
-            <div
-              className={`flex flex-col items-center justify-center h-[50%] transition-all`}
-            >
-              <Image
-                className=""
-                src={controller}
-                alt="Controle"
-                width="300"
-                height="200"
-              ></Image>
-            </div>
-            <div className="flex flex-col place-content-center justify-self-end bg-[#191919] rounded-b-2xl w-full h-[50%]">
-              <h1 className="self-center text-lg font-bold">Tenha controle</h1>
-              <h1 className="self-center text-lg font-bold">
-                sobre suas finanças
-              </h1>
-              <Button ClassName="transition-all duration-1000 rounded-full justify-self-center self-center w-[80%] h-[40%] mt-8 p-4 hover:font-bold hover:w-[83%] hover:h-[43%]">
-                Começar agora
-              </Button>
-            </div>
-          </div>
+    <div className=" dark flex w-full lg:h-[81vh] h-full">
+      <div className="transition-all duration-500 ease-linear flex lg:flex-row flex-col w-full h-full dark:bg-[#232323] bg-[#E0E5EC] dark:text-white text-black">
+        <div className="flex flex-col items-center w-full h-[60%] lg:w-[60%]">
+          <h1 className="lg:w-[80%] mt-10 w-full text-5xl px-3 font-bold ">
+            Conheça o Financial Controller!
+          </h1>
+          <p className="text-lg lg:w-[80%] w-full h-fit mt-5 px-5 ">
+           Você possui controle financeiro ? Se a resposta for não, o Financial controller pode te ajudar a entender para aonde está indo o seu dinheiro.
+           O App pode ser usado individualmente ou em equipes para construir controles de gastos completos. O App é 100% gratuito, venha conhecer!
+          </p>
+        </div>
+        <div className="w-full h-[50rem] lg:h-[50rem]  lg:w-[40%] flex  lg:items-center  transition-all duration-500 ease-linear">
+        <Box>
+          <RoundedImage src="/images/fcmobilescreen.png" alt="Placeholder" />
+          </Box>           
         </div>
       </div>
     </div>

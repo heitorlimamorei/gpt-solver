@@ -1,21 +1,26 @@
+import ButtonDark from "../Button";
 import Image from "next/image";
 import { loginIcon } from "../icons/Icones";
 import logoWhite from "../../../public/images/logo-no-background.png";
+import logoBlack from "../../../public/images/logo-no-background-black.png";
+import BotaoTema from "../template/BotaoTema";
+import useAppData from "../../data/hook/useAppData";
 import iconWhite from "../../../public/images/icon-white-no-bg.png";
+import iconBlack from "../../../public/images/icon-black-no-bg.png";
 import Button from "../Button";
-import { signIn} from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 
 function CabecalhoHome(props) {
   const { tema, alternarTema } = props;
   return (
     <div
-      className={`dark bg-[#232323] w-full h-[1rem] transition-all duration-500 ease-linear lg:mb-5`}
+      className={`dark:bg-[#232323] bg-[#E0E5EC] w-full h-[10%] transition-all duration-500 ease-linear lg:mb-5`}
     >
       <header className="flex items-center w-full h-[10vh]">
         <div className="flex flex-row items-center justify-start h-full w-full">
           <div className="ml-[4rem] w-[30%] hidden lg:flex">
             <Image
-              src={logoWhite}
+              src={tema === "dark" ? logoWhite : logoBlack}
               alt=""
               width="500"
               height="65"
@@ -24,10 +29,10 @@ function CabecalhoHome(props) {
           </div>
           <div className="ml-3 mt-8 lg:hidden">
             <Image
-              src={iconWhite}
+              src={tema === "dark" ? iconWhite : iconBlack}
               alt=""
-              width="100"
-              height="70"
+              width="150"
+              height="100"
               className=""
             ></Image>
           </div>
