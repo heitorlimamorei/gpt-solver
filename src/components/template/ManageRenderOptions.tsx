@@ -85,7 +85,11 @@ function ManageRenderOptions(props: ManageRenderOptionsProps) {
           ClassName="p-3"
         >
           {sortOptions.map((opt) => (
-            <option value={opt.value} key={opt.value}>
+            <option
+              value={opt.value}
+              key={opt.value}
+              className={`dark:bg-[#232323] bg-[#E0E5EC]`}
+            >
               {opt.name}
             </option>
           ))}
@@ -103,7 +107,11 @@ function ManageRenderOptions(props: ManageRenderOptionsProps) {
           ClassName="p-3"
         >
           {spentTypes.map((spentType) => (
-            <option value={spentType.value} key={spentType.value}>
+            <option
+              value={spentType.value}
+              key={spentType.value}
+              className={`dark:bg-[#232323] bg-[#E0E5EC]`}
+            >
               {spentType.name}
             </option>
           ))}
