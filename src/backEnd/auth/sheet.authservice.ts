@@ -50,15 +50,15 @@ async function getSessionData(email: string, sheetId: string) {
 }
 async function createUser(newUser: newUser) {
   if (!(await userAlreadyExists(newUser.sheetId, newUser.email))) {
-    if(newUser.role !== Roles.roles[0].name){
+    if (newUser.role !== Roles.roles[0].name) {
       const resp = await sheetAuthrepo.createUser(newUser);
       await userService.addSheetIntoTheList(newUser.email, newUser.sheetId);
-      return resp
+      return resp;
     } else {
-      throw new Error(`User role: ${newUser.role} not allowed!`)
+      throw new Error(`User role: ${newUser.role} not allowed!`);
     }
   } else {
-    throw new Error(`User ${newUser.email} already exists!`)
+    throw new Error(`User ${newUser.email} already exists!`);
   }
 }
 async function deleteUser(sheetId: string, userId: string) {
@@ -66,8 +66,16 @@ async function deleteUser(sheetId: string, userId: string) {
   await userService.removeSheetFromTheList(user.email, sheetId);
   return await sheetAuthrepo.deleteUser(sheetId, userId);
 }
+async function removeSelf(sheetId: string, email: string) {
+  if (await authenticate(email, sheetId)) {
+    const id: string = (await findUserByEmail(email, sheetId)).id;
+    await deleteUser(sheetId, id);
+  } else {
+    throw new Error("User not found: " + email);
+  }
+}
 async function updateUser(user: userProps, sheetId: string) {
-  return (await sheetAuthrepo.updateUser(user, sheetId))[0];;
+  return (await sheetAuthrepo.updateUser(user, sheetId))[0];
 }
 async function getUsers(sheetId: string) {
   return await sheetAuthrepo.getUsers(sheetId);
@@ -88,4 +96,5 @@ export default {
   updateUser,
   getUsers,
   getUser,
+  removeSelf
 };
