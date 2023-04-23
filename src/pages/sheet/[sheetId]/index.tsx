@@ -69,6 +69,7 @@ function Sheet() {
   });
   const handleToggle = useCallback(() => {
     setIsOpen((current) => !current);
+    setSelected2("createItem");
   }, []);
   const handleToggleManageProps = useCallback(() => {
     setIsOpen2((current) => !current);
@@ -89,6 +90,7 @@ function Sheet() {
       value: 0,
       description: "",
     });
+    setSelected2("createItem");
     setCurrentEditingItem(null);
   }, []);
   const setEditMode = useCallback((currentItem: sheetItemProps) => {
@@ -206,13 +208,15 @@ function Sheet() {
   );
   useEffect(() => {
     let id: any = router.query.sheetId;
-    if (email !== undefined && email !== null && email.length > 0 && id !== undefined) {
-     
-   
-        console.log(email);
-        console.log(router.query.sheetId);
-        ReloadSheet(id, email);
-      
+    if (
+      email !== undefined &&
+      email !== null &&
+      email.length > 0 &&
+      id !== undefined
+    ) {
+      console.log(email);
+      console.log(router.query.sheetId);
+      ReloadSheet(id, email);
     }
   }, [email, router.query]);
   return (
