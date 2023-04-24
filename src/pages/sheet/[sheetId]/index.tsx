@@ -220,7 +220,7 @@ function Sheet() {
     }
   }, [email, router.query]);
   return (
-    <div className={`h-[500vh] w-[100%]`}>
+    <div className={`h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"

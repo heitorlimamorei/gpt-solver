@@ -10,6 +10,6 @@ const ModeSwitcher = (props: ModeSwitcherInterface) => {
   const seletedModeComponents = modeComponents.filter((modeCoponent, i) => {
     return modeCoponent.mode === mode;
   });
-  return <div>{seletedModeComponents[0].component}</div>;
+  return <div className="self-center flex items-center justify-items-center">{seletedModeComponents[0].component}</div>;
 };
 export default memo(ModeSwitcher);

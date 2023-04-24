@@ -7,12 +7,13 @@ const CalculateInss = () => {
   const [dependents, setDependents] = useState(0);
   const { solveIr } = useCalcs();
   return (
-    <div className="flex flex-col items-center h-full w-full p-2">
-      <div>
-        <h1>Calcular IRPF</h1>
-        {rawSalary > 0 && <h2>resultado: {solveIr(rawSalary, dependents)}</h2>}
+    <div className="flex flex-col items-center h-full w-full p-10 dark:shadow-[12px_12px_32px_#0f0f0f,-12px_-12px_32px_#373737]
+    shadow-[12px_12px_32px_#5e6063,-12px_-12px_32px_#ffffff] rounded-xl dark:text-white">
+      <h1>Calcular IRPF</h1>
+      <div className="shadow-[5px_5px_10px_#0e0e0e,-5px_-5px_10px_#383838] rounded-xl p-2 mt-3">
+        {rawSalary > 0 && <h2>Resultado: {solveIr(rawSalary, dependents)}</h2>}
       </div>
-      <div className="flex flex-col p-2 mt-2">
+      <div className="flex flex-col p-2 mt-2 ">
         <label htmlFor="rawSalary">
           Salário bruto
         </label>
@@ -24,8 +25,8 @@ const CalculateInss = () => {
           ClassName="mb-2"
           type={"number"}
         />
-         <label htmlFor="dependents">
-          n° de dependentes
+         <label className="mt-5" htmlFor="dependents">
+          N° de dependentes
         </label>
         <Input
           name="dependentsInput"

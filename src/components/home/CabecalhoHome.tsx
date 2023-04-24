@@ -14,13 +14,13 @@ function CabecalhoHome(props) {
   const { tema, alternarTema } = props;
   return (
     <div
-      className={`dark:bg-[#232323] bg-[#E0E5EC] w-full h-[10%] transition-all duration-500 ease-linear lg:mb-5`}
+      className={`dark bg-[#232323] w-full h-[7rem] transition-all duration-500 ease-linear lg:mb-5`}
     >
       <header className="flex items-center w-full h-[10vh]">
         <div className="flex flex-row items-center justify-start h-full w-full">
           <div className="ml-[4rem] w-[30%] hidden lg:flex">
             <Image
-              src={tema === "dark" ? logoWhite : logoBlack}
+              src={logoWhite}
               alt=""
               width="500"
               height="65"
@@ -29,7 +29,7 @@ function CabecalhoHome(props) {
           </div>
           <div className="ml-3 mt-8 lg:hidden">
             <Image
-              src={tema === "dark" ? iconWhite : iconBlack}
+              src={iconWhite}
               alt=""
               width="150"
               height="100"

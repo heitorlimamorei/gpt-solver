@@ -34,22 +34,23 @@ const CalculateLiquidSalary = () => {
   );
   const liquidSalary = liquidSalaryData[4];
   return (
-    <div className="flex flex-col items-center h-full w-full p-2">
-      <div className="flex w-full md:w-1/2  mt-3 items-center justify-center">
+    <div className="flex flex-col items-center h-full w-[60rem] p-10 dark:shadow-[12px_12px_32px_#0f0f0f,-12px_-12px_32px_#373737]
+    shadow-[12px_12px_32px_#5e6063,-12px_-12px_32px_#ffffff] rounded-xl dark:text-white">
+      <div className="text-black flex  md:w-1/2  mt-3 items-center w-[70%] justify-center">
         {liquidSalary.value > 0 && rawSalary >= 100 ? (
           <Table
             headerData={[
               {
-                name: "item",
+                name: "Item",
               },
               {
-                name: "valor",
+                name: "Valor",
               },
             ]}
           >
             {liquidSalaryData.map((item, index) => (
               <TRow key={item.name} index={index}>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-4 py-3 text-gray">
                   {itemsNames[item.name].name}
                 </td>
                 <td className="px-4 py-3">
@@ -69,7 +70,7 @@ const CalculateLiquidSalary = () => {
         )}
       </div>
 
-      <div className="flex flex-col p-2 mt-2 w-full md:w-1/2">
+      <div className="dark:text-white flex flex-col p-2 mt-2 w-full md:w-1/2">
         <label htmlFor="rawSalary">Salário bruto</label>
         <CheckingInput
           checking={{

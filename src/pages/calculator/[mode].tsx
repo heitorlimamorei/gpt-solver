@@ -33,9 +33,12 @@ export default function Calculator() {
     []
   );
   return (
-    <div className={`h-[500vh] w-[100%]`}>
-      <Layout titulo="Ajustes" subtitulo="Faça os an*justes necessarios">
+    <div className={`h-full w-[100%]`}>
+      <Layout titulo="Ajustes" subtitulo="Faça os an*justes necessarios">\
+      <div className="w-full h-[85vh] flex items-center justify-center">
         <ModeSwitcher mode={mode} modeComponents={modeComponents} />
+      </div>
+        
       </Layout>
     </div>
   );
