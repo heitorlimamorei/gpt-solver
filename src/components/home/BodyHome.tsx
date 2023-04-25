@@ -1,11 +1,8 @@
-import { MoneyIcon, MoneyIconC } from "../icons/Icones";
-import Box from "./Box";
 import Image from "next/image";
 import Button from "../Button";
 import controller from "../../../public/images/controller.png";
-import RoundedImage from "./RoundedImage";
-import Passo1 from "../../../public/images/passo1.png";
-import Passo2 from "../../../public/images/passo2.png";
+import Passo1 from "../../../public/images/Passo1.png";
+import Passo2 from "../../../public/images/Passo2.png";
 import Passo3 from "../../../public/images/passo3.png";
 import { signIn, useSession } from "next-auth/react"
 
