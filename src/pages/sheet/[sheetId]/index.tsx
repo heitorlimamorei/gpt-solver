@@ -23,7 +23,7 @@ import Switch2 from "../../../components/template/Switch2";
 import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
 import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
 
-function Sheet() {
+function EditSheet() {
   const {
     sheet,
     sheetReLoader,
@@ -220,7 +220,7 @@ function Sheet() {
     }
   }, [email, router.query]);
   return (
-    <div className={`h-full w-[100%]`}>
+    <div className={`md:h-[500vh] h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
@@ -304,4 +304,4 @@ function Sheet() {
   );
 }
 
-export default Sheet;
+export default EditSheet;

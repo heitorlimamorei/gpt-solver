@@ -1,73 +1,66 @@
-import { useEffect, useState } from "react";
-import { plusIcon } from "../components/icons/Icones";
 import Layout from "../components/template/Layout";
-import ModalForm from "../components/template/ModalForm";
-import { useSession } from "next-auth/react";
-import axios from "axios";
-import { sheetProps } from "../types/sheetTypes";
-import Button from "../components/Button";
-import CreateSheet from "../components/template/CreateSheet";
-import variaveis from "../model/variaveis";
-import SheetOptions from "../components/SheetOptions";
-export default function Home() {
-  const { BASE_URL } = variaveis;
-  const [sheets, setSheets] = useState<sheetProps[]>([]);
-  const [sheetIds, setSheetIds] = useState<string[]>([]);
-  const [isOpen3, setIsOpen3] = useState(false);
-  const session = useSession();
-  const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
-  let email = session.data?.user.email;
-  let name = session.data?.user.name;
-  useEffect(() => {
-    if (email !== undefined) {
-      if (email.length > 0) {
-        setSheetIdsIsLoading(true);
-        axios
-          .post(`${BASE_URL}/api/users/login`, {
-            email: email,
-            name: name,
-          })
-          .then((response) => {
-            let sheets: string[] = response.data.sheetIds;
-            console.log(sheets);
-            setSheetIds(sheets);
-          });
-      }
-    }
-  }, [email]);
+import { useRouter } from "next/router";
+import {
+  CalculatorIconWhite,
+  CalculatorIconBlack,
+  TableIconWhite,
+  TableIconBlack,
+} from "../components/icons/Icones";
+import useAppData from "../data/hook/useAppData";
+function Home() {
+  const { tema, alternarTema } = useAppData();
+  const router = useRouter();
+  async function planilhas() {
+    router.push("/sheet");
+  }
+  async function calculadora() {
+    router.push("/calculadora");
+  }
   return (
-    <div className={`lg:h-[100vh] h-[200vh] w-[100%]`}>
-      <Layout
-        titulo="Pagina inicial"
-        subtitulo="Estamos construindo um admin template"
-      >
-        <ModalForm isOpen={isOpen3}>
-          <CreateSheet
-            toggleIsOpen={() => setIsOpen3((current) => !current)}
-            addSheetIntoTheList={setSheets}
-          />
-        </ModalForm>
+    <div className="h-full w-full">
+      <Layout titulo="" subtitulo="">
+        <div className="flex flex-col lg:flex-row w-full h-[90vh]">
+          <button
+            className="flex items-center justify-items-center lg:w-[49.5%] lg:h-full w-full h-[49.5%]"
+            onClick={calculadora}
+          >
+            <div className="w-full flex flex-col items-center justify-items-center">
+              <div className="w-fit h-fit">
+                <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
+                  {tema == "dark"
+                    ? CalculatorIconWhite(7)
+                    : CalculatorIconBlack(7)}
+                </div>
+              </div>
 
-        <div className="flex flex-1 w-full mt-3">
-          <div className="flex w-full justify-end">
-            <Button
-              ClassName="md:px-4 md:py-1 py-3 px-4 w-full h-[3rem] rounded-lg ml-2 mt-5 mb-3 dark:text-white md:w-[15%]"
-              onClick={() => setIsOpen3(true)}
-              iconClassName="dark:text-[#00F0FF] text-[#0085FF] mr-1 ml-2"
-              icon={plusIcon(6)}
-              text="Criar Planilha"
-              textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-            ></Button>
-          </div>
+              <div className="dark:bg-[#232323] dark:text-white dark:shadow-[5px_5px_10px_#0e0e0e,-5px_-5px_10px_#383838] shadow-[5px_5px_10px_#5a5c5e,-5px_-5px_10px_#ffffff] w-fit p-2 bg-[#E0E5EC] rounded-full mt-7">
+                Calculadora
+              </div>
+            </div>
+          </button>
+          <div className="h-[1%] w-full lg:w-[0.2%] lg:h-full dark:bg-white bg-black"></div>
+          <button
+            className="flex  items-center justify-items-center lg:w-[49.5%] lg:h-full w-full h-[49.5%]"
+            onClick={planilhas}
+          >
+            <div className="w-full flex flex-col items-center justify-items-center">
+              <div className="w-fit h-fit">
+                <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
+                  {tema == "dark"
+                    ? TableIconWhite(7)
+                    : TableIconBlack(7)}
+                </div>
+              </div>
+
+              <div className="dark:bg-[#232323] dark:text-white dark:shadow-[5px_5px_10px_#0e0e0e,-5px_-5px_10px_#383838] shadow-[5px_5px_10px_#5a5c5e,-5px_-5px_10px_#ffffff] w-fit p-2 bg-[#E0E5EC] rounded-full mt-7">
+                Planilhas
+              </div>
+            </div>
+          </button>
         </div>
-        <SheetOptions
-          sheetIds={sheetIds}
-          sheets={sheets}
-          sheetIdsIsLoading={sheetIdsIsLoading}
-          setSheetIdsIsLoading={setSheetIdsIsLoading}
-          setSheets={setSheets}
-        />
       </Layout>
     </div>
   );
 }
+
+export default Home;
