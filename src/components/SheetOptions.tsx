@@ -41,12 +41,16 @@ function SheetOptions(props: SheetOptionsProps) {
       if (sheetsResp.length > 0) {
         setSheets(sheetsResp);
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   }, [getSheets]);
   useEffect(() => {
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
         loader();
+      } else {
+        setSheetIdsIsLoading(false);
       }
     }
   }, [sheetIds]);
