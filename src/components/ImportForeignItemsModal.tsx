@@ -42,7 +42,7 @@ function ImportForeignItemsModal(props: ImportForeignItemsModalProps) {
           ClassName="p-3"
         >
           {currentOptions.map((opt) => (
-            <option value={opt.data.id} key={opt.data.id}>
+            <option value={opt.data.id} key={opt.data.id} className={`dark:bg-[#232323] bg-[#E0E5EC]`}>
               {opt.data.name}
             </option>
           ))}
