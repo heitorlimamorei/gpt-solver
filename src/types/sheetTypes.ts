@@ -158,3 +158,10 @@ export interface itemRenderOptions {
   description: string;
   sortMode: shortingTypes
 }
+export interface itemFormDataProps {
+  id?:string;
+  name: string;
+  type: string;
+  value: number;
+  description: string;
+}

@@ -34,6 +34,7 @@ function EditSheet() {
     filterBySpentType,
     filterByDescription,
     filterByName,
+    validateItemForm
   } = useSheets();
   const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
@@ -106,32 +107,40 @@ function EditSheet() {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
+      let formStatus = validateItemForm({...formData}, false);
+      console.log(formStatus);
       if (!currentEditingItem) {
-        console.log(formData.type);
-        createNewItem({
+        if(formStatus.validated){
+          createNewItem({
           ...formData,
           value: Number(formData.value),
           sheetId: sheet.data.id,
           author: sheet.currentUser,
           date: new Date(),
         });
+        }
       } else {
-        updateItem({
-          ...currentEditingItem,
-          value: formData.value,
-          description: formData.description,
-          type: formData.type,
-          name: formData.name,
-        });
+        formStatus = validateItemForm({...formData}, true);
+        if(formStatus.validated){
+          updateItem({
+            ...currentEditingItem,
+            value: formData.value,
+            description: formData.description,
+            type: formData.type,
+            name: formData.name,
+          });
+        }
       }
-      setFormData({
-        name: "",
-        type: "",
-        value: 0,
-        description: "",
-      });
-      setCurrentEditingItem(null);
-      handleToggle();
+      if(formStatus.validated){
+        setFormData({
+          name: "",
+          type: "",
+          value: 0,
+          description: "",
+        });
+        setCurrentEditingItem(null);
+        handleToggle();
+      }
     },
     [currentEditingItem, formData, sheet]
   );

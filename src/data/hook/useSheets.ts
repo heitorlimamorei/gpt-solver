@@ -7,6 +7,7 @@ import {
   userProps,
   sheetProps,
   upadatedSheetProps,
+  itemFormDataProps,
 } from "../../types/sheetTypes";
 import _ from "lodash";
 import axios from "axios";
@@ -25,12 +26,9 @@ export default function useSheets() {
     }
   }, [email]);
   async function createNewSheet(payload: NewSheetProps) {
-    const { data: sheet } = await axios.post(
-     `${BASE_URL}/api/sheets`,
-      {
-        ...payload,
-      }
-    );
+    const { data: sheet } = await axios.post(`${BASE_URL}/api/sheets`, {
+      ...payload,
+    });
     const { data: items } = await axios.post(
       `${BASE_URL}/api/sheets/${sheet.data.id}/items`,
       {
@@ -49,7 +47,7 @@ export default function useSheets() {
         users,
       },
     });
-    return sheet
+    return sheet;
   }
   async function updateSheet(updatedSheet: upadatedSheetProps) {
     const finalUpdatedSheet = {
@@ -58,23 +56,17 @@ export default function useSheets() {
       totalValue: updatedSheet.totalValue,
       tiposDeGastos: updatedSheet.tiposDeGastos,
     };
-    const { data: updatedsheetf } = await axios.put(
-      `${BASE_URL}/api/sheets`,
-      {
-        email: state.currentUser,
-        ...finalUpdatedSheet,
-      }
-    );
+    const { data: updatedsheetf } = await axios.put(`${BASE_URL}/api/sheets`, {
+      email: state.currentUser,
+      ...finalUpdatedSheet,
+    });
     dispatch({ type: "onUpdate", payload: updatedsheetf });
   }
   async function loadSheet(id: string) {
-    const { data: sheet } = await axios.post(
-      `${BASE_URL}/api/sheets/${id}`,
-      {
-        email: state.currentUser,
-        mode: "GET",
-      }
-    );
+    const { data: sheet } = await axios.post(`${BASE_URL}/api/sheets/${id}`, {
+      email: state.currentUser,
+      mode: "GET",
+    });
     const { data: items } = await axios.post(
       `${BASE_URL}/api/sheets/${id}/items`,
       {
@@ -94,14 +86,11 @@ export default function useSheets() {
       },
     });
   }
-  async function sheetReLoader(id: string, currentUser:string) {
-    const { data: sheet } = await axios.post(
-      `${BASE_URL}/api/sheets/${id}`,
-      {
-        email: currentUser,
-        mode: "GET",
-      }
-    );
+  async function sheetReLoader(id: string, currentUser: string) {
+    const { data: sheet } = await axios.post(`${BASE_URL}/api/sheets/${id}`, {
+      email: currentUser,
+      mode: "GET",
+    });
     const { data: items } = await axios.post(
       `${BASE_URL}/api/sheets/${id}/items`,
       {
@@ -322,24 +311,74 @@ export default function useSheets() {
         name: type[0],
         value: Number(sumOfSpents.toFixed(2)),
         length: type[1].length,
-        percentOfSpents: parseFloat(((sumOfSpents / total) * 100).toFixed(2))
+        percentOfSpents: parseFloat(((sumOfSpents / total) * 100).toFixed(2)),
       };
     });
   }
-  async function deleteSheet(){
+  async function deleteSheet() {
     const resp = await axios.post(`${BASE_URL}/api/sheets/${state.data.id}`, {
       email: state.currentUser,
-      mode: "DELETE"
+      mode: "DELETE",
     });
-    dispatch({type: "onDeleteSheet"});
+    dispatch({ type: "onDeleteSheet" });
   }
-  async function cloneForeignItems(foreignId){
-    const { data } = await axios.post(`${BASE_URL}/api/sheets/${state.data.id}/items/clone`, {
-      email: state.currentUser,
-      foreignId: foreignId
-    })
-    dispatch({type: "refreshItems", payload: data});
+  async function cloneForeignItems(foreignId) {
+    const { data } = await axios.post(
+      `${BASE_URL}/api/sheets/${state.data.id}/items/clone`,
+      {
+        email: state.currentUser,
+        foreignId: foreignId,
+      }
+    );
+    dispatch({ type: "refreshItems", payload: data });
   }
+
+  function validateItemForm(
+    formItemData: itemFormDataProps,
+    isUpdated: boolean
+  ) {
+    let status = {
+      validated: false,
+      errors: [],
+    };
+    if (isUpdated) {
+      if (formItemData.id.length < 0 || formItemData.id === undefined || formItemData.id === null) {
+        status.errors.push({
+          errorCode: "invalid_id",
+          message: "Id invalido!"
+        })
+      }
+    }
+      if (formItemData.description === undefined || formItemData.description === null) {
+        status.errors.push({
+          errorCode: "invalid_description",
+          message: "Descrição invalida!"
+        })
+      }
+      if (formItemData.name.length <= 0 || formItemData.name === undefined || formItemData.name === null) {
+        status.errors.push({
+          errorCode: "invalid_name",
+          message: "Nome invalido!"
+        })
+      }
+      if (formItemData.type.length <= 0 || formItemData.type === undefined || formItemData.type === null) {
+        status.errors.push({
+          errorCode: "invalid_type",
+          message: "Tipo invalido!"
+        })
+      }
+      if (formItemData.value <= 0 || formItemData.value === undefined || formItemData.value === null) {
+        status.errors.push({
+          errorCode: "value_type",
+          message: "Valor invalido!"
+        })
+      }
+    return {
+      ...status,
+      validated: !(status.errors.length > 0)
+    }
+  }
+
   return {
     sheet: state,
     createNewSheet,
@@ -365,6 +404,7 @@ export default function useSheets() {
     getStats,
     updateSheet,
     sheetReLoader,
-    cloneForeignItems
+    cloneForeignItems,
+    validateItemForm
   };
 }
