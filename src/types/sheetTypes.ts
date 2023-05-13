@@ -165,3 +165,15 @@ export interface itemFormDataProps {
   value: number;
   description: string;
 }
+export interface sheetFormDataProps {
+  id?:string;
+  owner: string;
+  tiposDeGastos: string[];
+  totalValue: number;
+  type: string;
+  name: string;
+}
+export interface iFormError{
+  errorCode: string;
+  message: string;
+}

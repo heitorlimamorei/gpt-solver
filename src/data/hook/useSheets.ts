@@ -8,6 +8,8 @@ import {
   sheetProps,
   upadatedSheetProps,
   itemFormDataProps,
+  sheetFormDataProps,
+  iFormError
 } from "../../types/sheetTypes";
 import _ from "lodash";
 import axios from "axios";
@@ -332,12 +334,16 @@ export default function useSheets() {
     );
     dispatch({ type: "refreshItems", payload: data });
   }
-
+  
+  interface IvalidateStatus{
+    validated:boolean;
+    errors: iFormError[];
+  }
   function validateItemForm(
     formItemData: itemFormDataProps,
     isUpdated: boolean
   ) {
-    let status = {
+    let status:IvalidateStatus = {
       validated: false,
       errors: [],
     };
@@ -379,6 +385,75 @@ export default function useSheets() {
     }
   }
 
+  function validateSheetForm(
+    formSheetData: sheetFormDataProps,
+    isUpdated: boolean
+  ) {
+    let status:IvalidateStatus = {
+      validated: false,
+      errors: [],
+    };
+
+    if (isUpdated) {
+      if (formSheetData.id.length < 0 || formSheetData.id === undefined || formSheetData.id === null) {
+        status.errors.push({
+          errorCode: "invalid_id",
+          message: "Id invalido!"
+        })
+      }
+    }
+
+    if (formSheetData.name.length <= 0 || formSheetData.name === undefined || formSheetData.name === null) {
+      status.errors.push({
+        errorCode: "invalid_name",
+        message: "Nome invalido!"
+      })
+    }
+
+    if (formSheetData.tiposDeGastos === undefined || formSheetData.tiposDeGastos === null) {
+      status.errors.push({
+        errorCode: "invalid_spentTypes",
+        message: "Tipos de gastos invalidos!"
+      })
+    } else if(formSheetData.tiposDeGastos.length < 1) {
+      status.errors.push({
+        errorCode: "empty_spentTypes",
+        message: "Lista de tipos de gastos está vazia!"
+      })
+    }
+
+    if (formSheetData.totalValue === undefined || formSheetData.totalValue === null) {
+      status.errors.push({
+        errorCode: "invalid_totalValue",
+        message: "Valor total invalido!"
+      })
+    } else if(formSheetData.totalValue <= 0) {
+      status.errors.push({
+        errorCode: "totalValue_equal_to_zero",
+        message: "Valor total não pode ser zero!"
+      })
+    }
+
+    return {
+      ...status,
+      validated: !(status.errors.length > 0)
+    }
+  }
+  interface IvalidateOptions {
+    callBack: (payload: sheetFormDataProps) => Promise<void>;
+    handler: (errors: iFormError[]) => void;
+    isUpdate: boolean;
+  }
+
+  async function validateSheetAndRun(paylod: sheetFormDataProps, validateOptions: IvalidateOptions): Promise<any>{
+    const {isUpdate, callBack, handler} = validateOptions;
+    const validation = validateSheetForm(paylod, isUpdate);
+    if(validation.validated){
+      return await callBack(paylod);
+    } else {
+      handler(validation.errors);
+    }
+  }
   return {
     sheet: state,
     createNewSheet,
@@ -405,6 +480,8 @@ export default function useSheets() {
     updateSheet,
     sheetReLoader,
     cloneForeignItems,
-    validateItemForm
+    validateItemForm,
+    validateSheetForm,
+    validateSheetAndRun
   };
 }
