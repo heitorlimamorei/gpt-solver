@@ -52,8 +52,8 @@ async function getUserByEmail(email: string) {
   }
 }
 async function createUser(newUser: newUser) {
-  const pontosRef = collection(db, `users`);
-  const userRef = await addDoc(pontosRef, { sheetIds: [], ...newUser });
+  const usersRef = collection(db, `users`);
+  const userRef = await addDoc(usersRef, { sheetIds: [], ...newUser });
   return await getUserById(userRef.id);
 }
 async function updateSheetList(id: string, sheetIdsUpdated: string[]) {
