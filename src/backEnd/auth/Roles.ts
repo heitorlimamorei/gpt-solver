@@ -41,7 +41,7 @@ const roles = [
   },
 ];
 function getRoleData(roleName: string){
-  return roles.find(role => role.name === roleName)
+  return roles.find(role => role.name === roleName);
 }
 function verifyPermissionsByRole(currentRole, neededPermission){
     return getRoleData(currentRole).permissions[neededPermission]

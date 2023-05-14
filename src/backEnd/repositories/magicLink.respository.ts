@@ -27,7 +27,7 @@ interface newMagicLinkProps {
   author: string;
 }
 
-function add30Days(data: Date): Date { // function that recives the current date and runturns that date plus 30 days
+function add30Days(data: Date): Date { // function that receives the current date and runturns that date plus 30 days
   const newDate = new Date(data);
   newDate.setDate(newDate.getDate() + 30);
   return newDate;
