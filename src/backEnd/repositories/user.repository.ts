@@ -76,6 +76,11 @@ async function deleteUser(id: string) {
   const userRef = doc(db, `user/${id}`);
   const docRef = await deleteDoc(userRef);
 }
+
+async function userExistsByEmail(email: string) {
+  return (await getUserByEmail(email)) ? true : false;
+}
+
 export default {
   getUserByEmail,
   getAllUsers,
@@ -83,4 +88,5 @@ export default {
   updateSheetList,
   updateUser,
   deleteUser,
+  userExistsByEmail
 };

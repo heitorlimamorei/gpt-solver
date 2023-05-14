@@ -1,6 +1,8 @@
 import magicLinkRespository from "../repositories/magicLink.respository";
 import sheetAuthservice from "../auth/sheet.authservice";
 import sheetAuthController from "../auth/sheetAuthController";
+import userRepository from "../repositories/user.repository";
+import { hasDatePassed, firebaseTimesStampType } from "../../utils/dateMethods"
 
 interface newMagicLinkProps {
   name: string;
@@ -15,7 +17,7 @@ interface MagicLinkProps {
   targetSheet: string;
   targetRole: string;
   author: string;
-  expires: Date;
+  expires: firebaseTimesStampType;
 }
 
 interface acceptInvitationFormData {
@@ -60,7 +62,7 @@ async function updateMagicLink(updatedLink: MagicLinkProps) {
     return await magicLinkRespository.updateMagicLink({ ...updatedLink });
   } else {
     throw new Error(
-      "ERROR: 401 User does not have permission to update a  MagicLink or the user doesn't exists."
+      "ERROR: 401 User does not have permission to update a  MagicLink or the user doesn't exists or the target sheet doesn't."
     );
   }
 }
@@ -77,51 +79,51 @@ async function getLinksByTargetSheet(userEmail: string, sheetId: string) {
   }
 }
 
+
 async function validateInvitation(
   magicLink: MagicLinkProps,
   formData: acceptInvitationFormData
 ) {
-  const isToday = (date: Date): boolean => {
-    const today = new Date();
-    if (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    ) {
+  if (await userRepository.userExistsByEmail(formData.email)) {
+    const isAlreadyInvited = await sheetAuthservice.authenticate(
+      formData.email,
+      magicLink.targetSheet
+    );
+
+    if (!hasDatePassed(magicLink.expires) && !isAlreadyInvited) {
       return true;
     } else {
       return false;
     }
-  };
-  const isAlreadyInvited = await sheetAuthservice.authenticate(
-    formData.email,
-    magicLink.targetSheet
-  );
-  if (!isToday(magicLink.expires) && !isAlreadyInvited) {
-    return true;
+
   } else {
-    return false;
+    throw new Error("ERROR 400: User doesn't exists!")
   }
 }
 
+
 async function acceptInvitation(formData: acceptInvitationFormData) {
   const magicLink: MagicLinkProps = await getMagicLinkById(formData.linkId);
+
   if (await validateInvitation(magicLink, formData)) {
     const updatedListUsers: userProps[] = await sheetAuthController.createUser({
       email: formData.email,
       sheetId: magicLink.targetSheet,
       role: magicLink.targetRole,
     });
+
     const newUser = updatedListUsers.find(
       (user) => user.email === formData.email
     );
+
     const session = await sheetAuthservice.getSessionData(
       newUser.email,
       magicLink.targetSheet
     );
+
     return { ...session };
   } else {
-    throw new Error("401: This Magic link is invalid")
+    throw new Error("401: This Magic link is invalid");
   }
 }
 
@@ -133,7 +135,6 @@ async function deleteMagicLinkAndReturnList(id: string, sheetId: string) {
   await deleteMagicLink(id);
   return await magicLinkRespository.getLinksByTargetSheet(sheetId);
 }
-
 
 
 export default {

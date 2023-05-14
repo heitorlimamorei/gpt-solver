@@ -1,4 +1,5 @@
 import { db } from "../../firebase/config";
+import { firebaseTimesStampType } from "../../utils/dateMethods"
 import {
   collection,
   doc,
@@ -17,7 +18,7 @@ interface MagicLinkProps {
   targetSheet: string;
   targetRole: string;
   author: string;
-  expires: Date;
+  expires: firebaseTimesStampType;
 }
 
 interface newMagicLinkProps {
