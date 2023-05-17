@@ -68,13 +68,16 @@ function EditSheet() {
     value: 0,
     description: "",
   });
+
   const handleToggle = useCallback(() => {
     setIsOpen((current) => !current);
     setSelected2("createItem");
   }, []);
+
   const handleToggleManageProps = useCallback(() => {
     setIsOpen2((current) => !current);
   }, []);
+
   const handleChange = useCallback((event) => {
     setFormData((current) => {
       return {
@@ -83,6 +86,7 @@ function EditSheet() {
       };
     });
   }, []);
+
   const handleCancel = useCallback(() => {
     handleToggle();
     setFormData({
@@ -94,6 +98,7 @@ function EditSheet() {
     setSelected2("createItem");
     setCurrentEditingItem(null);
   }, []);
+
   const setEditMode = useCallback((currentItem: sheetItemProps) => {
     setCurrentEditingItem(currentItem);
     setFormData({
@@ -104,43 +109,35 @@ function EditSheet() {
     });
     setIsOpen((current) => !current);
   }, []);
+
   const handleSubmit = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
-      let formStatus = validateItemForm({...formData}, false);
-      console.log(formStatus);
       if (!currentEditingItem) {
-        if(formStatus.validated){
-          createNewItem({
+        await createNewItem({
           ...formData,
           value: Number(formData.value),
           sheetId: sheet.data.id,
           author: sheet.currentUser,
           date: new Date(),
         });
-        }
       } else {
-        formStatus = validateItemForm({...formData}, true);
-        if(formStatus.validated){
-          updateItem({
-            ...currentEditingItem,
-            value: formData.value,
-            description: formData.description,
-            type: formData.type,
-            name: formData.name,
-          });
-        }
-      }
-      if(formStatus.validated){
-        setFormData({
-          name: "",
-          type: "",
-          value: 0,
-          description: "",
+        await updateItem({
+          ...currentEditingItem,
+          value: formData.value,
+          description: formData.description,
+          type: formData.type,
+          name: formData.name,
         });
-        setCurrentEditingItem(null);
-        handleToggle();
       }
+      setFormData({
+        name: "",
+        type: "",
+        value: 0,
+        description: "",
+      });
+      setCurrentEditingItem(null);
+      handleToggle();
     },
     [currentEditingItem, formData, sheet]
   );
@@ -160,6 +157,7 @@ function EditSheet() {
       }
     }
   }, [email]);
+  
   const getSheets = useCallback(async () => {
     let requests = [];
     if (sheetIds !== undefined) {

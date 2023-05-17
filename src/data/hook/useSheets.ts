@@ -347,8 +347,9 @@ export default function useSheets() {
       validated: false,
       errors: [],
     };
+    console.log(formItemData);
     if (isUpdated) {
-      if (formItemData.id.length < 0 || formItemData.id === undefined || formItemData.id === null) {
+      if (formItemData.id === undefined || formItemData.id === null || formItemData.id.length < 0 ) {
         status.errors.push({
           errorCode: "invalid_id",
           message: "Id invalido!"
