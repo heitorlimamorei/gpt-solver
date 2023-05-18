@@ -60,27 +60,27 @@ export default function AcceptInvitation() {
   }
 
   return (
-    <div className={`lg:h-[200vh] h-[200vh] w-[100%]`}>
+    <div className={`lg:h-[200vh] flex items-center h-[200vh] w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
       >
         {!magicLinkIsLoding ? (
           <ModalForm isOpen={true}>
-            <div className={`flex flex-col items-center w-full h-full`}>
+            <div className={`flex flex-col justify-items-center items-center w-full h-full`}>
               <h1 className="text-xl mb-4">{magicLink.name}</h1>
               <div className="mb-5 text-center">
               <h2 className="mb-2 text-sm font-semibold ">
                 Você deseja aceitar o convite de {magicLink.author} ?
               </h2>
               <p className="text-sm">
-                Esse Magic link, vai te adicionar com o cargo de <a className="text-red-600 font-semibold">{magicLink.targetRole}</a> na planilha de código: {magicLink.targetSheet}
+                Esse Magic link, vai adicionar você com o cargo de <a className="text-red-600 font-semibold">{magicLink.targetRole}</a> na planilha de código: {magicLink.targetSheet}
               </p>
               </div>
               <p></p>
-              <div className="flex w-full justify-between mb-3">
+              <div className="flex w-full justify-center mt-5 mb-3">
                 <Button
-                  ClassName="px-4 py-2 rounded-md"
+                  ClassName="px-4 py-2 mr-5 rounded-md"
                   onClick={() => {
                     router.push('/')
                   }}
@@ -90,18 +90,19 @@ export default function AcceptInvitation() {
                   icon={undefined}
                 ></Button>
                  <Button
-                  ClassName="px-4 py-2 rounded-md"
+                  ClassName="px-4 py-2 ml-5 rounded-md"
                   onClick={acceptInvitation}
-                  text="Aceitar convite"
+                  text="Aceitar"
                   textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
                   iconClassName={""}
                   icon={undefined}
                 ></Button>
               </div>
 
-              <div className="flex flex-col items-center mt-2">
+              <div className="flex flex-col items-center mt-5">
+                <h3 className="font-bold">Atenção!</h3>
                 <p className="text-sm text-gray-400">
-                  !Atenção! O serviço de Magic Link está em fase de teste
+                   O serviço de Magic Link está em fase de teste
                   inicial
                 </p>
                 <p className="text-sm text-gray-400">
