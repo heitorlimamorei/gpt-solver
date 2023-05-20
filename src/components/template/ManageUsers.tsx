@@ -30,7 +30,7 @@ function ManageUsers(props: ManageSheetProps) {
       );
     } else {
       return (
-        <>
+        <div className="">
           <UsersManageFeed
             setEditMode={setIsEditMode}
             sheet={sheet}
@@ -66,7 +66,7 @@ function ManageUsers(props: ManageSheetProps) {
             ></Button>
             
           </div>
-        </>
+        </div>
       );
     }
   }

@@ -11,7 +11,7 @@ function UsersManageFeed(props:UsersManageFeed) {
   const {sheet, setCurrentEditingUser, deleteUser, setEditMode} = props;
   const owner = sheet.users.find(user => user.role === "owner")
   return (
-    <ul>
+    <ul className='max-h-[15rem] overflow-y-scroll scroll-m-0'>
     <UserCard
       key={owner.id}
       user={owner}
