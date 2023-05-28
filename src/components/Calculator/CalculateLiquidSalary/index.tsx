@@ -34,9 +34,11 @@ const CalculateLiquidSalary = () => {
   );
   const liquidSalary = liquidSalaryData[4];
   return (
-    <div className="flex flex-col items-center h-full w-[60rem] p-10 dark:shadow-[12px_12px_32px_#0f0f0f,-12px_-12px_32px_#373737]
-    shadow-[12px_12px_32px_#5e6063,-12px_-12px_32px_#ffffff] rounded-xl dark:text-white">
-      <div className="text-black flex  md:w-1/2  mt-3 items-center w-[70%] justify-center">
+    <div
+      className="flex flex-col items-center h-full md:w-[40rem] p-10 dark:shadow-[12px_12px_32px_#0f0f0f,-12px_-12px_32px_#373737]
+    shadow-[12px_12px_32px_#5e6063,-12px_-12px_32px_#ffffff] rounded-xl dark:text-white"
+    >
+      <div className="text-black flex mt-3 items-center w-full md:w-[90%] justify-center">
         {liquidSalary.value > 0 && rawSalary >= 100 ? (
           <Table
             headerData={[
@@ -62,8 +64,8 @@ const CalculateLiquidSalary = () => {
             ))}
           </Table>
         ) : (
-          <div className="flex w-full md:w-1/2  m-3 items-center text-left justify-center">
-            <h1 className=" font-semibold">
+          <div className="flex w-full md:w-1/2  m-3 items-center ">
+            <h1 className=" font-semibold text-center dark:text-white">
               Calcule facilmente o seu salário líquido
             </h1>
           </div>
