@@ -2,11 +2,12 @@ import { memo } from "react";
 import useSheets from "../../data/hook/useSheets";
 import generatePDFReport from "../../utils/report";
 import Button from "../Button";
-import { ConfigIcon, dowloadIcon, filterIcon, IconeAjustes, plusIcon } from "../icons/Icones";
+import { chartIcon, ConfigIcon, dowloadIcon, filterIcon, IconeAjustes, plusIcon } from "../icons/Icones";
 interface ControllBarProps {
   handleToggle: () => void;
   handleToggleManageProps: () => void;
   setIsOpen4: (current: boolean) => void;
+  toogleChart: () => void;
 }
 function ControllBar(props: ControllBarProps) {
   const { sheet, sumAllItems, getStats: getStatistics } = useSheets();
@@ -14,6 +15,12 @@ function ControllBar(props: ControllBarProps) {
   return (
     <div className="flex flex-1 w-full mt-3">
       <div className="flex w-full justify-end">
+        <Button
+            ClassName="mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-[15%] h-[3rem] md:w-[3%]"
+            onClick={props.toogleChart}
+            icon={chartIcon(3)}
+            iconClassName="dark:text-[#00F0FF] text-[#0085FF]"
+          ></Button>
         {sheet.session.canEditItems ? (
           <Button
             ClassName="md:p-2 mt-1 rounded-lg ml-2 dark:text-white w-[15%] h-[3rem] md:w-[3%]"

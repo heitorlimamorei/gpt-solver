@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import Switch2 from "../../../components/template/Switch2";
 import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
 import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
+import ExpenseChart from "../../../components/ExpenseChart";
 
 function EditSheet() {
   const {
@@ -226,6 +227,13 @@ function EditSheet() {
       ReloadSheet(id, email);
     }
   }, [email, router.query]);
+
+  const [isHidden, setIsHidden] = useState(true);
+
+  const toggleVisibility = () => {
+    setIsHidden(!isHidden);
+  };
+
   return (
     <div className={`md:h-[500vh] h-[500vh] w-[100%]`}>
       <Layout
@@ -294,11 +302,16 @@ function EditSheet() {
             <h2 className="dark:text-white font-bold text-3xl">
               R${sumAllItems()}
             </h2>
+            
           </div>
+            <div className={isOpen || isOpen2 || isOpen4 ? "hidden" : ""} hidden={isHidden}>
+              <ExpenseChart></ExpenseChart>
+            </div>
           <ControllBar
             handleToggle={handleToggle}
             handleToggleManageProps={handleToggleManageProps}
             setIsOpen4={setIsOpen4}
+            toogleChart={toggleVisibility}
           />
           <div>
             <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
