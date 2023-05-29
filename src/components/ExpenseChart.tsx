@@ -1,7 +1,5 @@
 import React from "react";
 import _ from "lodash";
-import { useState } from "react";
-import { sheetProps } from "../types/sheetTypes";
 import { firestoreTimestampToDate } from "../utils/dateMethods";
 import {
   BarChart,
@@ -14,12 +12,19 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useSheets from "../data/hook/useSheets";
-import { groupBy } from "lodash";
-import reduce from "lodash/reduce";
+
+interface ResultsChartProps{
+  [key: string]: {
+    receita: string;
+    despesa: string;
+  }
+}
 
 function ExpenseChart() {
   const { sheet } = useSheets();
+
   let data = [];
+
   sheet.items.map((item) => {
     if (item.value < 0) {
       const newDate = firestoreTimestampToDate(item.date);
@@ -30,6 +35,7 @@ function ExpenseChart() {
 
       data.push({ date: date, despesa: item.value, receita: 0 });
     }
+    
     if (item.value > 0) {
       const newDate = firestoreTimestampToDate(item.date);
       const month = newDate.getMonth();
@@ -40,9 +46,10 @@ function ExpenseChart() {
       data.push({ date: date, receita: item.value, despesa: 0 });
     }
   });
+
   const groupedData = _.groupBy(data, "date");
 
-  const result = {};
+  const result:ResultsChartProps = {};
 
   for (const date in groupedData) {
     const entries = groupedData[date];
@@ -56,6 +63,7 @@ function ExpenseChart() {
     );
     result[date] = summedValues;
   }
+
   const newArray = Object.entries(result).map(([date, values]) => ({
     date,
     ...values
