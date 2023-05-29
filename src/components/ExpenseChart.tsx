@@ -23,29 +23,40 @@ interface ResultsChartProps{
 function ExpenseChart() {
   const { sheet } = useSheets();
 
-  let data = [];
+ 
+  const getItemsData = () => {
+    if(sheet.items.length === 0) return [];
 
-  sheet.items.map((item) => {
-    if (item.value < 0) {
-      const newDate = firestoreTimestampToDate(item.date);
-      const month = newDate.getMonth();
-      const day = newDate.getDate();
+    let currentItemsData = sheet.items.map((item) => {
+      if (item.value < 0) {
+        const newDate = firestoreTimestampToDate(item.date);
+        const month = newDate.getMonth();
+        const day = newDate.getDate();
+  
+        const date = `${day}/${month + 1}`;
+  
+       return({ date: {finalDate: date, objDate: newDate}, despesa: item.value, receita: 0 });
+      }
+      
+      if (item.value > 0) {
+        const newDate = firestoreTimestampToDate(item.date);
+        const month = newDate.getMonth();
+        const day = newDate.getDate();
+  
+        const date = `${day}/${month + 1}`;
+  
+        return({ date: {finalDate: date, objDate: newDate}, receita: item.value, despesa: 0 });
+      }
+    });
 
-      const date = `${day}/${month + 1}`;
+    let sortedData = currentItemsData.sort(
+      (a, b) => a.date.objDate.getTime() - b.date.objDate.getTime()
+    );
+   
+    return sortedData.map(item => ({...item, date: item.date.finalDate }));
+  }
 
-      data.push({ date: date, despesa: item.value, receita: 0 });
-    }
-    
-    if (item.value > 0) {
-      const newDate = firestoreTimestampToDate(item.date);
-      const month = newDate.getMonth();
-      const day = newDate.getDate();
-
-      const date = `${day}/${month + 1}`;
-
-      data.push({ date: date, receita: item.value, despesa: 0 });
-    }
-  });
+  let data = getItemsData();
 
   const groupedData = _.groupBy(data, "date");
 
@@ -54,7 +65,7 @@ function ExpenseChart() {
   for (const date in groupedData) {
     const entries = groupedData[date];
     const summedValues = entries.reduce(
-      (sums, entry) => {
+      (sums, entry: any) => {
         sums.receita += parseFloat(entry.receita) || 0;
         sums.despesa += parseFloat(entry.despesa) || 0;
         return sums;
