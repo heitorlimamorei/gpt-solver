@@ -15,8 +15,8 @@ import useSheets from "../data/hook/useSheets";
 
 interface ResultsChartProps{
   [key: string]: {
-    receita: string;
-    despesa: string;
+    receita: number;
+    despesa: number;
   }
 }
 
@@ -55,8 +55,8 @@ function ExpenseChart() {
     const entries = groupedData[date];
     const summedValues = entries.reduce(
       (sums, entry) => {
-        sums.receita += entry.receita || 0;
-        sums.despesa += entry.despesa || 0;
+        sums.receita += parseFloat(entry.receita) || 0;
+        sums.despesa += parseFloat(entry.despesa) || 0;
         return sums;
       },
       { receita: 0, despesa: 0 }
@@ -68,7 +68,7 @@ function ExpenseChart() {
     date,
     ...values
   }));
-
+  console.log(newArray);
   return (
     <div>
       <ResponsiveContainer width="100%" height={300}>
