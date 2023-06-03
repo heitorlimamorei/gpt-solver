@@ -3,7 +3,7 @@ import Textarea from "../Textarea";
 import Input from "../input";
 import Button from "../Button";
 import Select from "./Select";
-import { useState } from "react";
+
 interface IFormData {
   name: string;
   type: string;
@@ -29,17 +29,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
     spentOptions,
   } = props;
 
-  const [selectedOption2, setSelectedOption2] = useState("");
-
-  const handleSelectChange = (event) => {
-    setSelectedOption2(event.target.value);
-  };
-
-  function handleInputBlur() {
-    {
-      selectedOption2 === "despesa" && (formData.value = formData.value * -1);
-    }
-  }
+  const receitaOuDespesa = formData.value > 0 ? "receita" : "despesa";
 
   return (
     <form onSubmit={handleSubmit} className={`w-full h-full`}>
@@ -70,19 +60,6 @@ function CreateOrEditItem(props: FormModalContentProps) {
           ClassName="p-3"
         />
       </div>
-      <div className="my-3">
-        <select
-          className={`dark:bg-[#232323] bg-[#E0E5EC]  rounded-xl w-full h-[3.5rem]
-    shadow-[inset_9px_9px_18px_#5a5c5e,inset_-9px_-9px_18px_#ffffff]
-    dark:shadow-[inset_9px_9px_18px_#0e0e0e,inset_-9px_-9px_18px_#383838] p-3`}
-          value={selectedOption2}
-          onChange={handleSelectChange}
-        >
-          <option value="">Selecione uma opção</option>
-          <option value="despesa">Despesa</option>
-          <option value="receita">Receita</option>
-        </select>
-      </div>
       <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Valor
@@ -94,7 +71,6 @@ function CreateOrEditItem(props: FormModalContentProps) {
           name="value"
           value={formData.value}
           onChange={handleChange}
-          onBlur={handleInputBlur}
         />
       </div>
       <div className="mb-5">
@@ -115,14 +91,8 @@ function CreateOrEditItem(props: FormModalContentProps) {
         <Button
           ClassName="px-4 py-2 rounded-md"
           onClick={handleSubmit}
-          text={
-            isEditMode
-              ? "Atualizar gasto"
-              : selectedOption2 === "despesa"
-              ? "Adicionar gasto"
-              : "Adicionar receita"
-          }
-          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+          text={isEditMode ? `Atualizar ${receitaOuDespesa}` : `Criar  ${receitaOuDespesa}`}
+          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-tor from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         <Button
           ClassName="px-4 py-2 rounded-md"

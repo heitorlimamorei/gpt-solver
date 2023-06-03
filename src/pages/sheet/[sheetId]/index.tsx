@@ -305,7 +305,7 @@ function EditSheet() {
             
           </div>
             <div className={isOpen || isOpen2 || isOpen4 ? "hidden" : ""} hidden={isHidden}>
-              <ExpenseChart></ExpenseChart>
+              <ExpenseChart />
             </div>
           <ControllBar
             handleToggle={handleToggle}

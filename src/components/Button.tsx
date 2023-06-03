@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React, {memo} from "react";
-import { loginIcon } from "./icons/Icones";
 
 function Button(props) {
     return (
@@ -13,7 +12,7 @@ function Button(props) {
         flex-row
         justify-center
         items-center`}
-        onClick={props.onClick}>
+        onClick={props.onClick} type={!!props.type ? props.type : "button"}>
             <p className={props.iconClassName}>{props.icon}</p>            
             <p className={props.classChildren}>{props.children}</p>
             <p className={props.textClassName}>{props.text}</p>

@@ -15,7 +15,7 @@ const roles = [
       canView: true,
       canDelete: false,
       canEditItems: true,
-      canEditUsers: false,
+      canEditUsers: true,
       canManageSheetProps: true,
     },
   },
