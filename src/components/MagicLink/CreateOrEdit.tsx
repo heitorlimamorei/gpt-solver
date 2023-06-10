@@ -25,9 +25,10 @@ const CreateOrEdit = (props:CreateOrEditModalProps) => {
 
   return (
     <form onSubmit={handleSubmit} className={`w-full h-full`}>
-      <div className="mb-5">
+      <h1 className="font-bold text-2xl mb-4">Crie seu link de convite!</h1>
+      <div className="mb-5">  
         <label className="block font-medium text-lg mb-2" htmlFor="name">
-          Nome
+          Nome do link
         </label>
         <Input
           ClassName=""
@@ -41,7 +42,7 @@ const CreateOrEdit = (props:CreateOrEditModalProps) => {
       </div>
       <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="type">
-          Cargo desejado
+          Nível de Acesso
         </label>
         <Select
           options={rolesList}
@@ -57,7 +58,7 @@ const CreateOrEdit = (props:CreateOrEditModalProps) => {
           ClassName="px-4 py-2 rounded-md"
           type="submit"
           text={"Salvar"}
-          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-tor from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         <Button
           ClassName="px-4 py-2 rounded-md"

@@ -1,4 +1,4 @@
-import {memo} from "react";
+import { memo } from "react";
 import { userProps } from "../../types/sheetTypes";
 import Button from "../Button";
 import { trashIcon, editIcon } from "../icons/Icones";
@@ -19,19 +19,19 @@ function UserCard(props: UserCardProps) {
     <li
       className={
         user.role === "owner"
-          ? "flex flex-row my-3 rounded-xl items-center bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[inset_5px_5px_15px_#696c6f,inset_-5px_-5px_15px_#ffffff] dark:shadow-[inset_5px_5px_10px_#101010,inset_-5px_-5px_10px_#363636] h-[4rem]"
-          : `flex flex-row my-3 rounded-xl items-center bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+          ? "flex flex-row my-3 rounded-xl items-center bg-gradient-to-br from-[#FFFFFF] to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[inset_5px_5px_15px_#696c6f,inset_-5px_-5px_15px_#ffffff] dark:shadow-[inset_5px_5px_10px_#101010,inset_-5px_-5px_10px_#363636] w-full h-[4rem]"
+          : `flex flex-row my-3 rounded-xl items-center bg-gradient-to-br from-[#FFFFFF] w-full to-[#B8BCC2] dark:from-[#2A2A2A] dark:to-[#1C1C1C] shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
       dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] h-[4rem]`
       }
     >
-      <h1 className="md:mx-4 mx-1 md:text-base text-xs w-[70%]">
+      <h1 className="md:mx-4 w-full ml-6 md:text-base text-xs w-[70%]">
         <span className="flex md:hidden">{removeDomain(user.email)}</span>
         <span className="hidden md:flex">{user.email}</span>
       </h1>
       <p
         className={
           user.role === "owner"
-            ? "text-red-600 font-bold md:text-base text-xs justify-self-end"
+            ? "text-red-600 font-bold md:text-base text-xs"
             : user.role === "admin"
             ? "text-green-600 font-bold md:text-base text-xs"
             : user.role === "editor"
@@ -41,9 +41,9 @@ function UserCard(props: UserCardProps) {
       >
         {Capitalize(user.role)}
       </p>
-      <div className="w-full flex flex-row items-end justify-end">
+      <div className="w-[30%] flex flex-row items-end justify-end">
         {user.role === "owner" ? (
-          <></>
+          <div className="hidden"/>
         ) : (
           <>
             <Button

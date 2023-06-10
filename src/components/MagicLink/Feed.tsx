@@ -41,7 +41,8 @@ export default function Feed(props:MagicLinkFeed) {
 
   return (
     <div>
-      <ul>
+      <h1 className='font-bold text-xl dark:text-white'>Seus links ativos:</h1>
+      <ul className='flex flex-row'>
         {links &&
           links.map((link) => (
             <LinkCard
