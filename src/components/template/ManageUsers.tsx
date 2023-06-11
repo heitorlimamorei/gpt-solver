@@ -44,7 +44,7 @@ function ManageUsers(props: ManageSheetProps) {
           <div className="flex justify-between w-full mt-5 flex-wrap"> 
           <div className="flex flex-row">
             <Button
-                ClassName=" px-3 mx-2 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+                ClassName=" px-2 mx-2 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
                 dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
                 onClick={() => {
                   setCurrentEditingUser({
@@ -60,7 +60,7 @@ function ManageUsers(props: ManageSheetProps) {
                 icon={undefined}
               ></Button>
               <Button
-                ClassName=" px-3 mr-3 py-2 rounded-md justify-self-start shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+                ClassName=" px-2 mr-3 py-2 rounded-md justify-self-start shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
                 dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
                 onClick={() => router.push(`/magic-link/sheet/${sheet.data.id}`)}
                 text={undefined}
@@ -70,7 +70,7 @@ function ManageUsers(props: ManageSheetProps) {
               ></Button>
             </div>
             <Button
-              ClassName="px-3 mx-5 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+              ClassName="px-2 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
               dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
               onClick={toggleIsOpen}
               text="Fechar"
