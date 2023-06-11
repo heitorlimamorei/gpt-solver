@@ -41,34 +41,36 @@ function ManageUsers(props: ManageSheetProps) {
             setCurrentEditingUser={setCurrentEditingUser}
             
           />
-          <div className="flex  mt-5 flex-wrap"> 
-          <Button
-              ClassName=" px-3 mx-2 py-2 justify-self-start rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
-              dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
-              onClick={() => {
-                setCurrentEditingUser({
-                  email: "",
-                  role: "viewer",
-                  id: ""
-                })
-                setIsEditMode(false);
-              }}
-              text="Add usuário"
-              textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-              iconClassName={""}
-              icon={undefined}
-            ></Button>
+          <div className="flex justify-between w-full mt-5 flex-wrap"> 
+          <div className="flex flex-row">
             <Button
-              ClassName=" px-3 mr-3 py-2 justify-self-start rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
-              dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
-              onClick={() => router.push(`/magic-link/sheet/${sheet.data.id}`)}
-              text={undefined}
-              textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-              iconClassName="text-blue-600 font-bold"
-              icon={linkIcon(6)}
-            ></Button>
+                ClassName=" px-3 mx-2 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+                dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
+                onClick={() => {
+                  setCurrentEditingUser({
+                    email: "",
+                    role: "viewer",
+                    id: ""
+                  })
+                  setIsEditMode(false);
+                }}
+                text="Add usuário"
+                textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+                iconClassName={""}
+                icon={undefined}
+              ></Button>
+              <Button
+                ClassName=" px-3 mr-3 py-2 rounded-md justify-self-start shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+                dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
+                onClick={() => router.push(`/magic-link/sheet/${sheet.data.id}`)}
+                text={undefined}
+                textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+                iconClassName="text-blue-600 font-bold"
+                icon={linkIcon(6)}
+              ></Button>
+            </div>
             <Button
-              ClassName="px-3 mx-5 py-2 rounded-md justify-self-end shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+              ClassName="px-3 mx-5 py-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
               dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
               onClick={toggleIsOpen}
               text="Fechar"
