@@ -49,7 +49,7 @@ export default function MagicLinkHub() {
     useState<MagicLinkProps>(null);
   const [magicLinks, setMagicLinks] = useState<MagicLinkProps[]>(null);
   const [formData, setFormData] = useState<newMagicLinkProps>(formDataMock);
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const toggleIsOpen = useCallback(() => setModalIsOpen(current => !current), []);
 
