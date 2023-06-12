@@ -35,7 +35,7 @@ const LinkCard = (props: LinkCardProps) => {
    dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] p-5 my-5 md:w-[18%] w-full rounded-md dark:text-white">
     <h1 className="font-bold text-2xl">{magicLink.name}</h1>
     <h3 className="font-thin my-1"><span className="font-bold">Id: </span>{magicLink.id}</h3>
-    <p><span className="font-bold">Criado: </span>{day < 10 ? `0${day}` : day}/{month < 10  ? `0${month}` : month}/{year}</p>
+    <p><span className="font-bold">Expira: </span>{day < 10 ? `0${day}` : day}/{month < 10  ? `0${month}` : month}/{year}</p>
 
     <button onClick={() => setEditMode(magicLink)} className="dark:bg-[#232323] bg-[#E0E5EC] 
         dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
