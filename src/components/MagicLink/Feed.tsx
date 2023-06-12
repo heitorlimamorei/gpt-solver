@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import axios from 'axios';
 import variaveis from "../../model/variaveis";
-
 import { firebaseTimesStampType } from "../../utils/dateMethods";
 import LinkCard from './LinkCard';
 
@@ -41,7 +40,6 @@ export default function Feed(props:MagicLinkFeed) {
 
   return (
     <div>
-      <h1 className='font-bold text-xl dark:text-white'>Seus links ativos:</h1>
       <ul className='flex md:flex-row md:flex-wrap flex-col'>
         {links &&
           links.map((link) => (
