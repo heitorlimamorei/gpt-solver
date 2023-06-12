@@ -175,17 +175,17 @@ export default function MagicLinkHub() {
             rolesList={rolesList}
           />
         </ModalForm>
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-row my-8 justify-between w-full">
           <h1 className="font-bold text-xl dark:text-white">
             Seus links ativos:
           </h1>
           <Button
-            ClassName=" justify-self-end px-4 mr-3 py-4 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+            ClassName=" justify-self-end md:p-4 mr-3 p-2 rounded-md shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
           dark:shadow-[8px_8px_6px_#1C1C1C,_-3px_-3px_6px_#2A2A2A]"
             onClick={toggleIsOpen}
             text={`Criar Link`}
             textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-            iconClassName="text-[#00F0FF] mr-2 font-bold"
+            iconClassName="dark:text-[#00F0FF] text-[#1400FF] mr-2 font-bold"
             icon={plusIcon(6)}
           ></Button>
         </div>
