@@ -17,6 +17,9 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useSheetsCtx from "./useSheetsCtx";
 import variaveis from "../../model/variaveis";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/config";
+
 export default function useSheets() {
   const session = useSession();
   const { BASE_URL } = variaveis;
@@ -455,6 +458,22 @@ export default function useSheets() {
       handler(validation.errors);
     }
   }
+
+  function refreshItemsFromListener() {
+    if(!!state.data.id){
+      const q = query(collection(db, `planilhas/${state.data.id}/items`));
+      const unsubscribe = onSnapshot(q, (updatedItems) => {
+        const items = [];
+        updatedItems.forEach((doc) => {
+          items.push({id: doc.id, ...doc.data()});
+        });
+        console.log(items)
+        dispatch({ type: "refreshItems", payload: items });
+      });
+      return unsubscribe
+    }
+  }
+
   return {
     sheet: state,
     createNewSheet,
@@ -483,6 +502,7 @@ export default function useSheets() {
     cloneForeignItems,
     validateItemForm,
     validateSheetForm,
-    validateSheetAndRun
+    validateSheetAndRun,
+    refreshItemsFromListener,
   };
 }

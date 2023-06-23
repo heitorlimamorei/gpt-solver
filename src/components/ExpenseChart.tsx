@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import _ from "lodash";
 import { firestoreTimestampToDate } from "../utils/dateMethods";
 import {
@@ -20,7 +20,7 @@ interface ResultsChartProps{
   }
 }
 
-function ExpenseChart() {
+const ExpenseChart = () => {
   const { sheet } = useSheets();
 
  
@@ -79,7 +79,6 @@ function ExpenseChart() {
     date,
     ...values
   }));
-  console.log(newArray);
   return (
     <div>
       <ResponsiveContainer width="100%" height={300}>
@@ -108,4 +107,4 @@ function ExpenseChart() {
   );
 }
 
-export default ExpenseChart;
+export default memo(ExpenseChart);

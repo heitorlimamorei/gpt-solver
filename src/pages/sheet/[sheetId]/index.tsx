@@ -35,7 +35,8 @@ function EditSheet() {
     filterBySpentType,
     filterByDescription,
     filterByName,
-    validateItemForm
+    validateItemForm,
+    refreshItemsFromListener
   } = useSheets();
   const { BASE_URL } = variaveis;
   const [isOpen, setIsOpen] = useState(false);
@@ -227,6 +228,13 @@ function EditSheet() {
       ReloadSheet(id, email);
     }
   }, [email, router.query]);
+
+  useEffect(() => {
+    if(!!sheet.data.id){
+      const cancel:any = refreshItemsFromListener();
+      return () => cancel()
+    }
+  }, [sheet.data.id]);
 
   const [isHidden, setIsHidden] = useState(true);
 
