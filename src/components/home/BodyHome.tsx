@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Button from "../Button";
-import image from "../../../public/images/landingPageImage.png"
 import controller from "../../../public/images/controller.png";
 import Passo1 from "../../../public/images/Passo1.png";
 import Passo2 from "../../../public/images/Passo2.png";
@@ -10,25 +9,34 @@ import { signIn, useSession } from "next-auth/react"
 function BodyHome() {
   return (
     <div className=" dark dark:bg-[#232323]  flex flex-col items-center w-full h-full ">
-      <div className="h-[85vh] flex flex-row bg-[#232323] w-full">
-          <div className="flex flex-col items-center mt-[15rem]  h-full w-[40%]">
-            <div className="ml-[10rem] mb-[5rem]">
-              <h1 className=" w-[30rem] text-4xl font-bold text-white">Bem-Vindo ao FinancialController!</h1>
-              <p className="w-[30rem] text-white mt-3">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas quae, sint suscipit illo dolores facere pariatur fugiat quis cumque ea voluptas, ipsum quia odio dolorum voluptates itaque autem est nobis.</p>
-              <Button
-                ClassName="md:w-[13rem] w-[35%] h-[50px] self-start mt-10 font-bold rounded-[41px] transition-all duration-500 ease-linear lg:text-base text-[9px]"
-                text="Experimente agora!"
-                textClassName="transition-all duration-500 ease-linear text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-              >
-
+      <div className="flex flex-col items-center transition-all duration-500 ease-linear lg:flex-col  w-full h-full dark:bg-[#232323] bg-[#E0E5EC] dark:text-white text-black">
+        <div className="flex flex-col items-center w-[90%] lg:w-[40%] lg:h-[30rem]">
+          <div className="flex flex-col md:flex-row md:w-[90vw] items-center justify-center w-full h-full bg-[#232323] rounded-2xl shadow-[10px_10px_30px_#0e0e0e,-10px_-10px_30px_#383838]">
+            <div
+              className={`flex flex-col items-center justify-center h-[50%] md:h-full md:w-[40%] transition-all`}
+            >
+              <Image
+                className=""
+                src={controller}
+                alt="Controle"
+                width="280"
+                height="200"
+              ></Image>
+            </div>
+            <div className="flex flex-col md:h-full place-content-center justify-self-end bg-[#191919] rounded-b-2xl w-full h-[50%]">
+              <h1 className="self-center text-lg font-bold">Tenha controle</h1>
+              <h1 className="self-center text-lg font-bold">
+                sobre suas finanças
+              </h1>
+              <Button 
+              onClick={() => signIn('auth0')}
+              ClassName="transition-all duration-1000 md:h-[10%] md:w-[40%] rounded-full justify-self-center self-center w-[80%] h-[40%] mt-8 p-4 hover:font-bold hover:w-[83%] hover:h-[43%]">
+                Começar agora
               </Button>
             </div>
           </div>
-          <div className="ml-[15rem]">
-            <Image  alt="Imagem Pagina Inicial" src={image} width={970} height={880}>
-            </Image>
-          </div>
-      </div>
+        </div>
+        </div>
     </div>
   );
 }

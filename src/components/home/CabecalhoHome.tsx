@@ -14,7 +14,7 @@ function CabecalhoHome(props) {
   const { tema, alternarTema } = props;
   return (
     <div
-      className={`dark bg-[#232323] w-full h-[12vh] transition-all duration-500 ease-linear`}
+      className={`dark bg-[#232323] w-full h-[7rem] transition-all duration-500 ease-linear lg:mb-5`}
     >
       <header className="flex items-center w-full h-[10vh]">
         <div className="flex flex-row items-center justify-start h-full w-full">
