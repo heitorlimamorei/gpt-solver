@@ -3,13 +3,10 @@ import Cliper from "../Clipers/Cliper";
 import useAppData from "../../data/hook/useAppData";
 import ModalForm from "./ModalForm";
 
-interface IWatingActionProps {
-  isLoading: boolean;
-}
 
-export default function WatingActionModal(props: IWatingActionProps) {
-  const { tema } = useAppData();
-  const { isLoading } = props;
+
+export default function WatingActionModal() {
+  const { tema, isLoading } = useAppData();
   return (
     <>
       <ModalForm isOpen={isLoading} className="flex flex-col items-center justify-center h-[90%] mt-10 mb-10">

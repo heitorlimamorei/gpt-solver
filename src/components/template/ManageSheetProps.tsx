@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../input";
 import Button from "../Button";
-import Select from "./Select";
 import router from "next/router";
 import useSheets from "../../data/hook/useSheets";
 import { trashIcon } from "../icons/Icones";

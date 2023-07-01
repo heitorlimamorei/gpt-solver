@@ -50,7 +50,7 @@ export default function Sheet() {
           />
         </ModalForm>
 
-        <WatingActionModal isLoading={false}/>
+        <WatingActionModal/>
 
         <div className="flex flex-1 w-full mt-3">
           <div className="flex w-full justify-end">
