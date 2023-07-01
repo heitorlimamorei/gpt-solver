@@ -17,7 +17,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useSheetsCtx from "./useSheetsCtx";
 import variaveis from "../../model/variaveis";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 export default function useSheets() {

@@ -9,6 +9,7 @@ import Button from "../../components/Button";
 import CreateSheet from "../../components/template/CreateSheet";
 import variaveis from "../../model/variaveis";
 import SheetOptions from "../../components/SheetOptions";
+import WatingActionModal from "../../components/template/WatingActionModal";
 
 export default function Sheet() {
   const { BASE_URL } = variaveis;
@@ -48,6 +49,8 @@ export default function Sheet() {
             addSheetIntoTheList={setSheets}
           />
         </ModalForm>
+
+        <WatingActionModal/>
 
         <div className="flex flex-1 w-full mt-3">
           <div className="flex w-full justify-end">
