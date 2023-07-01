@@ -29,6 +29,9 @@ function CreateSheet(props: ManageSheetProps) {
   const { createNewSheet } = useSheets();
   const seesion = useSession();
   async function handleSubmit() {
+
+    toggleIsLoading();
+
     const sheet = await createNewSheet({
       name: name,
       tiposDeGastos: tiposDeGastos,
@@ -36,8 +39,7 @@ function CreateSheet(props: ManageSheetProps) {
       type: "pessoal",
       owner: seesion.data.user.email,
     });
-    toggleIsLoading();
-
+   
     if (!!sheet.id) toggleIsLoading();
 
     router.push(`/sheet/${sheet.data.id}`);
