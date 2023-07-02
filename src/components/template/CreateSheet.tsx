@@ -29,22 +29,25 @@ function CreateSheet(props: ManageSheetProps) {
   const { createNewSheet } = useSheets();
   const seesion = useSession();
   async function handleSubmit() {
+    try {
+      toggleIsLoading();
 
-    toggleIsLoading();
+      const sheet = await createNewSheet({
+        name: name,
+        tiposDeGastos: tiposDeGastos,
+        totalValue: totalValue,
+        type: "pessoal",
+        owner: seesion.data.user.email,
+      });
 
-    const sheet = await createNewSheet({
-      name: name,
-      tiposDeGastos: tiposDeGastos,
-      totalValue: totalValue,
-      type: "pessoal",
-      owner: seesion.data.user.email,
-    });
-   
-    if (!!sheet.id) toggleIsLoading();
+      if (!!sheet.id) toggleIsLoading();
 
-    router.push(`/sheet/${sheet.data.id}`);
+      router.push(`/sheet/${sheet.data.id}`);
 
-    toggleIsOpen();
+      toggleIsOpen();
+    } catch (err) {
+      toggleIsLoading();
+    }
   }
   function filterByIndex(index: number) {
     const arrayClone = [...tiposDeGastos].filter((spent, i) => i !== index);
