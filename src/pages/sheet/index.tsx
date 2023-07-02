@@ -10,16 +10,21 @@ import CreateSheet from "../../components/template/CreateSheet";
 import variaveis from "../../model/variaveis";
 import SheetOptions from "../../components/SheetOptions";
 import WatingActionModal from "../../components/template/WatingActionModal";
+import useAppData from "../../data/hook/useAppData";
 
 export default function Sheet() {
   const { BASE_URL } = variaveis;
   const [sheets, setSheets] = useState<sheetProps[]>([]);
   const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
+  const { setIsLoading } = useAppData();
   const session = useSession();
   const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
   let email = session.data?.user.email;
   let name = session.data?.user.name;
+
+  useEffect(()  => setIsLoading(false), []);
+  
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {

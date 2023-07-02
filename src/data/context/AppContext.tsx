@@ -5,6 +5,7 @@ interface AppContextProps {
   alternarTema: () => void;
   isLoading: boolean;
   toggleIsLoading: () => void;
+  setIsLoading(value: boolean): void;
 }
 type TypeAppContextProvider = {
   children: any;
@@ -14,7 +15,8 @@ const AppContext = createContext<AppContextProps>({
   tema: "dark",
   alternarTema: null,
   isLoading: false,
-  toggleIsLoading: null
+  toggleIsLoading: null,
+  setIsLoading: null
 });
 
 export function AppContextProvider(props: TypeAppContextProvider) {
@@ -40,7 +42,8 @@ export function AppContextProvider(props: TypeAppContextProvider) {
         tema: tema,
         alternarTema,
         isLoading,
-        toggleIsLoading
+        toggleIsLoading,
+        setIsLoading
       }}
     >
       {props.children}
