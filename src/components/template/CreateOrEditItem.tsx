@@ -66,7 +66,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
         </label>
         <Input
           ClassName=""
-          type="number"
+          type="text"
           id="value"
           name="value"
           value={formData.value}
@@ -92,7 +92,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
           ClassName="px-4 py-2 rounded-md"
           onClick={handleSubmit}
           text={isEditMode ? `Atualizar ${receitaOuDespesa}` : `Criar  ${receitaOuDespesa}`}
-          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-tor from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
+          textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         <Button
           ClassName="px-4 py-2 rounded-md"

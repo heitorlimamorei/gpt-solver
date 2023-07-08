@@ -80,11 +80,17 @@ function EditSheet() {
     setIsOpen2((current) => !current);
   }, []);
 
+  const validateField = useCallback((event: any) => { // posteriormente alterar por uma solução de UX.
+    const validateNumberField = () => typeof parseFloat(event.target.value) === "number";
+    return event.target.value == "value" ? validateNumberField() : event.target.value
+  }, []);
+  
   const handleChange = useCallback((event) => {
     setFormData((current) => {
       return {
         ...current,
-        [event.target.name]: event.target.value,
+        [event.target.name]: validateField(event)
+          
       };
     });
   }, []);
@@ -308,7 +314,7 @@ function EditSheet() {
           </div>
           <div className="flex justify-center items-center w-full h-[5rem]">
             <h2 className="dark:text-white font-bold text-3xl">
-              R${sumAllItems()}
+              R${sumAllItems().toFixed(2)}
             </h2>
             
           </div>
