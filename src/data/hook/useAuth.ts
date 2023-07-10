@@ -12,7 +12,6 @@ export default function useAuth() {
   let email = session.data?.user.email;
   let name = session.data?.user.name;
 
-  const handleSheetIdsLoadingChange = (current:boolean) => dispatch({type: "sheetIdsIsLoading", payload:current});
   const handleUserIsLoadingChange = (current:boolean) => dispatch({type: "userIdIsLoadingChange", payload:current});
   const handleSheetIdsLoad = (current: string[]) => dispatch({type: "loadSheetIds", payload:current});
   const handleLogin = (current: UserProps) => dispatch({type: "login", payload:current});
@@ -20,7 +19,6 @@ export default function useAuth() {
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {
-        handleSheetIdsLoadingChange(true);
         handleUserIsLoadingChange(true);
         axios
           .post(`${BASE_URL}/api/users/login`, {
@@ -36,13 +34,11 @@ export default function useAuth() {
 
   useEffect(() => {
     if (!!state.user.id) handleUserIsLoadingChange(false);
-    if (!!state.user.sheetIds) handleSheetIdsLoadingChange(false);
   }, [state.user]);
 
   console.log(state);
   
   return {
-    handleSheetIdsLoadingChange,
     handleUserIsLoadingChange,
     handleSheetIdsLoad,
     data: state

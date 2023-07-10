@@ -26,14 +26,6 @@ function AuthReducer(state: IAuthProps, action: AuthAction) {
           userIsLoading: action.payload,
         },
       };
-    case "sheetIdsIsLoading":
-      return {
-        ...state,
-        loadings: {
-          ...state.loadings,
-          sheetIdsIsLoading: action.payload,
-        },
-      };
     case "loadSheetIds":
       return {
         ...state,
@@ -57,7 +49,6 @@ const AuthConext = createContext<UserContextProps>({
     },
     loadings: {
       userIsLoading: false,
-      sheetIdsIsLoading: false,
     },
   },
   dispatch: () => {},
@@ -73,7 +64,6 @@ export function AuthContextProvider(props: UserContextProvider) {
     },
     loadings: {
       userIsLoading: false,
-      sheetIdsIsLoading: false,
     },
   });
   return (
