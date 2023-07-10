@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import Layout from "../../../components/template/Layout";
 import ModalForm from "../../../components/template/ModalForm";
 import useSheets from "../../../data/hook/useSheets";
-import { useSession } from "next-auth/react";
 import CardItem from "../../../components/CardItem";
 import _ from "lodash";
 import axios from "axios";
@@ -23,6 +22,7 @@ import Switch2 from "../../../components/template/Switch2";
 import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
 import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
 import ExpenseChart from "../../../components/ExpenseChart";
+import useAuth from "../../../data/hook/useAuth";
 
 function EditSheet() {
   const {
@@ -42,7 +42,9 @@ function EditSheet() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
-  const [sheetIds, setSheetIds] = useState<string[]>([]);
+  const { data} = useAuth();
+  const { user } = data;
+  const {email, sheetIds} = user;
   const [isOpen4, setIsOpen4] = useState(false);
 
   const [itemsRenderOptions, setItemsRenderOptions] =
@@ -59,9 +61,6 @@ function EditSheet() {
     "createItem"
   );
   const router = useRouter();
-  const session = useSession();
-  let email = session.data?.user.email;
-  let name = session.data?.user.name;
   const [currentEditingItem, setCurrentEditingItem] =
     useState<sheetItemProps>(null);
   const [formData, setFormData] = useState({
@@ -149,22 +148,6 @@ function EditSheet() {
     },
     [currentEditingItem, formData, sheet]
   );
-  useEffect(() => {
-    if (email !== undefined) {
-      if (email.length > 0) {
-        axios
-          .post(`${BASE_URL}/api/users/login`, {
-            email: email,
-            name: name,
-          })
-          .then((response) => {
-            let sheets: string[] = response.data.sheetIds;
-            console.log(sheets);
-            setSheetIds(sheets);
-          });
-      }
-    }
-  }, [email]);
   
   const getSheets = useCallback(async () => {
     let requests = [];

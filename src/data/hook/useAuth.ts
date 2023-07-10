@@ -35,8 +35,6 @@ export default function useAuth() {
   useEffect(() => {
     if (!!state.user.id) handleUserIsLoadingChange(false);
   }, [state.user]);
-
-  console.log(state);
   
   return {
     handleUserIsLoadingChange,
