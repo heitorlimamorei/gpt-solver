@@ -48,7 +48,7 @@ const AuthConext = createContext<UserContextProps>({
       sheetIds: [],
     },
     loadings: {
-      userIsLoading: false,
+      userIsLoading: true,
     },
   },
   dispatch: () => {},
