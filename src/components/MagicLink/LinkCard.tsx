@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo } from "react"
 import { firebaseTimesStampType, firestoreTimestampToDate } from "../../utils/dateMethods";
-import BASE_URL from '../../model/variaveis'
+import variaveis from "../../model/variaveis";
+import { ClipboardDocumentCheckIcon } from "../icons/Icones";
 interface MagicLinkProps {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ interface LinkCardProps{
 
 const LinkCard = (props: LinkCardProps) => {
   const { magicLink, setEditMode, handleDelete } = props;
+  const { BASE_URL } = variaveis;
 
   const getWhenLinkWillExpires = useCallback((expires: firebaseTimesStampType) => {
     const currentDate = firestoreTimestampToDate(expires);
@@ -37,19 +39,29 @@ const LinkCard = (props: LinkCardProps) => {
 
   return (
     <li
-      className="mx-3 shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+      className="flex flex-col mx-3 shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] 
    dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] p-5 my-5 md:w-[18%] w-full rounded-md dark:text-white"
     >
       <h1 className="font-bold text-2xl">{magicLink.name}</h1>
-      <h3 className="font-thin my-1">
-        <span className="font-bold">Id: </span>
-        {magicLink.id}
-      </h3>
+      <div className="flex items-center  my-2 w-2/3">
+        <span
+          className={`transition-all duration-500 ease-linear flex justify-center bg-[#E0E6EC] dark:bg-[#232323] rounded-full p-3 mr-1
+      shadow-[5px_5px_10px_#A7ABB0,_-5px_-5px_10px_#FFFFFF]
+      dark:shadow-[5px_5px_10px_#1A1A1A,_-5px_-5px_10px_#2C2C2C]
+      hover:text-gray-500 dark:text-white cursor-pointer`}
+      onClick={copyInvitationToTheCliboard}
+        >
+          {ClipboardDocumentCheckIcon(6)}
+        </span>
+        <h3 className="font-thin my-1 ">{magicLink.id}</h3>
+      </div>
+
       <p>
         <span className="font-bold">Expira: </span>
         {day < 10 ? `0${day}` : day}/{month < 10 ? `0${month}` : month}/{year}
       </p>
 
+      <div className="flex w-2/3">
       <button
         onClick={() => setEditMode(magicLink)}
         className="dark:bg-[#232323] bg-[#E0E5EC] 
@@ -64,7 +76,7 @@ const LinkCard = (props: LinkCardProps) => {
       <button
         className="dark:bg-[#232323] bg-[#E0E5EC] 
         dark:shadow-[10px_10px_24px_#0e0e0e,-10px_-10px_24px_#383838]
-        shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] p-3 rounded-xl ml-2"
+        shadow-[10px_10px_24px_#727578,-10px_-10px_24px_#ffffff] p-3 rounded-xl ml-2 mt-5"
         onClick={(ev) => {
           handleDelete(magicLink.id, magicLink.targetSheet);
         }}
@@ -73,6 +85,9 @@ const LinkCard = (props: LinkCardProps) => {
           Deletar
         </p>
       </button>
+      </div>
+
+      
     </li>
   );
 }
