@@ -27,7 +27,7 @@ async function createItem(newItem: newItemProps, email: string) {
       "canEditItems"
     )
   ) {
-    return (await itemRepository.createItem(newItem))[0]
+    return (await itemRepository.createItem(newItem))
   } else {
     throw new Error(
       "ERRO: 401, Não possui role para editar os itens da planilha."
@@ -48,7 +48,7 @@ async function updateItem(item: ItemProps, email: string) {
   if (
     await sheetAuthservice.checkPermission(email, item.sheetId, "canEditItems")
   ) {
-    return (await itemRepository.updateItem(item))[0]
+    return (await itemRepository.updateItem(item))
   } else {
     throw new Error(
       "ERRO: 401, Não possui role para editar os itens da planilha."
@@ -76,7 +76,6 @@ async function cloneItemsFromForeignSheet(
     for (let item of foreignItems) {
       await itemRepository.createForeignItem(item, sheetId);
     }
-    return await itemRepository.getItems(sheetId);
   } else {
     throw new Error('Autenticação falhou!')
   }

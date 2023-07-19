@@ -8,11 +8,10 @@ export default async function SheetIdRouter(
   try {
     const sheetId:any = req.query.sheetId;
     if (req.method === "POST") {
+      await ItemService.cloneItemsFromForeignSheet(req.body.foreignId,sheetId,req.body.email)
       res
         .status(200)
-        .json(
-          await ItemService.cloneItemsFromForeignSheet(req.body.foreignId,sheetId,req.body.email)
-        );
+        .json({ status: "OK" })
     }
   } catch (err) {
     res.status(400).send(err.message);

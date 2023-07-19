@@ -15,15 +15,17 @@ export default async function SheetIdRouter(
           .status(200)
           .json(await ItemService.getItems(sheetId, req.body.email));
       } else if (mode === "POST") {
+        await ItemController.createNewItem(req.body.newItem, req.body.email)
         res
           .status(200)
-          .json(await ItemController.createNewItem(req.body.newItem, req.body.email));
+          .json({ status: "OK" })
       }
     }
     if (req.method === "PUT") {
+      await ItemController.updateItem(req.body.item, req.body.email)
       res
         .status(200)
-        .json(await ItemController.updateItem(req.body.item, req.body.email));
+        .json({ status: "OK" })
     }
   } catch (err) {
     res.status(400).send(err.message);
