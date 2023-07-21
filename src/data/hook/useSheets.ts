@@ -176,20 +176,20 @@ export default function useSheets() {
     dispatch({ type: "refreshUsers", payload: users });
   }
   async function deleteItem(id: string) {
-    const { data: items } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items/${id}`,
       {
         email: state.currentUser,
         mode: "DELETE",
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
+    if( status !== 200) console.error(status);
   }
   function onChangeUser(newUser: string) {
     dispatch({ type: "onChangeUser", payload: newUser });
   }
   async function createNewItem(newItem: newSheetItemProps) {
-    const { data: items } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         email: state.currentUser,
@@ -197,10 +197,9 @@ export default function useSheets() {
         newItem: newItem,
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
   }
   async function updateItem(item: sheetItemProps) {
-    const { data: items } = await axios.put(
+    const { status } = await axios.put(
       `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         method: "PUT",
@@ -210,7 +209,6 @@ export default function useSheets() {
         },
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
   }
   function sumAllItems(): number {
     return _.sumBy(state.items, (item: sheetItemProps) =>
@@ -328,14 +326,13 @@ export default function useSheets() {
     dispatch({ type: "onDeleteSheet" });
   }
   async function cloneForeignItems(foreignId) {
-    const { data } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items/clone`,
       {
         email: state.currentUser,
         foreignId: foreignId,
       }
     );
-    dispatch({ type: "refreshItems", payload: data });
   }
   
   interface IvalidateStatus{

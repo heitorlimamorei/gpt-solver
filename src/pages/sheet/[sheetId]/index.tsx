@@ -120,7 +120,7 @@ function EditSheet() {
     async (event) => {
       event.preventDefault();
       if (!currentEditingItem) {
-        await createNewItem({
+         await createNewItem({
           ...formData,
           value: Number(formData.value),
           sheetId: sheet.data.id,
@@ -128,7 +128,7 @@ function EditSheet() {
           date: new Date(),
         });
       } else {
-        await updateItem({
+         await updateItem({
           ...currentEditingItem,
           value: formData.value,
           description: formData.description,
