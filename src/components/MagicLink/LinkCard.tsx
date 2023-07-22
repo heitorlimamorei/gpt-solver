@@ -39,8 +39,8 @@ const LinkCard = (props: LinkCardProps) => {
 
   return (
     <li
-      className="flex flex-col mx-3 shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff] 
-   dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] p-5 my-5 md:w-[18%] w-full rounded-md dark:text-white"
+      className="mx-3 shadow-[5px_5px_10px_#696c6f,-5px_-5px_10px_#ffffff]
+   dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A] p-5 my-5 md:w-[20%] w-full rounded-md dark:text-white"
     >
       <h1 className="font-bold text-2xl">{magicLink.name}</h1>
       <div className="flex items-center  my-2 w-2/3">

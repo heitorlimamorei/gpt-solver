@@ -2,46 +2,26 @@ import { useEffect, useState } from "react";
 import { plusIcon } from "../../components/icons/Icones";
 import Layout from "../../components/template/Layout";
 import ModalForm from "../../components/template/ModalForm";
-import { useSession } from "next-auth/react";
-import axios from "axios";
 import { sheetProps } from "../../types/sheetTypes";
 import Button from "../../components/Button";
 import CreateSheet from "../../components/template/CreateSheet";
-import variaveis from "../../model/variaveis";
 import SheetOptions from "../../components/SheetOptions";
 import WatingActionModal from "../../components/template/WatingActionModal";
 import useAppData from "../../data/hook/useAppData";
+import useAuth from "../../data/hook/useAuth";
 
 export default function Sheet() {
-  const { BASE_URL } = variaveis;
   const [sheets, setSheets] = useState<sheetProps[]>([]);
-  const [sheetIds, setSheetIds] = useState<string[]>([]);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [sheetsOptionsIsLoading, setSheetsOptionsIsLoading] = useState(true);
+
   const { setIsLoading } = useAppData();
-  const session = useSession();
-  const [sheetIdsIsLoading, setSheetIdsIsLoading] = useState(true);
-  let email = session.data?.user.email;
-  let name = session.data?.user.name;
+
+  const { data } = useAuth();
+  const { user } = data;
 
   useEffect(()  => setIsLoading(false), []);
   
-  useEffect(() => {
-    if (email !== undefined) {
-      if (email.length > 0) {
-        setSheetIdsIsLoading(true);
-        axios
-          .post(`${BASE_URL}/api/users/login`, {
-            email: email,
-            name: name,
-          })
-          .then((response) => {
-            let sheets: string[] = response.data.sheetIds;
-            console.log(sheets);
-            setSheetIds(sheets);
-          });
-      }
-    }
-  }, [email]);
   return (
     <div className={`lg:h-[200vh] h-[200vh] w-[100%]`}>
       <Layout
@@ -70,10 +50,10 @@ export default function Sheet() {
           </div>
         </div>
         <SheetOptions
-          sheetIds={sheetIds}
+          sheetIds={user.sheetIds}
           sheets={sheets}
-          sheetIdsIsLoading={sheetIdsIsLoading}
-          setSheetIdsIsLoading={setSheetIdsIsLoading}
+          sheetOptionsIsLoading={sheetsOptionsIsLoading}
+          setSheetOptionsIsLoading={setSheetsOptionsIsLoading}
           setSheets={setSheets}
         />
       </Layout>

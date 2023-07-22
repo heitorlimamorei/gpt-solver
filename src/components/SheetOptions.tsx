@@ -9,35 +9,33 @@ interface SheetOptionsProps {
   sheetIds: string[];
   sheets: sheetProps[];
   setSheets: ( newState: sheetProps[] ) => void;
-  sheetIdsIsLoading: boolean;
-  setSheetIdsIsLoading: ( newState:boolean) => void;
+  sheetOptionsIsLoading: boolean;
+  setSheetOptionsIsLoading: ( newState:boolean) => void;
 }
 function SheetOptions(props: SheetOptionsProps) {
-  const { sheetIds, sheets, setSheets, sheetIdsIsLoading,setSheetIdsIsLoading } = props;
+  const { sheetIds, sheets, setSheets, sheetOptionsIsLoading, setSheetOptionsIsLoading } = props;
   const { sheet, loadSheetByUserSeletion } = useSheets();
   const { BASE_URL } = variaveis;
   
   const getSheets = useCallback(async () => {
     let requests = [];
-    if (sheetIds !== undefined) {
-      if (sheetIds.length > 0) {
-        sheetIds.forEach((sheetId) => {
-          const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
-            email: sheet.currentUser,
-            mode: "GET",
-          });
-          requests.push(currentSheet);
+    if (!!sheetIds) {
+      sheetIds.forEach((sheetId) => {
+        const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
+          email: sheet.currentUser,
+          mode: "GET",
         });
-        const responseArray = await Promise.all(requests);
-        let finalReponse = responseArray.map((response) => response.data);
-        return finalReponse;
-      }
+        requests.push(currentSheet);
+      });
+      const responseArray = await Promise.all(requests);
+      let finalReponse = responseArray.map((response) => response.data);
+      return finalReponse;
     }
   }, [sheetIds]);
   const loader = useCallback(async () => {
     try {
       const sheetsResp: any = await getSheets();
-      setSheetIdsIsLoading(false);
+      setSheetOptionsIsLoading(false);
       if (sheetsResp.length > 0) {
         setSheets(sheetsResp);
       }
@@ -50,7 +48,7 @@ function SheetOptions(props: SheetOptionsProps) {
       if (sheetIds.length > 0) {
         loader();
       } else {
-        setSheetIdsIsLoading(false);
+        setSheetOptionsIsLoading(false);
       }
     }
   }, [sheetIds]);
@@ -59,9 +57,9 @@ function SheetOptions(props: SheetOptionsProps) {
       <h1 className="font-bold text-2xl dark:text-white">
         Escolha a planilha!
       </h1>
-      {sheetIdsIsLoading ? (
+      {sheetOptionsIsLoading ? (
         <div className="flex items-center justify-center mt-12">
-          <Cliper isLoading={sheetIdsIsLoading} size={60} />
+          <Cliper isLoading={sheetOptionsIsLoading} size={60} />
         </div>
       ) : (
         <ul className="flex md:flex-row flex-col md:flex-wrap mt-2">

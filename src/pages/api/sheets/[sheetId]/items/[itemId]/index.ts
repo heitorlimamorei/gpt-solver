@@ -12,9 +12,10 @@ export default async function SheetIdRouter(
       if (mode === "GET") {
         res.status(200).json(await ItemService.getItemById(sheetId, itemId));
       } else if (mode === "DELETE") {
+        await ItemService.deleteItem(itemId, sheetId, req.body.email)
         res
           .status(200)
-          .json(await ItemService.deleteItem(itemId, sheetId, req.body.email));
+          .json({ status: "OK" })
       }
     }
   } catch (err) {

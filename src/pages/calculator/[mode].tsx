@@ -38,7 +38,6 @@ export default function Calculator() {
       <div className="w-full h-[85vh] flex items-center justify-center">
         <ModeSwitcher mode={mode} modeComponents={modeComponents} />
       </div>
-        
       </Layout>
     </div>
   );
