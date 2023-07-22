@@ -54,7 +54,6 @@ async function createItem(newItem: newItemProps) {
     date: new Date(),
     type: newItem.type
   });
-  return [[...await getItems(newItem.sheetId)], await getItemById(newItem.sheetId, itemRef.id)]
 }
 async function createForeignItem(item: ItemProps, sheetId: string)  {
   const itemsRef = collection(db, `planilhas/${sheetId}/items`);
@@ -67,7 +66,6 @@ async function createForeignItem(item: ItemProps, sheetId: string)  {
     date: item.date,
     type: item.type
   });
-  return  getItems(item.sheetId)
 }
 async function updateItem(item:ItemProps){
   const itemRef = doc(db, `planilhas/${item.sheetId}/items/${item.id}`)
@@ -78,7 +76,6 @@ async function updateItem(item:ItemProps){
     value: item.value,
     type: item.type
   })
-  return [[...await getItems(item.sheetId)], await getItemById(item.sheetId, item.id)]
 }
 async function itemExists(sheetId:string, itemId:string){
   const docRef = doc(db, `planilhas/${sheetId}/items/${itemId}`)
@@ -88,7 +85,6 @@ async function itemExists(sheetId:string, itemId:string){
 async function deleteItem(sheetId: string, itemId:string){
   const itemRef = doc(db, `planilhas/${sheetId}/items/${itemId}`);
   const docRef = await deleteDoc(itemRef)
-  return await getItems(sheetId)
 }
 
 export default {
