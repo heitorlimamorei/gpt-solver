@@ -48,7 +48,9 @@ function SheetOptions(props: SheetOptionsProps) {
       if (sheetIds.length > 0) {
         loader();
       } else {
-        setSheetOptionsIsLoading(false);
+        if(sheets.length > 0) {
+          setSheetOptionsIsLoading(false);
+        }
       }
     }
   }, [sheetIds]);
