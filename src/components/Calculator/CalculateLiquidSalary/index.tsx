@@ -95,7 +95,7 @@ const CalculateLiquidSalary = () => {
           value={dependents}
           type={"number"}
         />
-        <label htmlFor="discount">Discontos(plano de saúde, etc)</label>
+        <label htmlFor="discount">Descontos(plano de saúde, etc)</label>
         <Input
           disabled={rawSalary <= 0}
           name="discount"
