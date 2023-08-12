@@ -1,27 +1,6 @@
 import React, { useState } from "react";
-const StarRating = ({ totalStars = 5, onRating = (f) => f }) => {
-  const [selectedStars, setSelectedStars] = useState(0);
-  const handleSelect = (rating) => {
-    setSelectedStars(rating);
-    onRating(rating);
-  };
-  return (
-    <div>
-      <label htmlFor="rating" className="">Como você avalia a sua experiência com o app?</label>
-      <div className="flex flex-row mt-2">
-        {[...Array(totalStars)].map((n, i) => (
-          <Star
-            key={i}
-            selected={selectedStars > i}
-            onSelect={() => handleSelect(i + 1)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
 
-const Star = ({ selected = false, onSelect = (f) => f }) => (
+const Star = ({ selected = false, onSelect } : { selected?: boolean; onSelect: () => void }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     onClick={onSelect}
@@ -40,5 +19,31 @@ const Star = ({ selected = false, onSelect = (f) => f }) => (
     />
   </svg>
 );
+
+const StarRating = ({ totalStars = 5, onRating, clasNames }: { totalStars: number; onRating: (rating: number) => void; clasNames?: string }) => {
+  const [selectedStars, setSelectedStars] = useState<number>(0);
+
+  const handleSelect = (rating) => {
+    setSelectedStars(rating);
+    onRating(rating);
+  };
+
+  return (
+    <div className={clasNames}>
+      <label htmlFor="rating">Como você avalia a sua experiência com o app?</label>
+      <div className="flex flex-row mt-2">
+        {[...Array(totalStars)].map((n, i) => (
+          <Star
+            key={i}
+            selected={selectedStars > i}
+            onSelect={() => handleSelect(i + 1)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
 
 export default StarRating;
