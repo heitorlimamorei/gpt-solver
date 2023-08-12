@@ -14,7 +14,7 @@ interface IuserProps {
     user_url: string;
 }
 
-export default function feedback() {
+export default function Feedback () {
   const [user, setUser] = useState<IuserProps>(null);
   const router = useRouter();
   const { data } = useSession();
