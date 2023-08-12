@@ -80,7 +80,7 @@ export default function useCalcs() {
   }
   function solveIr(value: number, dependents = 0) {
     const getValueMinusInss = () => {
-      let inssValue = solveInss(value) >= 604.44 ? 604.44 : solveInss(value); // check that the limiting value remains the same
+      let inssValue = solveInss(value); // check that the limiting value remains the same
       return value - inssValue - dependents * (2275.08 / 12);
     };
     const valueF = getValueMinusInss(); // getting effective value for operation

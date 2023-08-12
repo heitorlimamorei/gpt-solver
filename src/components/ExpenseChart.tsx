@@ -1,7 +1,5 @@
-import React from "react";
+import { memo } from "react";
 import _ from "lodash";
-import { useState } from "react";
-import { sheetProps } from "../types/sheetTypes";
 import { firestoreTimestampToDate } from "../utils/dateMethods";
 import {
   BarChart,
@@ -14,53 +12,73 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useSheets from "../data/hook/useSheets";
-import { groupBy } from "lodash";
-import reduce from "lodash/reduce";
 
-function ExpenseChart() {
+interface ResultsChartProps{
+  [key: string]: {
+    receita: number;
+    despesa: number;
+  }
+}
+
+const ExpenseChart = () => {
   const { sheet } = useSheets();
-  let data = [];
-  sheet.items.map((item) => {
-    if (item.value < 0) {
-      const newDate = firestoreTimestampToDate(item.date);
-      const month = newDate.getMonth();
-      const day = newDate.getDate();
 
-      const date = `${day}/${month + 1}`;
+ 
+  const getItemsData = () => {
+    if(sheet.items.length === 0) return [];
 
-      data.push({ date: date, despesa: item.value, receita: 0 });
-    }
-    if (item.value > 0) {
-      const newDate = firestoreTimestampToDate(item.date);
-      const month = newDate.getMonth();
-      const day = newDate.getDate();
+    let currentItemsData = sheet.items.map((item) => {
+      if (item.value < 0) {
+        const newDate = firestoreTimestampToDate(item.date);
+        const month = newDate.getMonth();
+        const day = newDate.getDate();
+  
+        const date = `${day}/${month + 1}`;
+  
+       return({ date: {finalDate: date, objDate: newDate}, despesa: item.value, receita: 0 });
+      }
+      
+      if (item.value > 0) {
+        const newDate = firestoreTimestampToDate(item.date);
+        const month = newDate.getMonth();
+        const day = newDate.getDate();
+  
+        const date = `${day}/${month + 1}`;
+  
+        return({ date: {finalDate: date, objDate: newDate}, receita: item.value, despesa: 0 });
+      }
+    });
 
-      const date = `${day}/${month + 1}`;
+    let sortedData = currentItemsData.sort(
+      (a, b) => a.date.objDate.getTime() - b.date.objDate.getTime()
+    );
+   
+    return sortedData.map(item => ({...item, date: item.date.finalDate }));
+  }
 
-      data.push({ date: date, receita: item.value, despesa: 0 });
-    }
-  });
+  let data = getItemsData();
+
   const groupedData = _.groupBy(data, "date");
 
-  const result = {};
+  const result:ResultsChartProps = {};
 
   for (const date in groupedData) {
     const entries = groupedData[date];
     const summedValues = entries.reduce(
-      (sums, entry) => {
-        sums.receita += entry.receita || 0;
-        sums.despesa += entry.despesa || 0;
+      (sums, entry: any) => {
+        sums.receita += parseFloat(entry.receita) || 0;
+        sums.despesa += parseFloat(entry.despesa) || 0;
         return sums;
       },
       { receita: 0, despesa: 0 }
     );
     result[date] = summedValues;
   }
+
   const newArray = Object.entries(result).map(([date, values]) => ({
     date,
     ...values
   }));
-
   return (
     <div>
       <ResponsiveContainer width="100%" height={300}>
@@ -89,4 +107,4 @@ function ExpenseChart() {
   );
 }
 
-export default ExpenseChart;
+export default memo(ExpenseChart);

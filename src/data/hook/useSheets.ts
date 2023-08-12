@@ -17,6 +17,9 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import useSheetsCtx from "./useSheetsCtx";
 import variaveis from "../../model/variaveis";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/config";
+
 export default function useSheets() {
   const session = useSession();
   const { BASE_URL } = variaveis;
@@ -173,20 +176,20 @@ export default function useSheets() {
     dispatch({ type: "refreshUsers", payload: users });
   }
   async function deleteItem(id: string) {
-    const { data: items } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items/${id}`,
       {
         email: state.currentUser,
         mode: "DELETE",
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
+    if( status !== 200) console.error(status);
   }
   function onChangeUser(newUser: string) {
     dispatch({ type: "onChangeUser", payload: newUser });
   }
   async function createNewItem(newItem: newSheetItemProps) {
-    const { data: items } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         email: state.currentUser,
@@ -194,10 +197,9 @@ export default function useSheets() {
         newItem: newItem,
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
   }
   async function updateItem(item: sheetItemProps) {
-    const { data: items } = await axios.put(
+    const { status } = await axios.put(
       `${BASE_URL}/api/sheets/${state.data.id}/items`,
       {
         method: "PUT",
@@ -207,7 +209,6 @@ export default function useSheets() {
         },
       }
     );
-    dispatch({ type: "refreshItems", payload: items });
   }
   function sumAllItems(): number {
     return _.sumBy(state.items, (item: sheetItemProps) =>
@@ -325,14 +326,13 @@ export default function useSheets() {
     dispatch({ type: "onDeleteSheet" });
   }
   async function cloneForeignItems(foreignId) {
-    const { data } = await axios.post(
+    const { status } = await axios.post(
       `${BASE_URL}/api/sheets/${state.data.id}/items/clone`,
       {
         email: state.currentUser,
         foreignId: foreignId,
       }
     );
-    dispatch({ type: "refreshItems", payload: data });
   }
   
   interface IvalidateStatus{
@@ -455,6 +455,22 @@ export default function useSheets() {
       handler(validation.errors);
     }
   }
+
+  function refreshItemsFromListener() {
+    if(!!state.data.id){
+      const q = query(collection(db, `planilhas/${state.data.id}/items`));
+      const unsubscribe = onSnapshot(q, (updatedItems) => {
+        const items = [];
+        updatedItems.forEach((doc) => {
+          items.push({id: doc.id, ...doc.data()});
+        });
+        console.log(items)
+        dispatch({ type: "refreshItems", payload: items });
+      });
+      return unsubscribe
+    }
+  }
+
   return {
     sheet: state,
     createNewSheet,
@@ -483,6 +499,7 @@ export default function useSheets() {
     cloneForeignItems,
     validateItemForm,
     validateSheetForm,
-    validateSheetAndRun
+    validateSheetAndRun,
+    refreshItemsFromListener,
   };
 }

@@ -4,15 +4,16 @@ import Button from "../Button";
 import useSheets from "../../data/hook/useSheets";
 import { trashIcon } from "../icons/Icones";
 import { useSession } from "next-auth/react";
-import { sheetProps } from "../../types/sheetTypes";
 import { useRouter } from "next/router";
+import useAppData from "../../data/hook/useAppData";
 interface ManageSheetProps {
   toggleIsOpen: () => void;
   addSheetIntoTheList: (sheet: any) => void;
 }
 function CreateSheet(props: ManageSheetProps) {
-  const { toggleIsOpen, addSheetIntoTheList } = props;
+  const { toggleIsOpen } = props;
   const router = useRouter();
+  const { toggleIsLoading } = useAppData();
   const [name, setName] = useState("");
   const [totalValue, setTotalValue] = useState(0);
   const [tiposDeGastos, setTiposDeGastos] = useState([
@@ -28,15 +29,25 @@ function CreateSheet(props: ManageSheetProps) {
   const { createNewSheet } = useSheets();
   const seesion = useSession();
   async function handleSubmit() {
-    const sheet = await createNewSheet({
-      name: name,
-      tiposDeGastos: tiposDeGastos,
-      totalValue: totalValue,
-      type: "pessoal",
-      owner: seesion.data.user.email,
-    })
-    router.push(`/sheet/${sheet.data.id}`);
-    toggleIsOpen();
+    try {
+      toggleIsLoading();
+
+      const sheet = await createNewSheet({
+        name: name,
+        tiposDeGastos: tiposDeGastos,
+        totalValue: totalValue,
+        type: "pessoal",
+        owner: seesion.data.user.email,
+      });
+
+      if (!!sheet.id) toggleIsLoading();
+
+      router.push(`/sheet/${sheet.data.id}`);
+
+      toggleIsOpen();
+    } catch (err) {
+      toggleIsLoading();
+    }
   }
   function filterByIndex(index: number) {
     const arrayClone = [...tiposDeGastos].filter((spent, i) => i !== index);

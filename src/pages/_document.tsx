@@ -30,7 +30,7 @@ class MyDocument extends Document {
           {/* Defina a cor da barra de endereço para navegadores que não suportam a tag `meta[name=msapplication-TileColor]` */}
           <meta name="theme-color" content={themeColor} />
           <style>{`body { background-color: ${themeColor}; }`}</style>
-          <meta name="description" content="Minha descrição aqui" />
+          <meta name="description" content="Financial Controller o app que transforma seu dinheiro em sonhos!" />
         </Head>
         <body>
           <Main />

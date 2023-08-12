@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import Layout from "../../../components/template/Layout";
 import ModalForm from "../../../components/template/ModalForm";
 import useSheets from "../../../data/hook/useSheets";
-import { useSession } from "next-auth/react";
-import CardItem from "../../../components/CardItem";
 import _ from "lodash";
 import axios from "axios";
 import {
@@ -23,27 +21,27 @@ import Switch2 from "../../../components/template/Switch2";
 import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
 import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
 import ExpenseChart from "../../../components/ExpenseChart";
+import useAuth from "../../../data/hook/useAuth";
+import ItemsFeed from "../../../components/ItemsFeed";
 
 function EditSheet() {
+  const { BASE_URL } = variaveis;
   const {
     sheet,
     sheetReLoader,
     createNewItem,
     sumAllItems,
-    getSortedItems,
     updateItem,
-    filterBySpentType,
-    filterByDescription,
-    filterByName,
-    validateItemForm
+    refreshItemsFromListener,
   } = useSheets();
-  const { BASE_URL } = variaveis;
+  
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
-  const [sheetIds, setSheetIds] = useState<string[]>([]);
+  const { data } = useAuth();
+  const { user } = data;
+  const { email, sheetIds } = user;
   const [isOpen4, setIsOpen4] = useState(false);
-
   const [itemsRenderOptions, setItemsRenderOptions] =
     useState<itemRenderOptions>({
       name: "",
@@ -58,9 +56,6 @@ function EditSheet() {
     "createItem"
   );
   const router = useRouter();
-  const session = useSession();
-  let email = session.data?.user.email;
-  let name = session.data?.user.name;
   const [currentEditingItem, setCurrentEditingItem] =
     useState<sheetItemProps>(null);
   const [formData, setFormData] = useState({
@@ -79,11 +74,20 @@ function EditSheet() {
     setIsOpen2((current) => !current);
   }, []);
 
+  const validateField = useCallback((event: any) => {
+    // posteriormente alterar por uma solução de UX.
+    const validateNumberField = () =>
+      typeof parseFloat(event.target.value) === "number";
+    return event.target.value == "value"
+      ? validateNumberField()
+      : event.target.value;
+  }, []);
+
   const handleChange = useCallback((event) => {
     setFormData((current) => {
       return {
         ...current,
-        [event.target.name]: event.target.value,
+        [event.target.name]: validateField(event),
       };
     });
   }, []);
@@ -115,7 +119,7 @@ function EditSheet() {
     async (event) => {
       event.preventDefault();
       if (!currentEditingItem) {
-        await createNewItem({
+         await createNewItem({
           ...formData,
           value: Number(formData.value),
           sheetId: sheet.data.id,
@@ -123,7 +127,7 @@ function EditSheet() {
           date: new Date(),
         });
       } else {
-        await updateItem({
+         await updateItem({
           ...currentEditingItem,
           value: formData.value,
           description: formData.description,
@@ -142,23 +146,7 @@ function EditSheet() {
     },
     [currentEditingItem, formData, sheet]
   );
-  useEffect(() => {
-    if (email !== undefined) {
-      if (email.length > 0) {
-        axios
-          .post(`${BASE_URL}/api/users/login`, {
-            email: email,
-            name: name,
-          })
-          .then((response) => {
-            let sheets: string[] = response.data.sheetIds;
-            console.log(sheets);
-            setSheetIds(sheets);
-          });
-      }
-    }
-  }, [email]);
-  
+
   const getSheets = useCallback(async () => {
     let requests = [];
     if (sheetIds !== undefined) {
@@ -176,12 +164,14 @@ function EditSheet() {
       }
     }
   }, [sheetIds]);
+
   const loader = useCallback(async () => {
     const sheetsResp: any = await getSheets();
     if (sheetsResp.length > 0) {
       setSheets(sheetsResp);
     }
   }, [getSheets]);
+
   useEffect(() => {
     if (sheetIds !== undefined) {
       if (sheetIds.length > 0) {
@@ -189,16 +179,7 @@ function EditSheet() {
       }
     }
   }, [sheetIds]);
-  const renderItems = useCallback(() => {
-    const { name, description, type, sortMode } = itemsRenderOptions;
-    const itemsReady = filterByDescription(
-      description,
-      filterByName(name, filterBySpentType(type, getSortedItems(sortMode)))
-    );
-    return itemsReady.map((item) => (
-      <CardItem key={item.id} item={item} setEditMode={setEditMode} />
-    ));
-  }, [sheet, itemsRenderOptions]);
+
   const ReloadSheet = useCallback(
     async (currentId: any, currentEmail: any) => {
       let reloadedSheet: sheetProps = await sheetReLoader(
@@ -214,6 +195,7 @@ function EditSheet() {
     },
     [setFormData]
   );
+
   useEffect(() => {
     let id: any = router.query.sheetId;
     if (
@@ -227,6 +209,13 @@ function EditSheet() {
       ReloadSheet(id, email);
     }
   }, [email, router.query]);
+
+  useEffect(() => {
+    if (!!sheet.data.id) {
+      const cancel: any = refreshItemsFromListener();
+      return () => cancel();
+    }
+  }, [sheet.data.id]);
 
   const [isHidden, setIsHidden] = useState(true);
 
@@ -300,24 +289,25 @@ function EditSheet() {
           </div>
           <div className="flex justify-center items-center w-full h-[5rem]">
             <h2 className="dark:text-white font-bold text-3xl">
-              R${sumAllItems()}
+              R${sumAllItems().toFixed(2)}
             </h2>
-            
           </div>
-            <div className={isOpen || isOpen2 || isOpen4 ? "hidden" : ""} hidden={isHidden}>
-              <ExpenseChart></ExpenseChart>
-            </div>
+          <div
+            className={isOpen || isOpen2 || isOpen4 ? "hidden" : ""}
+            hidden={isHidden}
+          >
+            <ExpenseChart />
+          </div>
           <ControllBar
             handleToggle={handleToggle}
             handleToggleManageProps={handleToggleManageProps}
             setIsOpen4={setIsOpen4}
             toogleChart={toggleVisibility}
           />
-          <div>
-            <ul className="flex flex-wrap mt-4 w-full transition-all duration-500 ease-linear">
-              {renderItems()}
-            </ul>
-          </div>
+          <ItemsFeed
+            setEditMode={setEditMode}
+            itemsRenderOptions={itemsRenderOptions}
+          />
         </IfSheetIsLoaded>
       </Layout>
     </div>

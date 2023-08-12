@@ -3,6 +3,9 @@ import { createContext, useState, useEffect } from "react";
 interface AppContextProps {
   tema: string;
   alternarTema: () => void;
+  isLoading: boolean;
+  toggleIsLoading: () => void;
+  setIsLoading(value: boolean): void;
 }
 type TypeAppContextProvider = {
   children: any;
@@ -10,25 +13,37 @@ type TypeAppContextProvider = {
 
 const AppContext = createContext<AppContextProps>({
   tema: "dark",
-  alternarTema: null
+  alternarTema: null,
+  isLoading: false,
+  toggleIsLoading: null,
+  setIsLoading: null
 });
 
 export function AppContextProvider(props: TypeAppContextProvider) {
   const [tema, setTema] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
   function alternarTema() {
     const novoTema = tema === "dark" ? "" : "dark";
     setTema(novoTema);
     localStorage.setItem("tema", novoTema);
   }
+  function toggleIsLoading() {
+    setIsLoading(c => !c);
+  }
   useEffect(() => {
     const tema = localStorage.getItem("tema");
     setTema(tema);
   }, []);
+
   return (
     <AppContext.Provider
       value={{
         tema: tema,
-        alternarTema
+        alternarTema,
+        isLoading,
+        toggleIsLoading,
+        setIsLoading
       }}
     >
       {props.children}

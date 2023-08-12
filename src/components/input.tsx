@@ -8,7 +8,6 @@ interface inputProps {
   value: any;
   onChange: any;
   disabled?: boolean;
-  onBlur?: any;
   ref?: any;
 }
 
@@ -28,7 +27,6 @@ function Input(props: inputProps) {
         value={props.value}
         onChange={props.onChange}
         type={props.type}
-        onBlur={props.onBlur}
         placeholder={props.placeholder}
         required
       />
