@@ -61,7 +61,7 @@ const SurveyForm = (props: SurveryFormProps) => {
               />
             </div>
           </div>
-          <div className="flex mt-3">
+          <div className="flex mt-3 justify-between">
             <Button
               ClassName="px-4 py-1 rounded-md mr-5" 
               onClick={handleSubmit}

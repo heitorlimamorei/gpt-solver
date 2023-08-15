@@ -1,12 +1,12 @@
 import React from 'react'
 import axios from 'axios';
-import Layout from '../../components/template/Layout'
-import SurveyForm from '../../components/template/SurveyForm'
+import Layout from '../../../components/template/Layout'
+import SurveyForm from '../../../components/template/SurveyForm'
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
-import variaveis  from '../../model/variaveis';
+import variaveis  from '../../../model/variaveis';
 
 interface IuserProps {
     user_name: string;
