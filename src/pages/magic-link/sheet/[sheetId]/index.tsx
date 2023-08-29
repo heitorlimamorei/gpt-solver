@@ -159,7 +159,6 @@ export default function MagicLinkHub() {
     []
   );
   return (
-    <div className={`lg:h-[200vh] flex items-center h-[200vh] w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
@@ -198,6 +197,5 @@ export default function MagicLinkHub() {
           handleDelete={handleDelete}
         />
       </Layout>
-    </div>
   );
 }

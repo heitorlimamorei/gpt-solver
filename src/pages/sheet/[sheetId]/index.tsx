@@ -224,7 +224,7 @@ function EditSheet() {
   };
 
   return (
-    <div className={`md:h-[500vh] h-[500vh] w-[100%]`}>
+    <div className={`md:h-full h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
