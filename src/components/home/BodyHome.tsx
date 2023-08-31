@@ -2,11 +2,11 @@ import Button from "../Button";
 import Image from "next/image";
 import homeimage from "../../../public/images/homeimage.png";
 import { signIn} from "next-auth/react"
-
+import useAppData from "../../data/hook/useAppData";
 
 function BodyHome() {
   return (
-    <div className="h-[80vh]">
+    <div className="h-full bg-[#232323] dark">
       <div className="flex flex-col lg:flex-row">
         <div className="flex  lg:w-[50%]  h-[80vh] p-[40px] flex-col">
         <div className="lg:hidden">
@@ -23,7 +23,7 @@ function BodyHome() {
             <Button
               text="Comece agora!"
               onClick={() => signIn('auth0')}
-              ClassName={`md:w-[13rem] mt-10 w-[80%] lg:self-start self-center h-[70px] font-bold rounded-[41px] lg:text-base text-[15px]`}
+              ClassName={`md:w-[13rem] bg-[#232323] mt-10 w-[80%] lg:self-start self-center h-[70px] font-bold rounded-[41px] lg:text-base text-[15px]`}
               textClassName="transition-all text-xl duration-500 ease-linear text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#00A5BC] "
             ></Button>
           </div>
