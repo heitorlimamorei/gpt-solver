@@ -3,6 +3,7 @@ import Textarea from "../Textarea";
 import Input from "../input";
 import Button from "../Button";
 import Select from "./Select";
+import IncomeOutcomeSwitch from "./IncomeOutcomeSwitch";
 
 interface IFormData {
   name: string;
@@ -29,7 +30,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
     spentOptions,
   } = props;
 
-  const receitaOuDespesa = formData.value > 0 ? "receita" : "despesa";
+  let ref= 1;
 
   return (
     <form onSubmit={handleSubmit} className={`w-full h-full`}>
@@ -64,14 +65,17 @@ function CreateOrEditItem(props: FormModalContentProps) {
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Valor
         </label>
-        <Input
-          ClassName=""
-          type="text"
-          id="value"
-          name="value"
-          value={formData.value}
-          onChange={handleChange}
-        />
+        <div className="flex flex-row">
+          <IncomeOutcomeSwitch reference={ref} onChange={() => {ref = ref * -1, console.log(ref)}}/>
+          <Input
+            ClassName=""
+            type="number"
+            id="value"
+            name="value"
+            value={formData.value}
+            onChange={handleChange}
+          />
+        </div>
       </div>
       <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="description">
@@ -90,8 +94,23 @@ function CreateOrEditItem(props: FormModalContentProps) {
       <div className="flex justify-between">
         <Button
           ClassName="px-4 py-2 rounded-md"
-          onClick={handleSubmit}
-          text={isEditMode ? `Atualizar ${receitaOuDespesa}` : `Criar  ${receitaOuDespesa}`}
+          onClick={(event) => {
+            // DON'T REMOVE THIS CONSOLE.LOG! I DON'T KNOW WHY BUT THE SWITCH WON'T WORK WITHOUT IT
+            console.log('')
+            if (formData.value < 0){
+              formData.value = formData.value * -1
+            }
+            if (ref < 0) {
+              formData.value = formData.value * -1
+            }
+            
+            handleSubmit(event)
+          }}
+          text={
+            isEditMode
+              ? `Atualizar item`
+              : `Criar  item`
+          }
           textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         <Button

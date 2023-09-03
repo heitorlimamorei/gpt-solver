@@ -137,7 +137,7 @@ function EditSheet() {
       }
       setFormData({
         name: "",
-        type: "",
+        type: sheet.data.tiposDeGastos[0],
         value: 0,
         description: "",
       });
