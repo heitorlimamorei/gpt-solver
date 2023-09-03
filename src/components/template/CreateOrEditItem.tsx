@@ -99,11 +99,9 @@ function CreateOrEditItem(props: FormModalContentProps) {
             console.log('')
             if (formData.value < 0){
               formData.value = formData.value * -1
-              console.log("negativo")
             }
             if (ref < 0) {
               formData.value = formData.value * -1
-              console.log("passou")
             }
             
             handleSubmit(event)
