@@ -8,7 +8,7 @@ function IncomeOutcomeSwitch( {reference, onChange}) {
   };
 
   return (
-    <div className="flex  items-center justify-center mr-2 md:w-[15%] w-[25%] h-full dark:shadow-[5px_5px_10px_#0e0e0e,-5px_-5px_10px_#383838] rounded-full">
+    <div className="flex  items-center justify-center mr-2 md:w-[15%] w-[25%] h-full dark:shadow-[5px_5px_10px_#0e0e0e,-5px_-5px_10px_#383838] rounded-full text-white">
       <label
         htmlFor="toggle"
         className={`w-full h-9 hover:cursor-pointer flex items-center rounded-full p-1 transition-colors duration-300 ease-in-out ${
