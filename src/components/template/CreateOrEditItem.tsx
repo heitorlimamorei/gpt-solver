@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, memo, useEffect } from "react";
 import Textarea from "../Textarea";
 import Input from "../input";
 import Button from "../Button";
@@ -13,7 +13,7 @@ interface IFormData {
 }
 interface FormModalContentProps {
   formData: IFormData;
-  handleChange: (event: any) => void;
+  handleChange: (field: string, value: any) => void;
   handleSubmit: (event: any) => void;
   isEditMode?: boolean;
   onCancel: () => void;
@@ -30,7 +30,26 @@ function CreateOrEditItem(props: FormModalContentProps) {
     spentOptions,
   } = props;
 
-  let ref= 1;
+  const [isOutCome, setIsOutCome] = useState<boolean>(false);
+
+  const toggleIsOutCome = () => {
+    handleChange('value', formData.value * -1);
+    setIsOutCome(c => !c);
+  }
+
+  const handleFieldChange = (ev) => {
+    handleChange(ev.target.name, ev.target.value);
+  };
+
+  useEffect(() => {
+    setIsOutCome(formData.value < 0);
+  }, [formData]);
+  
+  useEffect(() => {
+    if (isOutCome && formData.value > 0) {
+      handleChange('value', formData.value * -1);
+    }
+  }, [formData, isOutCome]);
 
   return (
     <form onSubmit={handleSubmit} className={`w-full h-full`}>
@@ -45,7 +64,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
           name="name"
           placeholder="Nome"
           value={formData.name}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />
       </div>
       <div className="mb-5">
@@ -56,7 +75,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
           options={spentOptions}
           id="type"
           selected={formData.type}
-          handleselected={handleChange}
+          handleselected={handleFieldChange}
           name="type"
           ClassName="p-3"
         />
@@ -66,14 +85,14 @@ function CreateOrEditItem(props: FormModalContentProps) {
           Valor
         </label>
         <div className="flex flex-row">
-          <IncomeOutcomeSwitch reference={ref} onChange={() => {ref = ref * -1, console.log(ref)}}/>
+          <IncomeOutcomeSwitch isChecked={isOutCome} toggleChecked={toggleIsOutCome} />
           <Input
             ClassName=""
             type="number"
             id="value"
             name="value"
             value={formData.value}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />
         </div>
       </div>
@@ -88,24 +107,13 @@ function CreateOrEditItem(props: FormModalContentProps) {
           cols={2}
           rows={2}
           value={formData.description}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />
       </div>
       <div className="flex justify-between">
         <Button
           ClassName="px-4 py-2 rounded-md"
-          onClick={(event) => {
-            // DON'T REMOVE THIS CONSOLE.LOG! I DON'T KNOW WHY BUT THE SWITCH WON'T WORK WITHOUT IT
-            console.log('')
-            if (formData.value < 0){
-              formData.value = formData.value * -1
-            }
-            if (ref < 0) {
-              formData.value = formData.value * -1
-            }
-            
-            handleSubmit(event)
-          }}
+          onClick={handleSubmit}
           text={
             isEditMode
               ? `Atualizar item`
@@ -123,4 +131,4 @@ function CreateOrEditItem(props: FormModalContentProps) {
     </form>
   );
 }
-export default React.memo(CreateOrEditItem);
+export default memo(CreateOrEditItem);
