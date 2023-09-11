@@ -4,7 +4,13 @@ import Button from "../Button";
 import useSheets from "../../data/hook/useSheets";
 import { trashIcon, editIcon } from "../icons/Icones";
 
-const Item = ({ item, setEditMode }: { item: sheetItemProps; setEditMode: (c: sheetItemProps) => void; }) => {
+const Item = ({
+  item,
+  setEditMode,
+}: {
+  item: sheetItemProps;
+  setEditMode: (c: sheetItemProps) => void;
+}) => {
   const { sheet, deleteItem } = useSheets();
   return (
     <li
@@ -16,7 +22,7 @@ const Item = ({ item, setEditMode }: { item: sheetItemProps; setEditMode: (c: sh
       <h1 className="text-3xl dark:text-white font-extrabold md:min-w-[25rem] min-w-[50vw] w-full break-normal">
         {item.name}
       </h1>
-      <p className="text-base text-gray-600 dark:text-gray-400 my-1/2 w-[90%] break-normal">
+      <p className="text-base text-gray-600 dark:text-gray-300 my-1/2 w-[90%] break-normal">
         {item.description.length > 0 ? (
           <>
             <strong>Descrição: </strong>
@@ -27,7 +33,9 @@ const Item = ({ item, setEditMode }: { item: sheetItemProps; setEditMode: (c: sh
             </p>
           </>
         ) : (
-          <></>
+          <>
+            
+          </>
         )}
       </p>
 
@@ -42,9 +50,14 @@ const Item = ({ item, setEditMode }: { item: sheetItemProps; setEditMode: (c: sh
         {item.value < 0 ? `R$${item.value * -1}` : `R$${item.value}`}
       </p>
 
+      <div className="flex flex-row text-gray-600 dark:text-gray-300">
+              <strong className="mr-1">Autor:</strong>
+              <p>{item.author.split("@")[0]}</p>
+            </div>
       <p className="dark:text-white mb-2 w-[90%]">
         <strong>Tipo:</strong> {item.type}
       </p>
+
       {sheet.session.canEditItems && (
         <div className="flex w-full">
           <Button
