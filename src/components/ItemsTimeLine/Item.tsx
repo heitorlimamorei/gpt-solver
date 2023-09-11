@@ -4,7 +4,7 @@ import Button from "../Button";
 import useSheets from "../../data/hook/useSheets";
 import { trashIcon, editIcon } from "../icons/Icones";
 
-const Item = ({ item }: { item: sheetItemProps }) => {
+const Item = ({ item, setEditMode }: { item: sheetItemProps; setEditMode: (c: sheetItemProps) => void; }) => {
   const { sheet, deleteItem } = useSheets();
   return (
     <li

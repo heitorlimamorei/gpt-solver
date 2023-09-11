@@ -320,7 +320,7 @@ function EditSheet() {
             isTimelineFeed === false ? <ItemsFeed
               setEditMode={setEditMode}
               itemsRenderOptions={itemsRenderOptions}
-            /> : <TimeLineFeed />
+            /> : <TimeLineFeed setEditMode={setEditMode} />
           }
         </IfSheetIsLoaded>
       </Layout>

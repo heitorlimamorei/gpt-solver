@@ -2,8 +2,10 @@ import { firestoreTimestampToDate, formatDate } from "../../utils/dateMethods";
 import TimeLineItem from "./TimeLineItem";
 import { memo } from "react";
 import useSheets from "../../data/hook/useSheets";
+import _ from "lodash";
+import { sheetItemProps } from "../../types/sheetTypes";
 
-const TimeLineFeed = () => {
+const TimeLineFeed = ({ setEditMode }:{ setEditMode: (c: sheetItemProps) => void }) => {
   const { sheet } = useSheets();
   const items = sheet.items;
 
@@ -25,7 +27,7 @@ const TimeLineFeed = () => {
   const renderTimeLine = () => {
     const timeLine = getTimeLine();
     return timeLine.map(({ date, items }) => (
-      <TimeLineItem key={date} date={date} items={items} />
+      <TimeLineItem key={date} date={date} items={items} setEditMode={setEditMode} />
     ));
   };
 
