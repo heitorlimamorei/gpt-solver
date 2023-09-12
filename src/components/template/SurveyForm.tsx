@@ -1,6 +1,6 @@
 import StarsRating from './StarsRating';
 import Input from '../input';
-import { useState, memo } from 'react';
+import { useState, memo, useCallback } from 'react';
 import Button from '../Button';
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
 import { surveyFeedBackSubmitProps } from '../../types/feedBackTypes';
@@ -15,35 +15,61 @@ const SurveyForm = (props: SurveryFormProps) => {
   const { title, onClose } = props;
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
-  const [improve, setImprove] = useState<string>('')
+  const [featuresImprovement, setFeaturesImprovement] = useState<string>('');
   const [didPlanBefore, setDidPlanBefore] = useState<string>(null);
   const [improveManagement, setImproveManagement] = useState<number>(null);
-  const [familyUse, setFamilyUse] = useState(null);
-  const [continueUse, setContinueUse] = useState(null)
+  const [appHasBeenShared, setAppHasBeenShared] = useState<string>(null);
+  const [continueUse, setContinueUse] = useState<string>(null);
 
-  const handleRating = (newRating: number) => {
+  const handleRating = useCallback((newRating: number) => {
     setRating(newRating);
-  };
+  }, []);
 
-  const handleChange = (event) => {
+  const handleChange = useCallback((event) => {
     setReview(event.target.value);
-  };
-  const handleImprove = (event) => {
-    setImprove(event.target.value)
-  }
+  }, []);
+
+  const handleImprove = useCallback((event) => {
+    setFeaturesImprovement(event.target.value);
+  }, []);
+
+  const handleDidPlanBeforeChange = useCallback((c: string) => {
+    setDidPlanBefore(c);
+  }, []);
+
+  const handleimproveManagementChange = useCallback((c: number) => {
+    setImproveManagement(c);
+  }, []);
+
+  const handleappHasBeenSharedChange = useCallback((c: string) => {
+    setAppHasBeenShared(c);
+  }, []);
+
+  const handleappcontinueUseChange = useCallback((c: string) => {
+    setContinueUse(c);
+  }, []);
 
   const handleSubmit = async () => {
-    if (!review && !!didPlanBefore && !!improveManagement && rating === 0 && !improve && !!familyUse && !!continueUse) return;
+    if (
+      !review &&
+      !!didPlanBefore &&
+      !!improveManagement &&
+      rating === 0 &&
+      !featuresImprovement &&
+      !!appHasBeenShared &&
+      !!continueUse
+    )
+      return;
 
     const did_pan_before = didPlanBefore == 'Sim' ? true : false;
-    const family_recomendation = familyUse == 'Sim' ? true : false
-    const continue_use = continueUse == 'Sim' ? true : false
+    const family_recomendation = appHasBeenShared == 'Sim' ? true : false;
+    const continue_use = continueUse == 'Sim' ? true : false;
 
     await props.onSubmit({
       stars: rating,
       text: review,
-      improvement: improve,
-      family_used: family_recomendation,
+      featuresImprovement: featuresImprovement,
+      appHasBeenShared: family_recomendation,
       continued_using: continue_use,
       did_pan_before,
       financial_management_improved: improveManagement,
@@ -51,7 +77,7 @@ const SurveyForm = (props: SurveryFormProps) => {
 
     onClose();
   };
-  console.log(improve)
+
   return (
     <div className="flex items-center flex-col w-full h-full">
       <div className="flex items-center justify-center">
@@ -67,40 +93,52 @@ const SurveyForm = (props: SurveryFormProps) => {
           </div>
           <div className="mb-1">
             <MultipleChoiceQuestion
+              selectedOption={didPlanBefore}
               question="Já fez planejamento financeiro antes ?"
               options={['Sim', 'não']}
-              handleOptionChange={setDidPlanBefore}
+              handleOptionChange={handleDidPlanBeforeChange}
             />
           </div>
           <div className="mb-3">
             <MultipleChoiceQuestion
+              selectedOption={improveManagement}
               question="De 0 a 10, quanto você acha que o app te ajudou a planejar melhor suas finanças?"
               options={[0, 2, 5, 8, 10]}
-              handleOptionChange={setImproveManagement}
+              handleOptionChange={handleimproveManagementChange}
             />
           </div>
-            <div>
-              <MultipleChoiceQuestion
-                question="Você adicionou pessoas da familia à sua planilha?"
-                options={['Sim', 'Não']}
-                handleOptionChange={setFamilyUse}
+          <div className="mb-3">
+            <MultipleChoiceQuestion
+              selectedOption={appHasBeenShared}
+              question="Você já indicou a plataforma a alguem ?"
+              options={['Sim', 'Não']}
+              handleOptionChange={handleappHasBeenSharedChange}
+            />
+          </div>
+          <div className="mb-3">
+            <MultipleChoiceQuestion
+              selectedOption={continueUse}
+              question="Você continuou utilizando o app após o período de experiência?"
+              options={['Sim', 'Não']}
+              handleOptionChange={handleappcontinueUseChange}
+            />
+          </div>
+          <div className="mt-1">
+            <label htmlFor="review">Quais pontos você acha que devemos melhorar?</label>
+            <div className="mt-3">
+              <Input
+                id="improve"
+                name="improve"
+                type="text"
+                value={featuresImprovement}
+                placeholder="Sua sugestão aqui!"
+                onChange={handleImprove}
               />
             </div>
-            <div>
-              <MultipleChoiceQuestion 
-              question='Você continuou utilizando o app após o período de experiência?'
-              options={['Sim', 'Não']}
-              handleOptionChange={setContinueUse}/>
-            </div>
-            <div>
-              <MultipleChoiceQuestion 
-              question='Você continuou utilizando o app após o período de experiência?'
-              options={['Sim', 'Não']}
-              handleOptionChange={setContinueUse}/>
-            </div>
-            <div className="mt-1">
+          </div>
+          <div className="my-6">
             <label htmlFor="review">
-              Escreva uma avaliação sobre o que você achou do app para ajudar-nos a melhorar!
+              Escreva uma avaliação geral sobre o que você achou do app.
             </label>
             <div className="mt-3">
               <Input
@@ -111,21 +149,6 @@ const SurveyForm = (props: SurveryFormProps) => {
                 placeholder="Sua review aqui!"
                 onChange={handleChange}
               />
-            </div>
-            <div className="mt-1">
-            <label htmlFor="review">
-              Quais pontos você acha que devemos melhorar?
-            </label>
-            <div className="mt-3">
-              <Input
-                id="improve"
-                name="improve"
-                type="text"
-                value={improve}
-                placeholder="Sua sugestão aqui!"
-                onChange={handleImprove}
-              />
-            </div>
             </div>
           </div>
           <div className="flex mt-3 justify-between">

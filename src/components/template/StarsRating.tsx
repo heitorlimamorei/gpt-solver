@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 
 const Star = ({ selected = false, onSelect } : { selected?: boolean; onSelect: () => void }) => (
   <svg
@@ -46,4 +46,4 @@ const StarRating = ({ totalStars = 5, onRating, clasNames }: { totalStars: numbe
 
 
 
-export default StarRating;
+export default memo(StarRating);
