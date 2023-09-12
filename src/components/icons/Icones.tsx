@@ -424,3 +424,37 @@ export const ClockIcon = (tamanho = 6) => (
     />
   </svg>
 );
+
+export const ArrowUpIcon = (tamanho = 6) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={4}
+    stroke="currentColor"
+    className="w-6 h-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
+    />
+  </svg>
+);
+
+export const ArrouDownIcon = (tamanho = 6) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={4}
+    stroke="currentColor"
+    className="w-6 h-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
+    />
+  </svg>
+);

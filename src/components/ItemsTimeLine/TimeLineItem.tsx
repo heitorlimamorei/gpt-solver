@@ -12,7 +12,7 @@ const TimeLineItem = ({date, items, setEditMode}: ITimeLineProps) => {
   return (
     <li className=''>
         <div className='flex flex-row items-center justify-center'>
-      <h1 className='font-bold text-xl my-5 dark:text-white'>
+      <h1 className='font-bold text-xl my-2 dark:text-white'>
         {date} 
       </h1>
       <div className='w-full h-2 mx-2 dark:bg-white bg-black'></div>
