@@ -23,6 +23,7 @@ import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
 import ExpenseChart from "../../../components/ExpenseChart";
 import useAuth from "../../../data/hook/useAuth";
 import ItemsFeed from "../../../components/ItemsFeed";
+import TimeLineFeed from "../../../components/ItemsTimeLine/Feed"
 
 function EditSheet() {
   const { BASE_URL } = variaveis;
@@ -34,7 +35,7 @@ function EditSheet() {
     updateItem,
     refreshItemsFromListener,
   } = useSheets();
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [sheets, setSheets] = useState<sheetProps[]>([]);
@@ -110,7 +111,7 @@ function EditSheet() {
     async (event) => {
       event.preventDefault();
       if (!currentEditingItem) {
-         await createNewItem({
+        await createNewItem({
           ...formData,
           value: Number(formData.value),
           sheetId: sheet.data.id,
@@ -118,7 +119,7 @@ function EditSheet() {
           date: new Date(),
         });
       } else {
-         await updateItem({
+        await updateItem({
           ...currentEditingItem,
           value: formData.value,
           description: formData.description,
@@ -214,6 +215,16 @@ function EditSheet() {
     setIsHidden(!isHidden);
   };
 
+  const [isTimelineFeed, setIsTimelineFeed] = useState(false);
+  function handleFeedToogle() {
+    if (isTimelineFeed === true){
+      setIsTimelineFeed(false)
+    }
+    else {
+      setIsTimelineFeed(true)
+    }
+  }
+
   return (
     <div className={`md:h-full h-full w-[100%]`}>
       <Layout
@@ -294,11 +305,14 @@ function EditSheet() {
             handleToggleManageProps={handleToggleManageProps}
             setIsOpen4={setIsOpen4}
             toogleChart={toggleVisibility}
+            toogleFeed={handleFeedToogle}
           />
-          <ItemsFeed
-            setEditMode={setEditMode}
-            itemsRenderOptions={itemsRenderOptions}
-          />
+          {
+            isTimelineFeed === false ? <ItemsFeed
+              setEditMode={setEditMode}
+              itemsRenderOptions={itemsRenderOptions}
+            /> : <TimeLineFeed setEditMode={setEditMode} />
+          }
         </IfSheetIsLoaded>
       </Layout>
     </div>

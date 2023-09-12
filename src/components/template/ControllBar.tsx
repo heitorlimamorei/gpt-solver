@@ -2,12 +2,13 @@ import { memo } from "react";
 import useSheets from "../../data/hook/useSheets";
 import generatePDFReport from "../../utils/report";
 import Button from "../Button";
-import { chartIcon, ConfigIcon, dowloadIcon, filterIcon, IconeAjustes, plusIcon } from "../icons/Icones";
+import { chartIcon, ClockIcon, ConfigIcon, dowloadIcon, filterIcon, IconeAjustes, plusIcon } from "../icons/Icones";
 interface ControllBarProps {
   handleToggle: () => void;
   handleToggleManageProps: () => void;
   setIsOpen4: (current: boolean) => void;
   toogleChart: () => void;
+  toogleFeed: () => void;
 }
 function ControllBar(props: ControllBarProps) {
   const { sheet, sumAllItems, getStats: getStatistics } = useSheets();
@@ -54,6 +55,12 @@ function ControllBar(props: ControllBarProps) {
             <p>{filterIcon(8)}</p>
           </Button>
         )}
+        <Button
+            ClassName="mt-1 rounded-lg ml-2 flex justify-center dark:text-white w-[15%] h-[3rem] md:w-[3%]"
+            onClick={props.toogleFeed}
+            icon={ClockIcon(8)}
+            iconClassName="dark:text-[#00F0FF] text-[#0085FF]"
+          ></Button>
       </div>
     </div>
   );
