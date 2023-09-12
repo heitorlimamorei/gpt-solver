@@ -1,18 +1,22 @@
-import StarsRating from "./StarsRating";
-import Input from "../input";
-import { useState, memo } from "react";
-import Button from "../Button";
+import StarsRating from './StarsRating';
+import Input from '../input';
+import { useState, memo } from 'react';
+import Button from '../Button';
+import MultipleChoiceQuestion from './MultipleChoiceQuestion';
+import { surveyFeedBackSubmitProps } from '../../types/feedBackTypes';
 
 interface SurveryFormProps {
   title: string;
   onClose: () => void;
-  onSubmit: ( payload : {stars: number; text: string} ) => Promise<void>;
+  onSubmit: (payload: surveyFeedBackSubmitProps) => Promise<void>;
 }
 
 const SurveyForm = (props: SurveryFormProps) => {
-  const {title, onClose} = props;
+  const { title, onClose } = props;
   const [rating, setRating] = useState<number>(0);
-  const [review, setReview] = useState<string>("");
+  const [review, setReview] = useState<string>('');
+  const [didPlanBefore, setDidPlanBefore] = useState<string>(null);
+  const [improveManagement, setImproveManagement] = useState<number>(null);
 
   const handleRating = (newRating: number) => {
     setRating(newRating);
@@ -23,19 +27,24 @@ const SurveyForm = (props: SurveryFormProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!review && rating === 0) return;
+    if (!review && !!didPlanBefore && !!improveManagement && rating === 0) return;
 
-    await props.onSubmit({stars: rating, text: review});  
+    const did_pan_before = didPlanBefore == 'sim' ? true : false;
+
+    await props.onSubmit({
+      stars: rating,
+      text: review,
+      did_pan_before,
+      financial_management_improved: improveManagement,
+    });
 
     onClose();
-  }
+  };
 
   return (
     <div className="flex items-center flex-col w-full h-full">
       <div className="flex items-center justify-center">
-        <h1 className="dark:text-gray-100 font-bold mt-4 md:text-2xl">
-          {title}
-        </h1>
+        <h1 className="dark:text-gray-100 font-bold mt-4 md:text-2xl">{title}</h1>
       </div>
       <div className="flex flex-col item">
         <div
@@ -45,10 +54,23 @@ const SurveyForm = (props: SurveryFormProps) => {
           <div className="mb-6">
             <StarsRating onRating={handleRating} totalStars={5} />
           </div>
+          <div className="mb-1">
+            <MultipleChoiceQuestion
+              question="Já fez planejamento financeiro antes ?"
+              options={['sim', 'não']}
+              handleOptionChange={setDidPlanBefore}
+            />
+          </div>
+          <div className="mb-3">
+            <MultipleChoiceQuestion
+              question="De 0 a 10, quanto você acha que o app te ajudou a planejar melhor suas finanças?"
+              options={[0, 2, 5, 8, 10]}
+              handleOptionChange={setImproveManagement}
+            />
+          </div>
           <div className="mt-1">
             <label htmlFor="review">
-              Escreva uma avaliação sobre o que você achou do app para
-              ajudar-nos a melhorar!
+              Escreva uma avaliação sobre o que você achou do app para ajudar-nos a melhorar!
             </label>
             <div className="mt-3">
               <Input
@@ -63,11 +85,11 @@ const SurveyForm = (props: SurveryFormProps) => {
           </div>
           <div className="flex mt-3 justify-between">
             <Button
-              ClassName="px-4 py-1 rounded-md mr-5" 
+              ClassName="px-4 py-1 rounded-md mr-5"
               onClick={handleSubmit}
               text="Enviar"
               textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-              iconClassName={""}
+              iconClassName={''}
               icon={undefined}
             ></Button>
             <Button
@@ -75,7 +97,7 @@ const SurveyForm = (props: SurveryFormProps) => {
               onClick={onClose}
               text="Fechar"
               textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
-              iconClassName={""}
+              iconClassName={''}
               icon={undefined}
             ></Button>
           </div>
