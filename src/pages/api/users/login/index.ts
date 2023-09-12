@@ -1,13 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import userService from "../../../../backEnd/services/user.service";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import userService from '../../../../backEnd/services/user.service';
 
-export default async function SheetRouter(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function SheetRouter(req: NextApiRequest, res: NextApiResponse) {
   const user = req.body;
   try {
-    if (req.method === "POST") {
+    if (req.method === 'POST') {
       res.status(200).json(await userService.getUserByEmail(user));
     }
   } catch (err) {
