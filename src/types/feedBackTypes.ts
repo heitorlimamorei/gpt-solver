@@ -20,6 +20,9 @@ export interface INewFeedBackProps {
 export interface surveyFeedBackSubmitProps {
   stars: number;
   text: string;
+  improvement: string;
+  family_used: boolean;
+  continued_using: boolean;
   financial_management_improved: number;
   did_pan_before: boolean;
 }

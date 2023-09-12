@@ -15,8 +15,11 @@ const SurveyForm = (props: SurveryFormProps) => {
   const { title, onClose } = props;
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
+  const [improve, setImprove] = useState<string>('')
   const [didPlanBefore, setDidPlanBefore] = useState<string>(null);
   const [improveManagement, setImproveManagement] = useState<number>(null);
+  const [familyUse, setFamilyUse] = useState(null);
+  const [continueUse, setContinueUse] = useState(null)
 
   const handleRating = (newRating: number) => {
     setRating(newRating);
@@ -25,22 +28,30 @@ const SurveyForm = (props: SurveryFormProps) => {
   const handleChange = (event) => {
     setReview(event.target.value);
   };
+  const handleImprove = (event) => {
+    setImprove(event.target.value)
+  }
 
   const handleSubmit = async () => {
-    if (!review && !!didPlanBefore && !!improveManagement && rating === 0) return;
+    if (!review && !!didPlanBefore && !!improveManagement && rating === 0 && !improve && !!familyUse && !!continueUse) return;
 
-    const did_pan_before = didPlanBefore == 'sim' ? true : false;
+    const did_pan_before = didPlanBefore == 'Sim' ? true : false;
+    const family_recomendation = familyReomendadtion == 'Sim' ? true : false
+    const continue_use = continueUse == 'Sim' ? true : false
 
     await props.onSubmit({
       stars: rating,
       text: review,
+      improvement: improve,
+      family_used: family_recomendation,
+      continued_using: continue_use,
       did_pan_before,
       financial_management_improved: improveManagement,
     });
 
     onClose();
   };
-
+  console.log(improve)
   return (
     <div className="flex items-center flex-col w-full h-full">
       <div className="flex items-center justify-center">
@@ -57,7 +68,7 @@ const SurveyForm = (props: SurveryFormProps) => {
           <div className="mb-1">
             <MultipleChoiceQuestion
               question="Já fez planejamento financeiro antes ?"
-              options={['sim', 'não']}
+              options={['Sim', 'não']}
               handleOptionChange={setDidPlanBefore}
             />
           </div>
@@ -68,7 +79,26 @@ const SurveyForm = (props: SurveryFormProps) => {
               handleOptionChange={setImproveManagement}
             />
           </div>
-          <div className="mt-1">
+            <div>
+              <MultipleChoiceQuestion
+                question="Você adicionou pessoas da familia à sua planilha?"
+                options={['Sim', 'Não']}
+                handleOptionChange={setFamilyUse}
+              />
+            </div>
+            <div>
+              <MultipleChoiceQuestion 
+              question='Você continuou utilizando o app após o período de experiência?'
+              options={['Sim', 'Não']}
+              handleOptionChange={setContinueUse}/>
+            </div>
+            <div>
+              <MultipleChoiceQuestion 
+              question='Você continuou utilizando o app após o período de experiência?'
+              options={['Sim', 'Não']}
+              handleOptionChange={setContinueUse}/>
+            </div>
+            <div className="mt-1">
             <label htmlFor="review">
               Escreva uma avaliação sobre o que você achou do app para ajudar-nos a melhorar!
             </label>
@@ -81,6 +111,21 @@ const SurveyForm = (props: SurveryFormProps) => {
                 placeholder="Sua review aqui!"
                 onChange={handleChange}
               />
+            </div>
+            <div className="mt-1">
+            <label htmlFor="review">
+              Quais pontos você acha que devemos melhorar?
+            </label>
+            <div className="mt-3">
+              <Input
+                id="improve"
+                name="improve"
+                type="text"
+                value={improve}
+                placeholder="Sua sugestão aqui!"
+                onChange={handleImprove}
+              />
+            </div>
             </div>
           </div>
           <div className="flex mt-3 justify-between">
