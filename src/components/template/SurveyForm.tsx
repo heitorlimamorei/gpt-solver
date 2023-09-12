@@ -36,7 +36,7 @@ const SurveyForm = (props: SurveryFormProps) => {
     if (!review && !!didPlanBefore && !!improveManagement && rating === 0 && !improve && !!familyUse && !!continueUse) return;
 
     const did_pan_before = didPlanBefore == 'Sim' ? true : false;
-    const family_recomendation = familyReomendadtion == 'Sim' ? true : false
+    const family_recomendation = familyUse == 'Sim' ? true : false
     const continue_use = continueUse == 'Sim' ? true : false
 
     await props.onSubmit({
