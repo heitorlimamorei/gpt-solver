@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
+import { useState, memo } from 'react';
 
-const MultipleChoiceQuestion = ({ question, options }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+interface IMultipleChoiceQuestionProps {
+  question: string;
+  options: string[] | number[];
+  handleOptionChange: (opt: any) => void;
+}
 
+const MultipleChoiceQuestion = ({ question, options, handleOptionChange }: IMultipleChoiceQuestionProps ) => {
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold dark:text-white mb-4">{question}</h2>
-      <form>
+    <div className="py-4">
+      <label htmlFor={question} className="dark:text-white">{question}</label>
         {options.map((option, index) => (
-          <label key={index} className="block mb-2 dark:text-white">
+          <label key={index} className="block mb-2 mx-1 dark:text-white mt-2">
             <input
               type="radio"
               name="options"
               value={option}
-              onChange={() => setSelectedOption(option)}
+              onChange={() => handleOptionChange(option)}
               className="mr-2 "
             />
             {option}
           </label>
         ))}
-      </form>
     </div>
   );
 };
 
-export default MultipleChoiceQuestion;
+export default memo(MultipleChoiceQuestion);
