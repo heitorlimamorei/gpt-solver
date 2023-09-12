@@ -1,8 +1,9 @@
-import React from "react";
+import { useState, memo, useEffect } from "react";
 import Textarea from "../Textarea";
 import Input from "../input";
 import Button from "../Button";
 import Select from "./Select";
+import IncomeOutcomeSwitch from "./IncomeOutcomeSwitch";
 
 interface IFormData {
   name: string;
@@ -12,7 +13,7 @@ interface IFormData {
 }
 interface FormModalContentProps {
   formData: IFormData;
-  handleChange: (event: any) => void;
+  handleChange: (field: string, value: any) => void;
   handleSubmit: (event: any) => void;
   isEditMode?: boolean;
   onCancel: () => void;
@@ -29,7 +30,26 @@ function CreateOrEditItem(props: FormModalContentProps) {
     spentOptions,
   } = props;
 
-  const receitaOuDespesa = formData.value > 0 ? "receita" : "despesa";
+  const [isOutCome, setIsOutCome] = useState<boolean>(false);
+
+  const toggleIsOutCome = () => {
+    handleChange('value', formData.value * -1);
+    setIsOutCome(c => !c);
+  }
+
+  const handleFieldChange = (ev) => {
+    handleChange(ev.target.name, ev.target.value);
+  };
+
+  useEffect(() => {
+    setIsOutCome(formData.value < 0);
+  }, [formData]);
+  
+  useEffect(() => {
+    if (isOutCome && formData.value > 0) {
+      handleChange('value', formData.value * -1);
+    }
+  }, [formData, isOutCome]);
 
   return (
     <form onSubmit={handleSubmit} className={`w-full h-full`}>
@@ -44,7 +64,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
           name="name"
           placeholder="Nome"
           value={formData.name}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />
       </div>
       <div className="mb-5">
@@ -55,7 +75,7 @@ function CreateOrEditItem(props: FormModalContentProps) {
           options={spentOptions}
           id="type"
           selected={formData.type}
-          handleselected={handleChange}
+          handleselected={handleFieldChange}
           name="type"
           ClassName="p-3"
         />
@@ -64,14 +84,17 @@ function CreateOrEditItem(props: FormModalContentProps) {
         <label className="block font-medium text-lg mb-2" htmlFor="value">
           Valor
         </label>
-        <Input
-          ClassName=""
-          type="text"
-          id="value"
-          name="value"
-          value={formData.value}
-          onChange={handleChange}
-        />
+        <div className="flex flex-row">
+          <IncomeOutcomeSwitch isChecked={isOutCome} toggleChecked={toggleIsOutCome} />
+          <Input
+            ClassName=""
+            type="number"
+            id="value"
+            name="value"
+            value={formData.value}
+            onChange={handleFieldChange}
+          />
+        </div>
       </div>
       <div className="mb-5">
         <label className="block font-medium text-lg mb-2" htmlFor="description">
@@ -84,14 +107,18 @@ function CreateOrEditItem(props: FormModalContentProps) {
           cols={2}
           rows={2}
           value={formData.description}
-          onChange={handleChange}
+          onChange={handleFieldChange}
         />
       </div>
       <div className="flex justify-between">
         <Button
           ClassName="px-4 py-2 rounded-md"
           onClick={handleSubmit}
-          text={isEditMode ? `Atualizar ${receitaOuDespesa}` : `Criar  ${receitaOuDespesa}`}
+          text={
+            isEditMode
+              ? `Atualizar item`
+              : `Criar  item`
+          }
           textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
         ></Button>
         <Button
@@ -104,4 +131,4 @@ function CreateOrEditItem(props: FormModalContentProps) {
     </form>
   );
 }
-export default React.memo(CreateOrEditItem);
+export default memo(CreateOrEditItem);

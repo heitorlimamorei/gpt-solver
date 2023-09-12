@@ -23,7 +23,7 @@ export default function Sheet() {
   useEffect(()  => setIsLoading(false), []);
   
   return (
-    <div className={`lg:h-[200vh] h-[200vh] w-[100%]`}>
+    <div className={`lg:h-full h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"

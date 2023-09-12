@@ -4,6 +4,8 @@ export interface IFeedBackItemProps {
     user_url: string;
     stars: number;
     text: string;
+    financial_management_improved: number;
+    did_pan_before: boolean;
 }
 
 export interface INewFeedBackProps{
@@ -11,4 +13,6 @@ export interface INewFeedBackProps{
     user_url: string;
     stars: number;
     text: string;
+    financial_management_improved: number;
+    did_pan_before: boolean;
 }

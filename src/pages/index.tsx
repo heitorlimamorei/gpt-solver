@@ -28,8 +28,8 @@ function Home() {
               <div className="w-fit h-fit">
                 <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
                   {tema == "dark"
-                    ? CalculatorIconWhite(7)
-                    : CalculatorIconBlack(7)}
+                    ? CalculatorIconWhite(6)
+                    : CalculatorIconBlack(6)}
                 </div>
               </div>
 
@@ -47,8 +47,8 @@ function Home() {
               <div className="w-fit h-fit">
                 <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
                   {tema == "dark"
-                    ? TableIconWhite(7)
-                    : TableIconBlack(7)}
+                    ? TableIconWhite(6)
+                    : TableIconBlack(6)}
                 </div>
               </div>
 

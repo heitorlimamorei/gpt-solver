@@ -75,21 +75,12 @@ function EditSheet() {
     setIsOpen2((current) => !current);
   }, []);
 
-  const validateField = useCallback((event: any) => {
-    // posteriormente alterar por uma solução de UX.
-    const validateNumberField = () =>
-      typeof parseFloat(event.target.value) === "number";
-    return event.target.value == "value"
-      ? validateNumberField()
-      : event.target.value;
-  }, []);
-
-  const handleChange = useCallback((event) => {
+  const handleItemFormFieldChange = useCallback((field, value) => {
     setFormData((current) => {
       return {
         ...current,
-        [event.target.name]: validateField(event),
-      };
+        [field]: value,
+      }
     });
   }, []);
 
@@ -138,7 +129,7 @@ function EditSheet() {
       }
       setFormData({
         name: "",
-        type: "",
+        type: sheet.data.tiposDeGastos[0],
         value: 0,
         description: "",
       });
@@ -235,7 +226,7 @@ function EditSheet() {
   }
 
   return (
-    <div className={`md:h-[500vh] h-[500vh] w-[100%]`}>
+    <div className={`md:h-full h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
@@ -261,7 +252,7 @@ function EditSheet() {
             {selected2 === "createItem" ? (
               <CreateOrEditItem
                 formData={formData}
-                handleChange={handleChange}
+                handleChange={handleItemFormFieldChange}
                 handleSubmit={handleSubmit}
                 isEditMode={currentEditingItem != null}
                 onCancel={handleCancel}

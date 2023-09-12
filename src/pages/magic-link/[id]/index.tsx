@@ -60,7 +60,7 @@ export default function AcceptInvitation() {
   }
 
   return (
-    <div className={`lg:h-[200vh] flex items-center h-[200vh] w-[100%]`}>
+    <div className={`lg:h-full flex items-center h-full w-[100%]`}>
       <Layout
         titulo="Pagina inicial"
         subtitulo="Estamos construindo um admin template"
