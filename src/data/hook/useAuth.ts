@@ -16,18 +16,19 @@ export default function useAuth() {
   const handleSheetIdsLoad = (current: string[]) => dispatch({type: "loadSheetIds", payload:current});
   const handleLogin = (current: UserProps) => dispatch({type: "login", payload:current});
 
+  const requestLogin = async (email: string, name: string) => {
+    handleUserIsLoadingChange(true);
+    const { data } = await axios.post(`${BASE_URL}/api/users/login`, {
+      email: email,
+      name: name,
+    });
+    handleLogin({ ...data });
+  };
+
   useEffect(() => {
     if (email !== undefined) {
       if (email.length > 0) {
-        handleUserIsLoadingChange(true);
-        axios
-          .post(`${BASE_URL}/api/users/login`, {
-            email: email,
-            name: name,
-          })
-          .then((response) => {
-            handleLogin({...response.data});
-          });
+        requestLogin(email, name);
       }
     }
   }, [email]);
@@ -35,10 +36,12 @@ export default function useAuth() {
   useEffect(() => {
     if (!!state.user.id) handleUserIsLoadingChange(false);
   }, [state.user]);
-  
+
+
   return {
     handleUserIsLoadingChange,
     handleSheetIdsLoad,
+    requestLogin,
     data: state
   }
 }
