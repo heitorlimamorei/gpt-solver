@@ -5,13 +5,14 @@ import { itemRenderOptions, shortingTypes } from "../../types/sheetTypes";
 import useSheets from "../../data/hook/useSheets";
 import SelectEsp from "./SelectEsp";
 interface ManageRenderOptionsProps {
+  isShowingTimeLine: boolean;
   setItemsRenderOptions: (newOptions: itemRenderOptions) => void;
   itemsRenderOptions: itemRenderOptions;
   toggleIsOpen: () => void;
 }
 function ManageRenderOptions(props: ManageRenderOptionsProps) {
   const { sheet } = useSheets();
-  const { itemsRenderOptions, setItemsRenderOptions, toggleIsOpen } = props;
+  const { itemsRenderOptions, setItemsRenderOptions, toggleIsOpen, isShowingTimeLine } = props;
   let spentTypes = [
     { name: "nenhum filtro", value: "" },
     ...sheet.data.tiposDeGastos.map((spentType) => ({
@@ -84,15 +85,19 @@ function ManageRenderOptions(props: ManageRenderOptionsProps) {
           name="role"
           ClassName="p-3"
         >
-          {sortOptions.map((opt) => (
-            <option
-              value={opt.value}
-              key={opt.value}
-              className={`dark:bg-[#232323] bg-[#E0E5EC]`}
-            >
-              {opt.name}
-            </option>
-          ))}
+          {sortOptions
+            .filter((c) => {
+              return isShowingTimeLine ? c.value !== 'ascending' && c.value !== 'descending' : true;
+            })
+            .map((opt) => (
+              <option
+                value={opt.value}
+                key={opt.value}
+                className={`dark:bg-[#232323] bg-[#E0E5EC]`}
+              >
+                {opt.name}
+              </option>
+            ))}
         </SelectEsp>
       </div>
       <div className="mb-5">
@@ -123,7 +128,7 @@ function ManageRenderOptions(props: ManageRenderOptionsProps) {
           onClick={handleSubmit}
           text="Salvar"
           textClassName="px-4 py-2 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0085FF] to-[#1400FF] dark:bg-gradient-to-r dark:from-[#00F0FF] dark:to-[#00A5BC]"
-          iconClassName={""}
+          iconClassName={''}
           icon={undefined}
         ></Button>
         <Button
@@ -139,7 +144,7 @@ function ManageRenderOptions(props: ManageRenderOptionsProps) {
           }}
           text="Fechar"
           textClassName="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff0000] to-[#ff5252] dark:bg-gradient-to-r dark:from-[#ff0000] dark:to-[#ff5252]"
-          iconClassName={""}
+          iconClassName={''}
           icon={undefined}
         ></Button>
       </div>

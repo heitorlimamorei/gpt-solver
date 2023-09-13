@@ -1,15 +1,30 @@
 import { firestoreTimestampToDate, formatDate } from "../../utils/dateMethods";
 import TimeLineItem from "./TimeLineItem";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import useSheets from "../../data/hook/useSheets";
 import _ from "lodash";
-import { sheetItemProps } from "../../types/sheetTypes";
+import { itemRenderOptions } from "../../types/sheetTypes";
 
-const TimeLineFeed = ({ setEditMode }:{ setEditMode: (c: sheetItemProps) => void }) => {
-  const { sheet } = useSheets();
-  const items = sheet.items;
+const TimeLineFeed = ({ itemsRenderOptions }: {itemsRenderOptions: itemRenderOptions;}) => {
+  const {
+    sheet,
+    filterByDescription,
+    filterByName,
+    filterBySpentType,
+    getSortedItems,
+  } = useSheets();
 
-  const getTimeLine = () => {
+  const getItems = useCallback(() => {
+    const { name, description, type, sortMode } = itemsRenderOptions;
+    const itemsReady = filterByDescription(
+      description,
+      filterByName(name, filterBySpentType(type, getSortedItems(sortMode)))
+    );
+    return itemsReady;
+  }, [sheet, itemsRenderOptions]);
+
+  const getTimeLine = useCallback(() => {
+    const items  = getItems();
     const getItemsByDate = () =>
       _.groupBy(items, (item) =>
         formatDate(firestoreTimestampToDate(item.date))
@@ -18,18 +33,22 @@ const TimeLineFeed = ({ setEditMode }:{ setEditMode: (c: sheetItemProps) => void
       date: item[0],
       items: item[1],
     }));
-    const sortItemsByDate = _.sortBy(agroupedItems, (day) =>
-      firestoreTimestampToDate(day.items[0].date)
-    );
-    return sortItemsByDate;
-  };
 
-  const renderTimeLine = () => {
+    const sortCoefficient = itemsRenderOptions.sortMode == "date descending" ? -1 : 1;
+
+    const sortItemsByDate = _.sortBy(agroupedItems, (day) => {
+      const date: any = firestoreTimestampToDate(day.items[0].date);
+      return date * sortCoefficient;
+    });
+    return sortItemsByDate;
+  }, [getItems]);
+
+  const renderTimeLine = useCallback(() => {
     const timeLine = getTimeLine();
     return timeLine.map(({ date, items }) => (
-      <TimeLineItem key={date} date={date} items={items} setEditMode={setEditMode} />
+      <TimeLineItem key={date} date={date} items={items} />
     ));
-  };
+  }, [getTimeLine]);
 
   return (
     <div>

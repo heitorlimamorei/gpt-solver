@@ -1,40 +1,30 @@
-import { useCallback, useEffect, useState } from "react";
-import Layout from "../../../components/template/Layout";
-import ModalForm from "../../../components/template/ModalForm";
-import useSheets from "../../../data/hook/useSheets";
-import _ from "lodash";
-import axios from "axios";
-import {
-  sheetItemProps,
-  sheetProps,
-  itemRenderOptions,
-} from "../../../types/sheetTypes";
-import CreateOrEditItem from "../../../components/template/CreateOrEditItem";
-import ManageSheetProps from "../../../components/template/ManageSheetProps";
-import ManageUsers from "../../../components/template/ManageUsers";
-import Switch from "../../../components/template/Switch";
-import ManageRenderOptions from "../../../components/template/ManageRenderOptions";
-import ControllBar from "../../../components/template/ControllBar";
-import variaveis from "../../../model/variaveis";
-import { useRouter } from "next/router";
-import Switch2 from "../../../components/template/Switch2";
-import ImportForeignItemsModal from "../../../components/ImportForeignItemsModal";
-import IfSheetIsLoaded from "../../../components/IfSheetIsLoaded";
-import ExpenseChart from "../../../components/ExpenseChart";
-import useAuth from "../../../data/hook/useAuth";
-import ItemsFeed from "../../../components/ItemsFeed";
-import TimeLineFeed from "../../../components/ItemsTimeLine/Feed"
+import { useCallback, useEffect, useState } from 'react';
+import Layout from '../../../components/template/Layout';
+import ModalForm from '../../../components/template/ModalForm';
+import useSheets from '../../../data/hook/useSheets';
+import _ from 'lodash';
+import axios from 'axios';
+import { sheetItemProps, sheetProps, itemRenderOptions } from '../../../types/sheetTypes';
+import CreateOrEditItem from '../../../components/template/CreateOrEditItem';
+import ManageSheetProps from '../../../components/template/ManageSheetProps';
+import ManageUsers from '../../../components/template/ManageUsers';
+import Switch from '../../../components/template/Switch';
+import ManageRenderOptions from '../../../components/template/ManageRenderOptions';
+import ControllBar from '../../../components/template/ControllBar';
+import variaveis from '../../../model/variaveis';
+import { useRouter } from 'next/router';
+import Switch2 from '../../../components/template/Switch2';
+import ImportForeignItemsModal from '../../../components/ImportForeignItemsModal';
+import IfSheetIsLoaded from '../../../components/IfSheetIsLoaded';
+import ExpenseChart from '../../../components/ExpenseChart';
+import useAuth from '../../../data/hook/useAuth';
+import ItemsFeed from '../../../components/ItemsFeed';
+import TimeLineFeed from '../../../components/ItemsTimeLine/Feed';
 
 function EditSheet() {
   const { BASE_URL } = variaveis;
-  const {
-    sheet,
-    sheetReLoader,
-    createNewItem,
-    sumAllItems,
-    updateItem,
-    refreshItemsFromListener,
-  } = useSheets();
+  const { sheet, sheetReLoader, createNewItem, sumAllItems, updateItem, refreshItemsFromListener } =
+    useSheets();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
@@ -43,32 +33,28 @@ function EditSheet() {
   const { user } = data;
   const { email, sheetIds } = user;
   const [isOpen4, setIsOpen4] = useState(false);
-  const [itemsRenderOptions, setItemsRenderOptions] =
-    useState<itemRenderOptions>({
-      name: "",
-      type: "",
-      description: "",
-      sortMode: "date descending",
-    });
-  const [selected, setSelected] = useState<"users" | "properties">(
-    "properties"
-  );
-  const [selected2, setSelected2] = useState<"createItem" | "import">(
-    "createItem"
-  );
+  const [itemsRenderOptions, setItemsRenderOptions] = useState<itemRenderOptions>({
+    name: '',
+    type: '',
+    description: '',
+    sortMode: 'date descending',
+  });
+  const [selected, setSelected] = useState<'users' | 'properties'>('properties');
+  const [selected2, setSelected2] = useState<'createItem' | 'import'>('createItem');
   const router = useRouter();
-  const [currentEditingItem, setCurrentEditingItem] =
-    useState<sheetItemProps>(null);
+  const [currentEditingItem, setCurrentEditingItem] = useState<sheetItemProps>(null);
   const [formData, setFormData] = useState({
-    name: "",
+    name: '',
     type: sheet.data.tiposDeGastos[0],
     value: 0,
-    description: "",
+    description: '',
   });
+  const [showTimeLineFeed, setShowTimeLineFeed] = useState<boolean>(false);
+  const [ChartIsHidden, setChartIsHidden] = useState(true);
 
   const handleToggle = useCallback(() => {
     setIsOpen((current) => !current);
-    setSelected2("createItem");
+    setSelected2('createItem');
   }, []);
 
   const handleToggleManageProps = useCallback(() => {
@@ -80,19 +66,19 @@ function EditSheet() {
       return {
         ...current,
         [field]: value,
-      }
+      };
     });
   }, []);
 
   const handleCancel = useCallback(() => {
     handleToggle();
     setFormData({
-      name: "",
-      type: "",
+      name: '',
+      type: '',
       value: 0,
-      description: "",
+      description: '',
     });
-    setSelected2("createItem");
+    setSelected2('createItem');
     setCurrentEditingItem(null);
   }, []);
 
@@ -128,15 +114,15 @@ function EditSheet() {
         });
       }
       setFormData({
-        name: "",
+        name: '',
         type: sheet.data.tiposDeGastos[0],
         value: 0,
-        description: "",
+        description: '',
       });
       setCurrentEditingItem(null);
       handleToggle();
     },
-    [currentEditingItem, formData, sheet]
+    [currentEditingItem, formData, sheet],
   );
 
   const getSheets = useCallback(async () => {
@@ -146,7 +132,7 @@ function EditSheet() {
         sheetIds.forEach((sheetId) => {
           const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
             email: sheet.currentUser,
-            mode: "GET",
+            mode: 'GET',
           });
           requests.push(currentSheet);
         });
@@ -174,10 +160,7 @@ function EditSheet() {
 
   const ReloadSheet = useCallback(
     async (currentId: any, currentEmail: any) => {
-      let reloadedSheet: sheetProps = await sheetReLoader(
-        currentId,
-        currentEmail
-      );
+      let reloadedSheet: sheetProps = await sheetReLoader(currentId, currentEmail);
       setFormData((current) => {
         return {
           ...current,
@@ -185,17 +168,12 @@ function EditSheet() {
         };
       });
     },
-    [setFormData]
+    [setFormData],
   );
 
   useEffect(() => {
     let id: any = router.query.sheetId;
-    if (
-      email !== undefined &&
-      email !== null &&
-      email.length > 0 &&
-      id !== undefined
-    ) {
+    if (email !== undefined && email !== null && email.length > 0 && id !== undefined) {
       console.log(email);
       console.log(router.query.sheetId);
       ReloadSheet(id, email);
@@ -209,31 +187,19 @@ function EditSheet() {
     }
   }, [sheet.data.id]);
 
-  const [isHidden, setIsHidden] = useState(true);
+  
 
-  const toggleVisibility = () => {
-    setIsHidden(!isHidden);
-  };
+  const toggleChartVisibility = () => setChartIsHidden(c => !c);
 
-  const [isTimelineFeed, setIsTimelineFeed] = useState(false);
-  function handleFeedToogle() {
-    if (isTimelineFeed === true){
-      setIsTimelineFeed(false)
-    }
-    else {
-      setIsTimelineFeed(true)
-    }
-  }
+  const handleToggleShowTimeLineFeed = () => setShowTimeLineFeed(c => !c);
 
   return (
     <div className={`md:h-full h-full w-[100%]`}>
-      <Layout
-        titulo="Pagina inicial"
-        subtitulo="Estamos construindo um admin template"
-      >
+      <Layout titulo="Pagina inicial" subtitulo="Estamos construindo um admin template">
         <IfSheetIsLoaded>
           <ModalForm isOpen={isOpen4}>
             <ManageRenderOptions
+              isShowingTimeLine={showTimeLineFeed}
               itemsRenderOptions={itemsRenderOptions}
               setItemsRenderOptions={setItemsRenderOptions}
               toggleIsOpen={() => setIsOpen4((current) => !current)}
@@ -249,7 +215,7 @@ function EditSheet() {
                 />
               )}
             </div>
-            {selected2 === "createItem" ? (
+            {selected2 === 'createItem' ? (
               <CreateOrEditItem
                 formData={formData}
                 handleChange={handleItemFormFieldChange}
@@ -259,21 +225,14 @@ function EditSheet() {
                 spentOptions={sheet.data.tiposDeGastos}
               />
             ) : (
-              <ImportForeignItemsModal
-                toggleIsOpen={handleToggle}
-                sheetOptions={sheets}
-              />
+              <ImportForeignItemsModal toggleIsOpen={handleToggle} sheetOptions={sheets} />
             )}
           </ModalForm>
           <ModalForm isOpen={isOpen2}>
             <div className=" flex flex-row">
-              <Switch
-                className="self-start mb-2"
-                selected={selected}
-                setSelected={setSelected}
-              />
+              <Switch className="self-start mb-2" selected={selected} setSelected={setSelected} />
             </div>
-            {selected === "properties" ? (
+            {selected === 'properties' ? (
               <ManageSheetProps toggleIsOpen={handleToggleManageProps} />
             ) : (
               <ManageUsers toggleIsOpen={handleToggleManageProps} />
@@ -284,35 +243,27 @@ function EditSheet() {
               className="flex justify-center mt-6 md:mt-0 align-center w-fit p-2 rounded-xl shadow-[16px_16px_24px_#636568,-16px_-16px_32px_#ffffff;]
           dark:shadow-[16px_16px_32px_#0f0f0f,-16px_-16px_32px_#373737] dark:text-white "
             >
-              <h1 className="font-bold text-3xl uppercase">
-                {sheet.data.name}
-              </h1>
+              <h1 className="font-bold text-3xl uppercase">{sheet.data.name}</h1>
             </div>
           </div>
           <div className="flex justify-center items-center w-full h-[5rem]">
-            <h2 className="dark:text-white font-bold text-3xl">
-              R${sumAllItems().toFixed(2)}
-            </h2>
+            <h2 className="dark:text-white font-bold text-3xl">R${sumAllItems().toFixed(2)}</h2>
           </div>
-          <div
-            className={isOpen || isOpen2 || isOpen4 ? "hidden" : ""}
-            hidden={isHidden}
-          >
+          <div className={isOpen || isOpen2 || isOpen4 ? 'hidden' : ''} hidden={ChartIsHidden}>
             <ExpenseChart />
           </div>
           <ControllBar
             handleToggle={handleToggle}
             handleToggleManageProps={handleToggleManageProps}
             setIsOpen4={setIsOpen4}
-            toogleChart={toggleVisibility}
-            toogleFeed={handleFeedToogle}
+            toogleChart={toggleChartVisibility}
+            toogleFeed={handleToggleShowTimeLineFeed}
           />
-          {
-            isTimelineFeed === false ? <ItemsFeed
-              setEditMode={setEditMode}
-              itemsRenderOptions={itemsRenderOptions}
-            /> : <TimeLineFeed setEditMode={setEditMode} />
-          }
+          {!showTimeLineFeed ? (
+            <ItemsFeed setEditMode={setEditMode} itemsRenderOptions={itemsRenderOptions} />
+          ) : (
+            <TimeLineFeed itemsRenderOptions={itemsRenderOptions} />
+          )}
         </IfSheetIsLoaded>
       </Layout>
     </div>
