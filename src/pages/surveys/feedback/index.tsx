@@ -40,9 +40,10 @@ export default function Feedback() {
       user_name: user.user_name,
       financial_management_improved: payload.financial_management_improved,
       did_pan_before: payload.did_pan_before,
+      featuresImprovement: payload.featuresImprovement,
+      appHasBeenShared: payload.appHasBeenShared,
     });
   };
-
   const handleClose = () => {
     router.push('/surveys/feedback/reviews');
   };

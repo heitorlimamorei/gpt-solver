@@ -23,7 +23,8 @@
     "react-dom": "18.2.0",
     "react-spinners": "^0.13.8",
     "recharts": "^2.6.2",
-    "swr": "^2.0.3"
+    "swr": "^2.0.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",

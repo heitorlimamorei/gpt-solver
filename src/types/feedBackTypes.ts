@@ -13,6 +13,9 @@ export interface INewFeedBackProps {
   user_url: string;
   stars: number;
   text: string;
+  featuresImprovement: string;
+  appHasBeenShared: boolean;
+  continued_using: boolean;
   financial_management_improved: number;
   did_pan_before: boolean;
 }
@@ -20,6 +23,9 @@ export interface INewFeedBackProps {
 export interface surveyFeedBackSubmitProps {
   stars: number;
   text: string;
+  featuresImprovement: string;
+  appHasBeenShared: boolean;
+  continued_using: boolean;
   financial_management_improved: number;
   did_pan_before: boolean;
 }
