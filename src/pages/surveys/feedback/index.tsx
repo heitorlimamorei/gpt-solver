@@ -45,7 +45,7 @@ export default function Feedback() {
     });
   };
   const handleClose = () => {
-    router.push('/surveys/feedback/reviews');
+    router.push('/');
   };
 
   return (
