@@ -5,9 +5,11 @@ import SurveyForm from '../../../components/template/SurveyForm';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import WatingActionModal from '../../../components/template/WatingActionModal';
 
 import variaveis from '../../../model/variaveis';
 import { INewFeedBackProps } from '../../../types/feedBackTypes';
+import useAppData from '../../../data/hook/useAppData';
 
 interface IuserProps {
   user_name: string;
@@ -20,6 +22,7 @@ export default function Feedback() {
   const router = useRouter();
   const { data } = useSession();
   const { BASE_URL } = variaveis;
+  const { toggleIsLoading } = useAppData()
 
   useEffect(() => {
     const userData = data?.user;
@@ -33,7 +36,10 @@ export default function Feedback() {
   }, [data]);
 
   const handleSubmit = async (payload: INewFeedBackProps) => {
-    const { data } = await axios.post(`${BASE_URL}/api/feedback`, {
+    try {
+      toggleIsLoading()
+
+      const { data } = await axios.post(`${BASE_URL}/api/feedback`, {
       stars: payload.stars,
       text: payload.text,
       user_url: user.user_url,
@@ -42,15 +48,18 @@ export default function Feedback() {
       did_pan_before: payload.did_pan_before,
       featuresImprovement: payload.featuresImprovement,
       appHasBeenShared: payload.appHasBeenShared,
-    });
+    });}catch(err) {
+      toggleIsLoading()
+    }
   };
   const handleClose = () => {
-    router.push('/');
+    router.push('/surveys/feedback/reviews');
   };
 
   return (
     <div className="h-screen">
       <Layout titulo="" subtitulo="">
+        <WatingActionModal text={"Enviando review"} />
         <SurveyForm
           title="Queremos saber sua opinião!"
           onSubmit={handleSubmit}
