@@ -59,7 +59,7 @@ export default function Feedback() {
   return (
     <div className="h-screen">
       <Layout titulo="" subtitulo="">
-        <WatingActionModal />
+        <WatingActionModal text={"Enviando review"} />
         <SurveyForm
           title="Queremos saber sua opinião!"
           onSubmit={handleSubmit}
