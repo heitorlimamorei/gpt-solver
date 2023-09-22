@@ -48,6 +48,7 @@ export default function Feedback() {
       did_pan_before: payload.did_pan_before,
       featuresImprovement: payload.featuresImprovement,
       appHasBeenShared: payload.appHasBeenShared,
+      continued_using: payload.continued_using,
     });}catch(err) {
       toggleIsLoading()
     }

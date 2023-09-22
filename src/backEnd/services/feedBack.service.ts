@@ -11,6 +11,7 @@ async function createFeedBack(newBack: INewFeedBackProps) {
     financial_management_improved,
     featuresImprovement,
     appHasBeenShared,
+    continued_using,
   } = newBack;
 
   if (
@@ -22,7 +23,9 @@ async function createFeedBack(newBack: INewFeedBackProps) {
     did_pan_before != undefined &&
     !!featuresImprovement &&
     !!appHasBeenShared &&
-    did_pan_before != null
+    did_pan_before != null &&
+    continued_using != undefined &&
+    continued_using != null
   ) {
     await feedbackRepository.createFeedBack(newBack);
   } else {
