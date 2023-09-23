@@ -63,7 +63,7 @@ export function AuthContextProvider(props: UserContextProvider) {
       sheetIds: [],
     },
     loadings: {
-      userIsLoading: false,
+      userIsLoading: true,
     },
   });
   return (

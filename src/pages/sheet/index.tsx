@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
-import { plusIcon } from "../../components/icons/Icones";
-import Layout from "../../components/template/Layout";
-import ModalForm from "../../components/template/ModalForm";
-import { sheetProps } from "../../types/sheetTypes";
-import Button from "../../components/Button";
-import CreateSheet from "../../components/template/CreateSheet";
-import SheetOptions from "../../components/SheetOptions";
-import WatingActionModal from "../../components/template/WatingActionModal";
-import useAppData from "../../data/hook/useAppData";
-import useAuth from "../../data/hook/useAuth";
+import { useEffect, useState } from 'react';
+import { plusIcon } from '../../components/icons/Icones';
+import Layout from '../../components/template/Layout';
+import ModalForm from '../../components/template/ModalForm';
+import { sheetProps } from '../../types/sheetTypes';
+import Button from '../../components/Button';
+import CreateSheet from '../../components/template/CreateSheet';
+import SheetOptions from '../../components/SheetOptions';
+import WatingActionModal from '../../components/template/WatingActionModal';
+import useAppData from '../../data/hook/useAppData';
 
 export default function Sheet() {
   const [sheets, setSheets] = useState<sheetProps[]>([]);
@@ -17,17 +16,11 @@ export default function Sheet() {
 
   const { setIsLoading } = useAppData();
 
-  const { data } = useAuth();
-  const { user } = data;
+  useEffect(() => setIsLoading(false), []);
 
-  useEffect(()  => setIsLoading(false), []);
-  
   return (
     <div className={`lg:h-full h-full w-[100%]`}>
-      <Layout
-        titulo="Pagina inicial"
-        subtitulo="Estamos construindo um admin template"
-      >
+      <Layout titulo="Pagina inicial" subtitulo="Estamos construindo um admin template">
         <ModalForm isOpen={isOpen3}>
           <CreateSheet
             toggleIsOpen={() => setIsOpen3((current) => !current)}
@@ -35,7 +28,7 @@ export default function Sheet() {
           />
         </ModalForm>
 
-        <WatingActionModal text={"Preparando tudo para você… 🛠️"}/>
+        <WatingActionModal text={'Preparando tudo para você… 🛠️'} />
 
         <div className="flex flex-1 w-full mt-3">
           <div className="flex w-full justify-end">
@@ -50,7 +43,6 @@ export default function Sheet() {
           </div>
         </div>
         <SheetOptions
-          sheetIds={user.sheetIds}
           sheets={sheets}
           sheetOptionsIsLoading={sheetsOptionsIsLoading}
           setSheetOptionsIsLoading={setSheetsOptionsIsLoading}

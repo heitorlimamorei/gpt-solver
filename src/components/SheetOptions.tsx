@@ -1,41 +1,49 @@
-import { useCallback, useEffect, memo} from "react";
-import SheetOption from "./SheetOption";
-import Cliper from "./Clipers/Cliper";
-import { sheetProps } from "../types/sheetTypes";
-import useSheets from "../data/hook/useSheets";
-import axios from "axios";
-import variaveis from "../model/variaveis";
+import { useCallback, useEffect, memo } from 'react';
+import SheetOption from './SheetOption';
+import Cliper from './Clipers/Cliper';
+import { sheetProps } from '../types/sheetTypes';
+import useSheets from '../data/hook/useSheets';
+import axios from 'axios';
+import variaveis from '../model/variaveis';
+import useAuth from '../data/hook/useAuth';
 interface SheetOptionsProps {
-  sheetIds: string[];
   sheets: sheetProps[];
-  setSheets: ( newState: sheetProps[] ) => void;
+  setSheets: (newState: sheetProps[]) => void;
   sheetOptionsIsLoading: boolean;
-  setSheetOptionsIsLoading: ( newState:boolean) => void;
+  setSheetOptionsIsLoading: (newState: boolean) => void;
 }
 function SheetOptions(props: SheetOptionsProps) {
-  const { sheetIds, sheets, setSheets, sheetOptionsIsLoading, setSheetOptionsIsLoading } = props;
+  const { sheets, setSheets, sheetOptionsIsLoading, setSheetOptionsIsLoading } = props;
   const { sheet, loadSheetByUserSeletion } = useSheets();
   const { BASE_URL } = variaveis;
-  
+
+  const { data } = useAuth();
+  const { user } = data;
+
   const getSheets = useCallback(async () => {
-    let requests = [];
-    if (!!sheetIds) {
-      sheetIds.forEach((sheetId) => {
-        const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
-          email: sheet.currentUser,
-          mode: "GET",
+    try {
+      let requests = [];
+      if (!!user.sheetIds) {
+        user.sheetIds.forEach((sheetId) => {
+          const currentSheet = axios.post(`${BASE_URL}/api/sheets/${sheetId}`, {
+            email: sheet.currentUser,
+            mode: 'GET',
+          });
+          requests.push(currentSheet);
         });
-        requests.push(currentSheet);
-      });
-      const responseArray = await Promise.all(requests);
-      let finalReponse = responseArray.map((response) => response.data);
-      return finalReponse;
+        const responseArray = await Promise.all(requests);
+        let finalReponse = responseArray.map((response) => response.data);
+        setSheetOptionsIsLoading(false);
+        return finalReponse;
+      }
+    } catch (err) {
+      console.log(err);
     }
-  }, [sheetIds]);
+  }, [user.sheetIds]);
+  
   const loader = useCallback(async () => {
     try {
       const sheetsResp: any = await getSheets();
-      setSheetOptionsIsLoading(false);
       if (sheetsResp.length > 0) {
         setSheets(sheetsResp);
       }
@@ -43,22 +51,16 @@ function SheetOptions(props: SheetOptionsProps) {
       console.log(err);
     }
   }, [getSheets]);
+
   useEffect(() => {
-    if (sheetIds !== undefined) {
-      if (sheetIds.length > 0) {
-        loader();
-      } else {
-        if(sheets.length > 0) {
-          setSheetOptionsIsLoading(false);
-        }
-      }
+    if (!data.loadings.userIsLoading) {
+      loader();
     }
-  }, [sheetIds]);
+  }, [data]);
+
   return (
     <div className="flex flex-col mt-3">
-      <h1 className="font-bold text-2xl dark:text-white">
-        Escolha a planilha!
-      </h1>
+      <h1 className="font-bold text-2xl dark:text-white">Escolha a planilha!</h1>
       {sheetOptionsIsLoading ? (
         <div className="flex items-center justify-center mt-12">
           <Cliper isLoading={sheetOptionsIsLoading} size={60} />
