@@ -52,7 +52,7 @@ async function getLinksByTargetSheet(id: string): Promise<MagicLinkProps[]> {
 
   return normalizados;
 }
-
+let
 async function createMagicLink(
   newMagicLink: newMagicLinkProps
 ): Promise<MagicLinkProps> {
