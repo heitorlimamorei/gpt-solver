@@ -62,13 +62,12 @@ async function getOkrById(id: string): Promise<IOkrProps> {
 
 async function getOkrsBySheetId(sheetId: string): Promise<IOkrProps[]> {
   let normalizedOkrs = [];
-
   const okrsRef = collection(db, `okrs`);
   const okrQuery = query(okrsRef, where('sheetId', '==', sheetId));
 
   const OKRS = await getDocs(okrQuery);
-  OKRS.forEach(({ id, data }) => {
-    normalizedOkrs.push({ id: id, ...data() });
+  OKRS.forEach((okr) => {
+    normalizedOkrs.push({ id: okr.id, ...okr.data() });
   });
   normalizedOkrs = normalizedOkrs.map((okr) => normalizeTimestamps({ ...okr }));
   return normalizedOkrs;
