@@ -2,6 +2,7 @@ import sheetAuthrepo from "./sheet.authrepo";
 import RolesService from "./Roles";
 import Roles from "./Roles";
 import userService from "../services/user.service";
+import userRepository from "../repositories/user.repository";
 interface userProps {
   email: string;
   role: string;
@@ -49,6 +50,10 @@ async function getSessionData(email: string, sheetId: string) {
   };
 }
 async function createUser(newUser: newUser) {
+  if(!(await userRepository.userExistsByEmail(newUser.email))){
+    throw new Error (`User not found: ${newUser.email}`);
+  } 
+
   if (!(await userAlreadyExists(newUser.sheetId, newUser.email))) {
     if (newUser.role !== Roles.roles[0].name) {
       const resp = await sheetAuthrepo.createUser(newUser);
