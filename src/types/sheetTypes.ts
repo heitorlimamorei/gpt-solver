@@ -1,3 +1,5 @@
+import { firebaseTimesStampType } from "../utils/dateMethods";
+
 export interface SheetContextProps {
   sheet: FinalSheetProps;
   createNewSheet: (payload: NewSheetProps) => Promise<void>;
@@ -12,21 +14,12 @@ export interface SheetContextProps {
   getBalance: () => number;
   getSortedItems: (sortType: shortingTypes) => sheetItemProps[];
   updateItem: (item: sheetItemProps) => Promise<void>;
-  filterByName: (
-    name: string,
-    currentItems?: sheetItemProps[]
-  ) => sheetItemProps[];
-  filterByDescription: (
-    description: string,
-    currentItems?: sheetItemProps[]
-  ) => sheetItemProps[];
+  filterByName: (name: string, currentItems?: sheetItemProps[]) => sheetItemProps[];
+  filterByDescription: (description: string, currentItems?: sheetItemProps[]) => sheetItemProps[];
   createUser: (newUser: NewUserProps) => Promise<void>;
   updateUser: (user: userProps) => Promise<void>;
   deleteUser: (user: userProps) => Promise<void>;
-  filterBySpentType: (
-    spentType: string,
-    currentItems?: sheetItemProps[]
-  ) => sheetItemProps[];
+  filterBySpentType: (spentType: string, currentItems?: sheetItemProps[]) => sheetItemProps[];
   getStats: () => {
     name: string;
     value: number;
@@ -124,7 +117,7 @@ export interface NewSheetProps {
 }
 export type sheetAction =
   | {
-      type: "create";
+      type: 'create';
       payload: {
         sheet: sheetProps;
         items: sheetItemProps[];
@@ -132,7 +125,7 @@ export type sheetAction =
       };
     }
   | {
-      type: "refresh";
+      type: 'refresh';
       payload: {
         sheet: sheetProps;
         items: sheetItemProps[];
@@ -140,40 +133,70 @@ export type sheetAction =
       };
     }
   | {
-      type: "onUpdate";
+      type: 'onUpdate';
       payload: returnedSheetAfterUpdate;
     }
-  | { type: "onChangeUser"; payload: string }
-  | { type: "refreshItems"; payload: sheetItemProps[] }
-  | { type: "refreshUsers"; payload: userProps[] } 
-  | {type: "onDeleteSheet"};
-export type shortingTypes =
-  | "ascending"
-  | "descending"
-  | "date ascending"
-  | "date descending";
+  | { type: 'onChangeUser'; payload: string }
+  | { type: 'refreshItems'; payload: sheetItemProps[] }
+  | { type: 'refreshUsers'; payload: userProps[] }
+  | { type: 'onDeleteSheet' };
+export type shortingTypes = 'ascending' | 'descending' | 'date ascending' | 'date descending';
 export interface itemRenderOptions {
   name: string;
   type: string;
   description: string;
-  sortMode: shortingTypes
+  sortMode: shortingTypes;
 }
 export interface itemFormDataProps {
-  id?:string;
+  id?: string;
   name: string;
   type: string;
   value: number;
   description: string;
 }
 export interface sheetFormDataProps {
-  id?:string;
+  id?: string;
   owner: string;
   tiposDeGastos: string[];
   totalValue: number;
   type: string;
   name: string;
 }
-export interface iFormError{
+export interface iFormError {
   errorCode: string;
   message: string;
+}
+
+type JsonDate = string;
+
+export interface IOkrProps {
+  id: string;
+  sheetId: string;
+  start_cycle: JsonDate;
+  end_cycle: JsonDate;
+  createdAt: JsonDate;
+  author: string;
+  spentType: string;
+  value: number;
+  isPercentual: boolean;
+}
+
+export interface newOkrProps {
+  sheetId: string;
+  start_cycle: Date;
+  end_cycle: Date;
+  author: string;
+  spentType: string;
+  value: number;
+  isPercentual: boolean;
+}
+
+export interface newOkrJsonProps {
+  sheetId: string;
+  start_cycle: JsonDate;
+  end_cycle: JsonDate;
+  author: string;
+  spentType: string;
+  value: number;
+  isPercentual: boolean;
 }
