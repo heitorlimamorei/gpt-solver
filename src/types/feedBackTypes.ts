@@ -32,3 +32,16 @@ export interface surveyFeedBackSubmitProps {
   financial_management_improved: number;
   did_pan_before: boolean;
 }
+
+export interface ISurveyStatsResp {
+  Means: {
+      starsMean: number;
+      financialManagementImprovedDataMean: number;
+  };
+  Percents: {
+      did_pan_beforePercent: number;
+      appHasBeenSharedPercent: number;
+      continued_usingPercent: number;
+  };
+  sample_length: number;
+}

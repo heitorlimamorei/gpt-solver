@@ -1,3 +1,4 @@
+import { ISurveyStatsResp } from '../../types/feedBackTypes';
 import {
   transformArrayByField,
   calculateMeanList,
@@ -64,7 +65,7 @@ function getPercentData(surveyData: ISurveyDataProps) {
   };
 }
 
-export default async function getSurveyStatistics() {
+export default async function getSurveyStatistics(): Promise<ISurveyStatsResp> {
   const surveyData = await getSurveyData();
 
   const surveyMeans = getSuverysMeans(surveyData);

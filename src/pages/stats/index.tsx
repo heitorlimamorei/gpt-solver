@@ -5,49 +5,50 @@ import variaveis from '../../model/variaveis';
 import axios from 'axios';
 import StatsCard from '../../components/template/StatsCard';
 import { StarIcon } from '../../components/icons/Icones';
+import { ISurveyStatsResp } from '../../types/feedBackTypes';
+const { BASE_URL } = variaveis;
 
 export default function Stats() {
-  const { BASE_URL } = variaveis;
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ISurveyStatsResp>(null);
+
+  const fetchData = async () => {
+    const response = await axios.get(`${BASE_URL}/api/feedback/statistics`);
+    setData(response.data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`${BASE_URL}/api/feedback/statistics`);
-      setData(JSON.stringify(response.data));
-    };
     fetchData();
-  }, [BASE_URL]);
-  console.log(JSON.parse(data));
-  function getContinuedUsing(data) {
-    data = JSON.parse(data);
-    let continued = data.Percents.continued_usingPercent;
-    const arr = [
-      { name: 'Continuou', value: +continued.toFixed() },
-      { name: 'Não continuou', value: 100 - continued.toFixed() },
+  }, []);
+
+  console.log(data);
+
+  const getContinuedUsing = () => {
+    const continued = parseFloat(data.Percents.continued_usingPercent.toFixed(2));
+    return [
+      { name: 'Continuou', value: continued },
+      { name: 'Não continuou', value: 100 - continued },
     ];
-    return arr;
   }
-  function getPlanBefore(data) {
-    data = JSON.parse(data);
-    let planned = data.Percents.did_pan_beforePercent;
-    const arr = [
-      { name: 'Tinha planejamento', value: +planned.toFixed() },
-      { name: 'Não tinha planejamento', value: 100 - planned.toFixed() },
+
+  const getPlanBefore = () => {
+    const planned = parseFloat(data.Percents.did_pan_beforePercent.toFixed(2));
+    return [
+      { name: 'Tinha planejamento', value: planned },
+      { name: 'Não tinha planejamento', value: 100 - planned },
     ];
-    return arr;
   }
-  function getShared(data) {
-    data = JSON.parse(data);
-    let shared = data.Percents.appHasBeenSharedPercent;
-    const arr = [
-      { name: 'Compartilhou', value: +shared.toFixed() },
-      { name: 'Não compartilhou', value: 100 - shared.toFixed() },
+
+  const getShared = () => {
+    const shared = parseFloat(data.Percents.appHasBeenSharedPercent.toFixed(2));
+    return  [
+      { name: 'Compartilhou', value: shared },
+      { name: 'Não compartilhou', value: 100 - shared },
     ];
-    return arr;
   }
-  function getRating(data) {
-    data = JSON.parse(data);
-    return data.Means.starsMean
-  }
+  if(!data) return null;
+  
+  const getRating = () => data.Means.starsMean;
+
   return (
     <Layout titulo="default" subtitulo="default">
       <div className="flex flex-col  md:flex-row">
@@ -57,11 +58,11 @@ export default function Stats() {
     dark:shadow-[8px_8px_3px_#1C1C1C,_-3px_-3px_16px_#2A2A2A]"
         >
              <p className="font-bold justify-self-start">Média de estrelas:</p>
-             <div className="flex flex-row text-5xl h-full w-full justify-self-center"><div className='flex w-full justify-center items-center'>{StarIcon(10)} {getRating(data)} </div></div>
+             <div className="flex flex-row text-5xl h-full w-full justify-self-center"><div className='flex w-full justify-center items-center'>{StarIcon(10)} {getRating()} </div></div>
         </div>
-        <StatsCard data={getContinuedUsing(data)} StatLabel="Continuaram usando o app:"></StatsCard>
-        <StatsCard data={getPlanBefore(data)} StatLabel="Tinham planejamento antes:"></StatsCard>
-        <StatsCard data={getShared(data)} StatLabel="Compartilharam o app com alguém:"></StatsCard>
+        <StatsCard data={getContinuedUsing()} StatLabel="Continuaram usando o app:"></StatsCard>
+        <StatsCard data={getPlanBefore()} StatLabel="Tinham planejamento antes:"></StatsCard>
+        <StatsCard data={getShared()} StatLabel="Compartilharam o app com alguém:"></StatsCard>
       </div>
     </Layout>
   );
