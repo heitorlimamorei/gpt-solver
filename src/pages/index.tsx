@@ -8,9 +8,12 @@ import {
 } from '../components/icons/Icones';
 import useAppData from '../data/hook/useAppData';
 import MessagePopup from '../components/MessagePopup';
+import { useState } from 'react';
 function Home() {
   const { tema, alternarTema } = useAppData();
+  const [showPopup, setShowPopup] = useState<boolean>(true);
   const router = useRouter();
+
   async function planilhas() {
     router.push('/sheet');
   }
@@ -21,7 +24,7 @@ function Home() {
     <div className="h-full w-full">
       <Layout titulo="" subtitulo="">
         <div className="flex flex-col lg:flex-row w-full h-[90vh]">
-          <MessagePopup />
+          <MessagePopup show={showPopup} tooggleShow={() => setShowPopup(c => !c)} />
           <button
             className="flex items-center justify-items-center lg:w-[49.5%] lg:h-full w-full h-[49.5%]"
             onClick={calculadora}
