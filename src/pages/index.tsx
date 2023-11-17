@@ -1,25 +1,27 @@
-import Layout from "../components/template/Layout";
-import { useRouter } from "next/router";
+import Layout from '../components/template/Layout';
+import { useRouter } from 'next/router';
 import {
   CalculatorIconWhite,
   CalculatorIconBlack,
   TableIconWhite,
   TableIconBlack,
-} from "../components/icons/Icones";
-import useAppData from "../data/hook/useAppData";
+} from '../components/icons/Icones';
+import useAppData from '../data/hook/useAppData';
+import MessagePopup from '../components/MessagePopup';
 function Home() {
   const { tema, alternarTema } = useAppData();
   const router = useRouter();
   async function planilhas() {
-    router.push("/sheet");
+    router.push('/sheet');
   }
   async function calculadora() {
-    router.push("/calculadora");
+    router.push('/calculadora');
   }
   return (
     <div className="h-full w-full">
       <Layout titulo="" subtitulo="">
         <div className="flex flex-col lg:flex-row w-full h-[90vh]">
+          <MessagePopup />
           <button
             className="flex items-center justify-items-center lg:w-[49.5%] lg:h-full w-full h-[49.5%]"
             onClick={calculadora}
@@ -27,9 +29,7 @@ function Home() {
             <div className="w-full flex flex-col items-center justify-items-center">
               <div className="w-fit h-fit">
                 <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
-                  {tema == "dark"
-                    ? CalculatorIconWhite(6)
-                    : CalculatorIconBlack(6)}
+                  {tema == 'dark' ? CalculatorIconWhite(6) : CalculatorIconBlack(6)}
                 </div>
               </div>
 
@@ -46,9 +46,7 @@ function Home() {
             <div className="w-full flex flex-col items-center justify-items-center">
               <div className="w-fit h-fit">
                 <div className="transition-all dark:bg-[#232323] w-fit p-5 dark:shadow-[16px_16px_32px_#0e0e0e,-16px_-16px_32px_#383838] shadow-[16px_16px_32px_#5a5c5e,-16px_-16px_32px_#ffffff] hover:p-10 bg-[#E0E5EC] rounded-full">
-                  {tema == "dark"
-                    ? TableIconWhite(6)
-                    : TableIconBlack(6)}
+                  {tema == 'dark' ? TableIconWhite(6) : TableIconBlack(6)}
                 </div>
               </div>
 
