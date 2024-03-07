@@ -1,7 +1,12 @@
+import ChatScreen from '@/components/chat/ChatScreen';
+
+import NavBar from '../components/NavBar';
+
 export default function Home() {
   return (
-   <main>
-    <h1>Helo there</h1>
-   </main>
+    <main className="flex flex-row bg-zinc-800 ">
+      <NavBar />
+      <ChatScreen />
+    </main>
   );
 }
