@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   try {
     const { conversation, model } = await request.json();
     let finalConversation: IMessage[] = [...conversation];
-
+    
     if (!checkGPTModel(model)) {
       throw new Error('Error: Recived invalid GPT model');
     }
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
     }
 
     const resp = await generateConversation({
-      model: 'gpt-3.5-turbo-16k-0613',
+      model: model,
       token_limit: 32000,
       messages: conversation,
     });

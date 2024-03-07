@@ -1,28 +1,14 @@
 'use client';
 import { useState } from 'react';
 
-import Chat, { ChatType } from './Chat';
+import Chat, { IMessage } from './Chat';
 import InputMessage from './InputMessage';
+import useChat from '@/hooks/useChat';
 
 export default function ChatScreen() {
-  const [messages, setMessages] = useState<ChatType[]>([
-    {
-      role: 'user',
-      content: 'Olá, qual seu nome?',
-    },
-    {
-      role: 'system',
-      content: 'Olá, sou o chatterson',
-    },
-  ]);
-
-  const handleSubmit = (message: string) => {
-    let format = {
-      role: 'user',
-      content: message,
-    };
-    setMessages((prevMessages) => [...prevMessages, format]);
-    console.log(messages);
+  const {addMessage, messages} = useChat();
+  const handleSubmit = async (message: string) => {
+    await addMessage(message);
   };
 
   return (
