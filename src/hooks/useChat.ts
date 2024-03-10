@@ -27,7 +27,7 @@ export default function useChat(): IUseChatResp {
   const sendToBff = async (message: IMessage) => {
     try {
       const resp = await axios.post<IBffResp>(
-        'api/openai',
+        'api/openAi',
         {
           conversation: [...messages, message],
           model: 'gpt-4',
