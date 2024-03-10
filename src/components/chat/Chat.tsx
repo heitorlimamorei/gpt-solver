@@ -25,10 +25,10 @@ export default function Chat(props: IChatProps) {
                 width={30}
                 height={30}
                 alt="Ai logo"
-                src={m.role == 'system' || m.role == "assistant" ? Logo : Profile}
+                src={m.role == 'system' || m.role == 'assistant' ? Logo : Profile}
                 className="mr-5 rounded-full"></Image>
               <p className="font-bold self-center bg-transparent">
-                {m.role == 'system' ||  m.role == "assistant" ? 'AI' : 'Você'}
+                {m.role == 'system' || m.role == 'assistant' ? 'AI' : 'Você'}
               </p>
             </div>
             <p className="mt-2 ml-[3rem] text-sm">{m.content}</p>

@@ -9,9 +9,7 @@ interface ButtonProps {
 
 export default function Button(props: ButtonProps) {
   return (
-    <button
-      onClick={props.onClick}
-      className={`flex flex-row hover:cursor-pointer ${props.style}`}>
+    <button onClick={props.onClick} className={`flex flex-row hover:cursor-pointer ${props.style}`}>
       {props.icon} {props.text}
     </button>
   );
