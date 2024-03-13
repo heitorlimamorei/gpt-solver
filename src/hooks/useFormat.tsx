@@ -1,14 +1,23 @@
 import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'ace-builds/src-noconflict/mode-golang';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-css';
+import 'ace-builds/src-noconflict/theme-monokai';
 
 import { IMessage } from '@/components/chat/Chat';
 
 enum Language {
   typescript = 'typescript',
-  tsx = 'tsx',
+  tsx = 'typescript',
+  jsx = 'javascript',
   javascript = 'javascript',
   java = 'java',
   python = 'python',
-  go = 'go',
+  go = 'golang',
   html = 'html',
   css = 'css',
 }
@@ -66,7 +75,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
         key={`ace-${lastIndex}`}
         placeholder="Placeholder Text"
         mode={language}
-        theme="github_dark"
+        theme="monokai"
         name="blah2"
         fontSize={14}
         showPrintMargin={true}
@@ -74,9 +83,9 @@ export function useFormat(message: IMessage): React.ReactNode[] {
         highlightActiveLine={true}
         value={codeBlock}
         setOptions={{
-          enableBasicAutocompletion: false,
-          enableLiveAutocompletion: false,
-          enableSnippets: false,
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
           showLineNumbers: true,
           tabSize: 2,
         }}
