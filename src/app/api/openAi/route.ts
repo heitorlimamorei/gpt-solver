@@ -24,9 +24,7 @@ interface IConversationResp {
   };
 }
 
-const generateConversation = async (
-  payload: IConversationPaylod,
-): Promise<IConversationResp> => {
+const generateConversation = async (payload: IConversationPaylod): Promise<IConversationResp> => {
   const resp = await openai.chat.completions.create({
     model: payload.model,
     messages: payload.messages,
@@ -48,11 +46,7 @@ const checkConversation = (messages: IMessage[]): boolean => {
   let result: boolean = true;
 
   messages.forEach((message) => {
-    if (
-      message.role == 'assistant' ||
-      message.role == 'system' ||
-      message.role == 'user'
-    ) {
+    if (message.role == 'assistant' || message.role == 'system' || message.role == 'user') {
       result = true;
     } else {
       result = false;
@@ -67,11 +61,7 @@ const checkConversation = (messages: IMessage[]): boolean => {
 };
 
 const checkGPTModel = (model: string): boolean => {
-  if (
-    model == 'gpt-4-turbo-preview' ||
-    model == 'gpt-4' ||
-    model == 'gpt-3.5-turbo-0125'
-  ) {
+  if (model == 'gpt-4-turbo-preview' || model == 'gpt-4' || model == 'gpt-3.5-turbo-0125') {
     return true;
   }
   return false;
@@ -81,7 +71,7 @@ export async function POST(request: Request) {
   try {
     const { conversation, model } = await request.json();
     let finalConversation: IMessage[] = [...conversation];
-    
+
     if (!checkGPTModel(model)) {
       throw new Error('Error: Recived invalid GPT model');
     }

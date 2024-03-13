@@ -24,8 +24,7 @@ enum Language {
 
 export function useFormat(message: IMessage): React.ReactNode[] {
   const { content } = message;
-  const codeRegex =
-    /```(typescript|tsx|html|css|go|javascript|java|python)(.*?)```/gs;
+  const codeRegex = /```(typescript|tsx|html|css|go|javascript|java|python)(.*?)```/gs;
 
   let modifiedContent: React.ReactNode[] = [];
   let lastIndex = 0;
@@ -95,9 +94,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
     // Text before code block
     if (lastIndex !== match.index) {
       modifiedContent.push(
-        <span key={`text-${lastIndex}`}>
-          {content.substring(lastIndex, match.index)}
-        </span>,
+        <span key={`text-${lastIndex}`}>{content.substring(lastIndex, match.index)}</span>,
       );
     }
 
@@ -109,9 +106,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
 
   // Text after last code block
   if (lastIndex < content.length) {
-    modifiedContent.push(
-      <span key={`text-${lastIndex}`}>{content.substring(lastIndex)}</span>,
-    );
+    modifiedContent.push(<span key={`text-${lastIndex}`}>{content.substring(lastIndex)}</span>);
   }
 
   return modifiedContent;
