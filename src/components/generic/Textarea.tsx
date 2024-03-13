@@ -7,12 +7,14 @@ interface TextareaProps {
   placeholder?: string;
   onChange?: any;
   value?: string;
+  onKeyPress?: any;
 }
 
 export default function Textarea(props: TextareaProps) {
   return (
     <>
       <TextareaAutoSize
+        onKeyDown={props.onKeyPress}
         value={props.value}
         className={props.style}
         placeholder={props.placeholder}
