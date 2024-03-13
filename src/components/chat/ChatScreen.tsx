@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
 
-import Chat, { IMessage } from './Chat';
-import InputMessage from './InputMessage';
 import useChat from '@/hooks/useChat';
 
+import Chat, { IMessage } from './Chat';
+import InputMessage from './InputMessage';
+
 export default function ChatScreen() {
-  const {addMessage, messages} = useChat();
+  const { addMessage, messages } = useChat();
   const handleSubmit = async (message: string) => {
     await addMessage(message);
   };
