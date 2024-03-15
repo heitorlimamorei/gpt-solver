@@ -1,5 +1,5 @@
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 import OpenAI from 'openai';
-import { OpenAIStream, StreamingTextResponse } from "ai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -25,7 +25,7 @@ interface IConversationResp {
   };
 }
 
-export const environment = "edge";
+export const runtime = 'edge';
 
 /*const generateConversation = async (payload: IConversationPaylod): Promise<IConversationResp> => {
   const resp = await openai.chat.completions.create({
@@ -104,7 +104,6 @@ export async function POST(request: Request) {
     const stream = OpenAIStream(reponse);
 
     return new StreamingTextResponse(stream);
-
   } catch (err: any) {
     return new Response(err.message, {
       status: 400,

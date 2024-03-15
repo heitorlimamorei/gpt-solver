@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import _ from 'lodash';
 
 interface IMessage {
@@ -21,34 +22,34 @@ export default function useChat(): IUseChatResp {
 
   const sendToBff = async (message: IMessage) => {
     try {
-    await fetch(
-        'api/openAi',
-        {
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         method: 'POST',
-         body: JSON.stringify({
-           conversation: [...messages, message],
-           model: 'gpt-4',
-         }),
+      await fetch('api/openAi', {
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ).then(async (reponse: any) => {
+        method: 'POST',
+        body: JSON.stringify({
+          conversation: [...messages, message],
+          model: 'gpt-4',
+        }),
+      }).then(async (reponse: any) => {
         const reader = reponse.body?.getReader();
 
         setMessages((prev) => {
-          return [...prev, {
-            role: "assistant",
-            content: "",
-          }];
+          return [
+            ...prev,
+            {
+              role: 'assistant',
+              content: '',
+            },
+          ];
         });
 
         let i = _.findLastIndex(messages) + 2;
-        let lastChuck = "";
+        let lastChuck = '';
 
         while (true) {
           const { value, done } = await reader?.read();
-         
+
           if (done) {
             break;
           }
