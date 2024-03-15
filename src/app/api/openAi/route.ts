@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { OpenAIStream, StreamingTextResponse } from "ai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -24,7 +25,9 @@ interface IConversationResp {
   };
 }
 
-const generateConversation = async (payload: IConversationPaylod): Promise<IConversationResp> => {
+export const environment = "edge";
+
+/*const generateConversation = async (payload: IConversationPaylod): Promise<IConversationResp> => {
   const resp = await openai.chat.completions.create({
     model: payload.model,
     messages: payload.messages,
@@ -41,6 +44,7 @@ const generateConversation = async (payload: IConversationPaylod): Promise<IConv
     },
   };
 };
+*/
 
 const checkConversation = (messages: IMessage[]): boolean => {
   let result: boolean = true;
@@ -70,7 +74,6 @@ const checkGPTModel = (model: string): boolean => {
 export async function POST(request: Request) {
   try {
     const { conversation, model } = await request.json();
-    let finalConversation: IMessage[] = [...conversation];
 
     if (!checkGPTModel(model)) {
       throw new Error('Error: Recived invalid GPT model');
@@ -84,26 +87,24 @@ export async function POST(request: Request) {
       throw new Error('Error: Conversation invalid: (malformed body)');
     }
 
-    const resp = await generateConversation({
+    /*const resp = await generateConversation({
       model: model,
       token_limit: 32000,
       messages: conversation,
     });
+    */
 
-    finalConversation.push(resp.message);
+    const reponse = await openai.chat.completions.create({
+      model: model,
+      max_tokens: 8000,
+      messages: conversation,
+      stream: true,
+    });
 
-    return new Response(
-      JSON.stringify({
-        conversation: finalConversation,
-        total_tokens: resp.usage.total_tokens,
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'text/json',
-        },
-      },
-    );
+    const stream = OpenAIStream(reponse);
+
+    return new StreamingTextResponse(stream);
+
   } catch (err: any) {
     return new Response(err.message, {
       status: 400,
