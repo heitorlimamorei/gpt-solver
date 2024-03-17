@@ -50,10 +50,7 @@ function getLanguage(match: RegExpMatchArray): Language {
   }
 }
 
-function generateCodeBlockWithMode(
-  codeBlock: string,
-  language: Language,
-): React.ReactNode {
+function generateCodeBlockWithMode(codeBlock: string, language: Language): React.ReactNode {
   const numberOfLines = codeBlock.split('\n').length;
 
   return (
@@ -102,13 +99,8 @@ function generateTextContent(
 
 export function useFormat(message: IMessage): React.ReactNode[] {
   const { content } = message;
-<<<<<<< HEAD
 
-  const codeRegex =
-    /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
-=======
-  const codeRegex = /```(typescript|tsx|html|css|go|javascript|java|python)(.*?)```/gs;
->>>>>>> 904e852f648fe14c47aa7b7b922f4661e52b7aaa
+  const codeRegex = /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
 
   let modifiedContent: React.ReactNode[] = [];
   let lastIndex = 0;
@@ -118,13 +110,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
     const language = getLanguage(match);
 
     if (lastIndex !== match.index) {
-      modifiedContent.push(
-<<<<<<< HEAD
-        generateTextContent(content, lastIndex, match.index),
-=======
-        <span key={`text-${lastIndex}`}>{content.substring(lastIndex, match.index)}</span>,
->>>>>>> 904e852f648fe14c47aa7b7b922f4661e52b7aaa
-      );
+      modifiedContent.push(generateTextContent(content, lastIndex, match.index));
     }
 
     modifiedContent.push(generateCodeBlockWithMode(codeBlock, language));
@@ -133,13 +119,10 @@ export function useFormat(message: IMessage): React.ReactNode[] {
   }
 
   if (lastIndex < content.length) {
-<<<<<<< HEAD
     const remainingContent = content.substring(lastIndex);
     // Check if remaining content contains AceEditor component
     if (!remainingContent.includes('<AceEditor')) {
-      modifiedContent.push(
-        generateTextContent(content, lastIndex, content.length),
-      );
+      modifiedContent.push(generateTextContent(content, lastIndex, content.length));
     } else {
       modifiedContent.push(
         <span key={`text-${lastIndex}`} className="">
@@ -147,9 +130,6 @@ export function useFormat(message: IMessage): React.ReactNode[] {
         </span>,
       );
     }
-=======
-    modifiedContent.push(<span key={`text-${lastIndex}`}>{content.substring(lastIndex)}</span>);
->>>>>>> 904e852f648fe14c47aa7b7b922f4661e52b7aaa
   }
   return modifiedContent;
 }
