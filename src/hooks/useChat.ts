@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import axios from 'axios';
+import _ from 'lodash';
 
 interface IMessage {
   content: string;
@@ -10,11 +10,6 @@ interface IMessage {
 interface IUseChatResp {
   messages: IMessage[];
   addMessage(message: string): Promise<void>;
-}
-
-interface IBffResp {
-  conversation: IMessage[];
-  total_tokens: number;
 }
 
 const systemMessage = {
@@ -27,18 +22,53 @@ export default function useChat(): IUseChatResp {
 
   const sendToBff = async (message: IMessage) => {
     try {
-      const resp = await axios.post<IBffResp>(
-        'api/openAi',
-        {
+      await fetch('api/openAi', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
           conversation: [...messages, message],
           model: 'gpt-4',
-        },
-        {
-          baseURL: process.env.BASE_URL,
-        },
-      );
-      const { conversation, total_tokens } = resp.data;
-      setMessages(conversation);
+        }),
+      }).then(async (reponse: any) => {
+        const reader = reponse.body?.getReader();
+
+        setMessages((prev) => {
+          return [
+            ...prev,
+            {
+              role: 'assistant',
+              content: '',
+            },
+          ];
+        });
+
+        let i = _.findLastIndex(messages) + 2;
+        let lastChuck = '';
+
+        while (true) {
+          const { value, done } = await reader?.read();
+
+          if (done) {
+            break;
+          }
+
+          let currentChunck = new TextDecoder().decode(value);
+          if (currentChunck != null) {
+            setMessages((prev) => {
+              let messages = [...prev];
+              let message = messages[i];
+              if (currentChunck != lastChuck) {
+                message.content = message.content.concat(currentChunck);
+                messages[i] = message;
+              }
+              lastChuck = currentChunck;
+              return messages;
+            });
+          }
+        }
+      });
     } catch (err) {
       console.log(err);
     }
