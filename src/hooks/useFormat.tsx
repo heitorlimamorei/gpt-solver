@@ -50,10 +50,7 @@ function getLanguage(match: RegExpMatchArray): Language {
   }
 }
 
-function generateCodeBlockWithMode(
-  codeBlock: string,
-  language: Language,
-): React.ReactNode {
+function generateCodeBlockWithMode(codeBlock: string, language: Language): React.ReactNode {
   const numberOfLines = codeBlock.split('\n').length;
 
   return (
@@ -137,8 +134,7 @@ function generateTextContent(content: string): React.ReactNode {
 export function useFormat(message: IMessage): React.ReactNode[] {
   const { content } = message;
 
-  const codeRegex =
-    /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
+  const codeRegex = /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
 
   let modifiedContent: React.ReactNode[] = [];
   let lastIndex = 0;
@@ -160,9 +156,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
 
   if (lastIndex < content.length) {
     const remainingContent = content.substring(lastIndex);
-    modifiedContent = modifiedContent.concat(
-      generateTextContent(remainingContent),
-    );
+    modifiedContent = modifiedContent.concat(generateTextContent(remainingContent));
   }
 
   return modifiedContent;
