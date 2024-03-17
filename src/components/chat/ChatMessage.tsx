@@ -30,7 +30,13 @@ export default function ChatMessage(message: IMessage) {
             : 'Você'}
         </div>
       </div>
-      <p className="mt-2 ml-[3rem] text-sm">{formattedContent}</p>
+      <ul className="mt-2 ml-[3rem] text-sm mx-2">
+        {formattedContent.map((element, index) => (
+          <li className="mt-3 text-[1rem]">
+            <React.Fragment key={index}>{element}</React.Fragment>
+          </li>
+        ))}
+      </ul>
     </li>
   );
 }
