@@ -1,16 +1,29 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+'use client';
 
+import React from 'react';
 import Button from '@/components/generic/Button';
 
 import { IconChat, IconNewChat } from './Icons';
+import { IChatListItem } from '@/types/chat';
 
-export default function NavBar() {
-  const chats = [
-    {
-      name: 'Chat1',
-    },
-  ];
+const mockUserId = "j0G5VyPFxPESbfFcD5jk";
+
+interface INavBarProps {
+  resp: {
+    chats: IChatListItem[];
+    currentChat: string;
+  }
+}
+
+export default function NavBar({ resp }: INavBarProps) {
+  const {chats, currentChat} = resp;
+
+  const handleChatChange = (chatId: string) => {
+    if (chatId != currentChat){ 
+      window.location.href = `/chat/${chatId}?u=${mockUserId}`;
+    }
+  };
 
   return (
     <>
@@ -26,9 +39,10 @@ export default function NavBar() {
           Outros Chats
         </label>
 
-        {chats.map((chat, index) => (
+        {chats.map((chat) => (
           <Button
-            key={index}
+            onClick={()=> handleChatChange(chat.id)}
+            key={chat.id}
             text={chat.name}
             style="w-[90%] h-fit px-3 py-1 hover:bg-zinc-800 rounded-xl"
           />
