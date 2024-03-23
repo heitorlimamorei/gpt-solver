@@ -1,37 +1,51 @@
 'use client';
-import useChat from '@/hooks/useChat';
+import { useEffect, useState } from 'react';
 
-import Chat, { IMessage } from './Chat';
+import useChat from '@/hooks/useChat';
+import useSenderMessage, { GenerationStates } from '@/hooks/useSenderMessage';
+import { IMessageResp } from '@/types/chat';
+
+import Chat from './Chat';
 import InputMessage from './InputMessage';
 
 interface IChatScreenProps {
-  resp?: {
-    messages: IMessage[];
-  }
+  resp: {
+    messages: IMessageResp[];
+    chatId: string;
+  };
 }
 
 export default function ChatScreen({ resp }: IChatScreenProps) {
-  const { addMessage, messages} = useChat();
+  const [generationStatus, setGenerationStatus] = useState<GenerationStates>('standby');
 
-  let cm = messages;
+  const handleIsGeneratioChange = (n: GenerationStates) => setGenerationStatus(n);
 
-  if (resp) {
-    if (resp.messages != null) {
-      resp.messages.forEach((m) => {
-        if (m.role != "system") {
-         cm = [...cm, m];
-        }
-      });
+  const { addMessage, messages, addMessages } = useChat(handleIsGeneratioChange);
+
+  useEffect(() => {
+    if (resp?.messages) {
+      addMessages(resp.messages);
     }
-  }
+  }, [resp?.messages]);
 
   const handleSubmit = async (message: string) => {
     await addMessage(message);
   };
 
+  useEffect(() => {
+    if (generationStatus == 'done') {
+      const message = messages[messages.length - 1];
+      useSenderMessage({
+        handleStatusChange: handleIsGeneratioChange,
+        message,
+        chatId: resp.chatId,
+      });
+    }
+  }, [generationStatus, messages]);
+
   return (
     <div className="flex flex-col w-full h-screen">
-      <Chat messages={cm}></Chat>
+      <Chat messages={messages}></Chat>
       <InputMessage onSubmit={handleSubmit}></InputMessage>
     </div>
   );

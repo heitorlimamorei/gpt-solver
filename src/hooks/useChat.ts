@@ -1,15 +1,13 @@
 import { useState } from 'react';
 
+import { GenerationStates } from '@/hooks/useSenderMessage';
+import { IMessage, IMessageResp } from '@/types/chat';
 import _ from 'lodash';
-
-interface IMessage {
-  content: string;
-  role: string;
-}
 
 interface IUseChatResp {
   messages: IMessage[];
   addMessage(message: string): Promise<void>;
+  addMessages(messages: IMessage[]): void;
 }
 
 const systemMessage = {
@@ -17,12 +15,13 @@ const systemMessage = {
   content: 'Olá eu sou o GPT-SOLVER!',
 };
 
-export default function useChat(): IUseChatResp {
+export default function useChat(handler: (n: GenerationStates) => void): IUseChatResp {
   const [messages, setMessages] = useState<IMessage[]>([systemMessage]);
 
   const sendToBff = async (message: IMessage) => {
     try {
-      await fetch('api/openAi', {
+      //resolver quesdtão de base_url
+      await fetch('http://localhost:3000/api/openAi', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -33,7 +32,7 @@ export default function useChat(): IUseChatResp {
         }),
       }).then(async (reponse: any) => {
         const reader = reponse.body?.getReader();
-
+        handler('writing');
         setMessages((prev) => {
           return [
             ...prev,
@@ -68,6 +67,7 @@ export default function useChat(): IUseChatResp {
             });
           }
         }
+        handler('done');
       });
     } catch (err) {
       console.log(err);
@@ -75,17 +75,33 @@ export default function useChat(): IUseChatResp {
   };
 
   const addMessage = async (message: string) => {
+    handler('writing');
+
     const messageF = {
       role: 'user',
       content: message,
     };
 
     setMessages((c) => [...c, messageF]);
+
+    handler('done');
+
     await sendToBff(messageF);
+  };
+
+  const addMessages = async (messages: IMessageResp[]) => {
+    const mr = messages.map(({ role, content }) => {
+      return {
+        role,
+        content,
+      };
+    });
+    setMessages(mr);
   };
 
   return {
     messages,
     addMessage,
+    addMessages,
   };
 }

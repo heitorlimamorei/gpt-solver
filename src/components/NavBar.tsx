@@ -2,12 +2,14 @@
 'use client';
 
 import React from 'react';
+
+import { IChatListItem } from '@/types/chat';
+
 import Button from '@/components/generic/Button';
 
 import { IconChat, IconNewChat } from './Icons';
-import { IChatListItem } from '@/types/chat';
 
-const mockUserId = "j0G5VyPFxPESbfFcD5jk";
+const mockUserId = 'j0G5VyPFxPESbfFcD5jk';
 
 interface INavBarProps {
   resp: {
