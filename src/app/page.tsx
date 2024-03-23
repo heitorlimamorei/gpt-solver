@@ -1,3 +1,39 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useSession, signIn } from 'next-auth/react';
+import { redirect } from 'next/navigation';
+import axios from 'axios';
+
 export default function Home() {
-  return <main className="flex flex-row bg-zinc-800 ">/CHAT/ID?U=uuid</main>;
+  const { data: session } = useSession();
+  const email = session?.user?.email;
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (email) {
+          const result = await axios.get(
+            `https://gpt-solver-backend.onrender.com/v1/user?email=${email}`,
+          );
+          setUserData(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, [email]);
+
+  if (session && userData && userData.chats && userData.chats.length > 0) {
+    return redirect(`/chat/${userData.chats[0]}?u=${userData.id}`);
+  }
+
+  return (
+    <>
+      Not signed in <br /> <button onClick={() => signIn()}>Sign in</button>
+    </>
+  );
 }
