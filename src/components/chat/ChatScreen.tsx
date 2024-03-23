@@ -20,7 +20,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
 
   const handleIsGeneratioChange = (n: GenerationStates) => setGenerationStatus(n);
 
-  const { addMessage, messages, addMessages } = useChat(handleIsGeneratioChange);
+  const { addMessage, messages, addMessages, sortMessages } = useChat(handleIsGeneratioChange);
 
   useEffect(() => {
     if (resp?.messages) {
@@ -45,7 +45,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
 
   return (
     <div className="flex flex-col w-full h-screen">
-      <Chat messages={messages}></Chat>
+      <Chat messages={sortMessages(messages)}></Chat>
       <InputMessage onSubmit={handleSubmit}></InputMessage>
     </div>
   );
