@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface IUser {
+export interface IUser {
   id: string;
   chats: string[];
   totalTokens: number;

@@ -2,13 +2,14 @@
 import { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import { IUser } from '@/hooks/useFetchUserData';
 import axios from 'axios';
 
 export default function Home() {
   const { data: session } = useSession();
   const email = session?.user?.email;
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<IUser>();
 
   useEffect(() => {
     async function fetchData() {
