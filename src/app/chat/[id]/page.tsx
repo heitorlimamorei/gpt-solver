@@ -38,7 +38,7 @@ export default async function ServerChat(props: IServerChatProps) {
 
   return (
     <main className="flex flex-row bg-zinc-800 ">
-      <NavBar resp={{ chats, currentChat: props.params.id }} />
+      <NavBar resp={{ chats, currentChat: props.params.id, u: props.searchParams.u }} />
       <ChatScreen resp={{ messages, chatId: props.params.id }} />
     </main>
   );

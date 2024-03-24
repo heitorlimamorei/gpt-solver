@@ -41,7 +41,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
   const sendToBff = async (message: IMessage) => {
     try {
-      const conversation = prepareToOpenAi([...messages, message]);
+      const conversation = prepareToOpenAi(sortMessages([...messages, message]));
       //resolver questão de base_url
       await fetch('http://localhost:3000/api/openAi', {
         headers: {
@@ -105,11 +105,6 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     await sendToBff(messageF);
   };
 
-  const addMessages = async (messages: IMessageResp[]) => {
-    const mr = prepareMessages(messages);
-    setMessages(mr);
-  };
-
   const sortMessages = (messages: IMessage[]) => {
     let mReady = messages.map((m) => {
       return {
@@ -124,6 +119,11 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     );
     return mReady.map(({ message }) => message);
   }
+
+  const addMessages = async (messages: IMessageResp[]) => {
+    const mr = sortMessages(prepareMessages(messages));
+    setMessages(mr);
+  };
 
   return {
     messages,
