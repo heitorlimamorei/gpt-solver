@@ -1,47 +1,62 @@
 import { useState } from 'react';
 
+import { GenerationStates } from '@/hooks/HandleSenderMessage';
+import { IMessage, IMessageResp } from '@/types/chat';
+import { firestoreTimestampToDate } from '@/utils/dateMethods';
 import _ from 'lodash';
-
-interface IMessage {
-  content: string;
-  role: string;
-}
 
 interface IUseChatResp {
   messages: IMessage[];
   addMessage(message: string): Promise<void>;
+  addMessages(messages: IMessageResp[]): void;
+  sortMessages(messages: IMessage[]): IMessage[];
 }
 
-const systemMessage = {
-  role: 'system',
-  content: 'Olá eu sou o GPT-SOLVER!',
+const getNewMessage = (role: string, content: string): IMessage => {
+  return {
+    id: _.uniqueId(),
+    createdAt: new Date(),
+    role: role,
+    content: content,
+  };
 };
 
-export default function useChat(): IUseChatResp {
+const prepareMessages = (messages: IMessageResp[]): IMessage[] => {
+  return messages.map((message) => {
+    return {
+      id: message.id,
+      createdAt: firestoreTimestampToDate(message.createdAt),
+      role: message.role,
+      content: message.content,
+    };
+  });
+};
+
+const prepareToOpenAi = (m: IMessage[]) => m.map((c) => ({ role: c.role, content: c.content }));
+
+const systemMessage = getNewMessage('system', 'Olá eu sou o GPT-SOLVER, como posso ajudar ?');
+
+export default function useChat(handler: (n: GenerationStates) => void): IUseChatResp {
   const [messages, setMessages] = useState<IMessage[]>([systemMessage]);
 
   const sendToBff = async (message: IMessage) => {
     try {
-      await fetch('api/openAi', {
+      const conversation = prepareToOpenAi(sortMessages([...messages, message]));
+      //resolver questão de base_url
+      await fetch('http://localhost:3000/api/openAi', {
         headers: {
           'Content-Type': 'application/json',
         },
         method: 'POST',
         body: JSON.stringify({
-          conversation: [...messages, message],
+          conversation: conversation,
           model: 'gpt-4',
         }),
       }).then(async (reponse: any) => {
         const reader = reponse.body?.getReader();
-
+        handler('writing');
         setMessages((prev) => {
-          return [
-            ...prev,
-            {
-              role: 'assistant',
-              content: '',
-            },
-          ];
+          return [...prev, getNewMessage('assistant', '')];
         });
 
         let i = _.findLastIndex(messages) + 2;
@@ -68,6 +83,7 @@ export default function useChat(): IUseChatResp {
             });
           }
         }
+        handler('done');
       });
     } catch (err) {
       console.log(err);
@@ -75,17 +91,39 @@ export default function useChat(): IUseChatResp {
   };
 
   const addMessage = async (message: string) => {
-    const messageF = {
-      role: 'user',
-      content: message,
-    };
+    handler('writing');
+
+    const messageF = getNewMessage('user', message);
 
     setMessages((c) => [...c, messageF]);
+
+    handler('done');
+
     await sendToBff(messageF);
+  };
+
+  const sortMessages = (messages: IMessage[]) => {
+    let mReady = messages.map((m) => {
+      return {
+        date: m.createdAt,
+        message: {
+          ...m,
+        },
+      };
+    });
+    mReady = mReady.sort((a, b) => a.date.getTime() - b.date.getTime());
+    return mReady.map(({ message }) => message);
+  };
+
+  const addMessages = async (messages: IMessageResp[]) => {
+    const mr = sortMessages(prepareMessages(messages));
+    setMessages(mr);
   };
 
   return {
     messages,
     addMessage,
+    addMessages,
+    sortMessages,
   };
 }
