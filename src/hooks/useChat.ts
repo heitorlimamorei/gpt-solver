@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 import { GenerationStates } from '@/hooks/HandleSenderMessage';
 import { IMessage, IMessageResp } from '@/types/chat';
-import _ from 'lodash';
 import { firestoreTimestampToDate } from '@/utils/dateMethods';
+import _ from 'lodash';
 
 interface IUseChatResp {
   messages: IMessage[];
   addMessage(message: string): Promise<void>;
   addMessages(messages: IMessageResp[]): void;
-  sortMessages(messages: IMessage[]): IMessage[]
+  sortMessages(messages: IMessage[]): IMessage[];
 }
 
 const getNewMessage = (role: string, content: string): IMessage => {
@@ -30,9 +30,9 @@ const prepareMessages = (messages: IMessageResp[]): IMessage[] => {
       content: message.content,
     };
   });
-}
+};
 
-const prepareToOpenAi = (m: IMessage[]) => m.map((c) => ({role: c.role, content: c.content}));
+const prepareToOpenAi = (m: IMessage[]) => m.map((c) => ({ role: c.role, content: c.content }));
 
 const systemMessage = getNewMessage('system', 'Olá eu sou o GPT-SOLVER, como posso ajudar ?');
 
@@ -56,10 +56,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
         const reader = reponse.body?.getReader();
         handler('writing');
         setMessages((prev) => {
-          return [
-            ...prev,
-            getNewMessage('assistant', '')
-          ];
+          return [...prev, getNewMessage('assistant', '')];
         });
 
         let i = _.findLastIndex(messages) + 2;
@@ -114,11 +111,9 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
         },
       };
     });
-    mReady = mReady.sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
-    );
+    mReady = mReady.sort((a, b) => a.date.getTime() - b.date.getTime());
     return mReady.map(({ message }) => message);
-  }
+  };
 
   const addMessages = async (messages: IMessageResp[]) => {
     const mr = sortMessages(prepareMessages(messages));
