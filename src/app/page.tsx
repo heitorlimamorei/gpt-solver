@@ -4,6 +4,9 @@ import { useSession, signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { IUser } from '@/hooks/useFetchUserData';
 import axios from 'axios';
+import LeftPanel from '@/components/home/LeftPanel';
+import RightPanel from '@/components/home/RightPanel';
+import Button from '@/components/generic/Button';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -33,8 +36,11 @@ export default function Home() {
   }
 
   return (
-    <>
-      Not signed in <br /> <button onClick={() => signIn()}>Sign in</button>
-    </>
+    <div
+      className="flex flex-row h-screen w-screen
+     bg-zinc-800">
+      <LeftPanel />
+      <RightPanel />
+    </div>
   );
 }
