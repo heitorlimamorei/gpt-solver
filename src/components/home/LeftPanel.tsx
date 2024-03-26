@@ -1,6 +1,8 @@
 import React from 'react';
-import Logo from '../../../public/ai.png';
+
 import Image from 'next/image';
+
+import Logo from '../../../public/ai.png';
 
 export default function LeftPanel() {
   return (

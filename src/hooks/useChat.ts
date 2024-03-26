@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { GenerationStates } from '@/hooks/useSenderMessage';
+import { GenerationStates } from '@/hooks/SenderMessage';
 import { IMessage, IMessageResp } from '@/types/chat';
 import _ from 'lodash';
 

@@ -1,8 +1,10 @@
 import React from 'react';
-import Button from '../generic/Button';
-import Image from 'next/image';
-import Logo from '../../../public/ai.png';
+
 import { useSession, signIn } from 'next-auth/react';
+import Image from 'next/image';
+
+import Logo from '../../../public/ai.png';
+import Button from '../generic/Button';
 
 export default function RightPanel() {
   const { data: session } = useSession();

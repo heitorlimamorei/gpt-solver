@@ -1,12 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
+
 import { useSession, signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+
 import { IUser } from '@/hooks/useFetchUserData';
 import axios from 'axios';
+
+import Button from '@/components/generic/Button';
 import LeftPanel from '@/components/home/LeftPanel';
 import RightPanel from '@/components/home/RightPanel';
-import Button from '@/components/generic/Button';
 
 export default function Home() {
   const { data: session } = useSession();
