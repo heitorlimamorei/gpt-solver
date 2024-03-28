@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-import SenderMessage, { GenerationStates } from '@/hooks/SenderMessage';
+import SenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
 import useChat from '@/hooks/useChat';
 import { IMessageResp } from '@/types/chat';
 
