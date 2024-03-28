@@ -24,14 +24,14 @@ export default function RightPanel() {
           <div className="flex flex-row mb-24">
             <Button
               onClick={() => {
-                signIn();
+                signIn('auth0');
               }}
               text="Entrar"
               style="bg-cyan-700 lg:py-3 lg:px-14 py-2 px-8 rounded-md lg:text-lg font-semibold mt-6 mr-3"
             />
             <Button
               onClick={() => {
-                signIn();
+                signIn('auth0');
               }}
               text="Cadastrar"
               style="bg-cyan-700 lg:py-3 lg:px-12 py-2 px-6 rounded-md lg:text-lg font-semibold mt-6 ml-3"
