@@ -13,11 +13,14 @@ export interface IChatListItem {
 
 export interface IMessageResp {
   id: string;
+  createdAt: firebaseTimesStampType;
   content: string;
   role: string;
 }
 
 export interface IMessage {
+  id: string;
+  createdAt: Date;
   content: string;
   role: string;
 }

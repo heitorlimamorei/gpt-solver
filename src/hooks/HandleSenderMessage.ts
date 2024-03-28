@@ -11,7 +11,7 @@ interface IUseSenderMessageProps {
   handleStatusChange: (n: GenerationStates) => void;
 }
 
-export default async function SenderMessage({
+export default async function HandleSenderMessage({
   handleStatusChange,
   message,
   chatId,
