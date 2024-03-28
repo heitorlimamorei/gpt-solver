@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-import SenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
+import HandleSenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
 import useChat from '@/hooks/useChat';
 import { IMessageResp } from '@/types/chat';
 
@@ -35,7 +35,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   useEffect(() => {
     if (generationStatus == 'done') {
       const message = messages[messages.length - 1];
-      SenderMessage({
+      HandleSenderMessage({
         handleStatusChange: handleIsGeneratioChange,
         message,
         chatId: resp.chatId,
