@@ -114,7 +114,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
       }
     }
     handler('done');
-  }
+  };
 
   const sendToBff = async (message: IMessage) => {
     const base_url = 'http://localhost:3000';
@@ -131,7 +131,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
           }),
         }).then(async (reponse) => {
           const reader = reponse.body?.getReader();
-         
+
           if (reader) await reponseDecoder(reader);
         });
       }
@@ -146,7 +146,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
         }),
       }).then(async (reponse) => {
         const reader = reponse.body?.getReader();
-       
+
         if (reader) await reponseDecoder(reader);
       });
     } catch (err) {
@@ -169,12 +169,12 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
   const addVisionMessage = async (message: string, imageUrl: string) => {
     handler('writing');
 
-    const messageF = getNewVMessage('user', '', imageUrl);
+    const messageF = getNewVMessage('user', message, imageUrl);
 
     handler('done');
 
     await sendToBff(messageF);
-  }
+  };
 
   const sortMessages = (messages: IMessage[]) => {
     let mReady = messages.map((m) => {
