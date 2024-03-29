@@ -11,40 +11,7 @@ interface IMessage {
   name?: string;
 }
 
-interface IConversationPaylod {
-  model: string;
-  token_limit: number;
-  messages: any[];
-}
-
-interface IConversationResp {
-  id: string;
-  message: IMessage;
-  usage: {
-    total_tokens: number;
-  };
-}
-
 export const runtime = 'edge';
-
-/*const generateConversation = async (payload: IConversationPaylod): Promise<IConversationResp> => {
-  const resp = await openai.chat.completions.create({
-    model: payload.model,
-    messages: payload.messages,
-  });
-
-  return {
-    id: resp.id,
-    message: {
-      role: resp.choices[0].message.role,
-      content: resp.choices[0].message.content!,
-    },
-    usage: {
-      total_tokens: resp.usage?.total_tokens!,
-    },
-  };
-};
-*/
 
 const checkConversation = (messages: IMessage[]): boolean => {
   let result: boolean = true;
@@ -73,7 +40,7 @@ const checkGPTModel = (model: string): boolean => {
 
 export async function POST(request: Request) {
   try {
-    const { conversation, model } = await request.json();
+    const { conversation, model, userId } = await request.json();
 
     if (!checkGPTModel(model)) {
       throw new Error('Error: Recived invalid GPT model');
@@ -87,19 +54,12 @@ export async function POST(request: Request) {
       throw new Error('Error: Conversation invalid: (malformed body)');
     }
 
-    /*const resp = await generateConversation({
-      model: model,
-      token_limit: 32000,
-      messages: conversation,
-    });
-    */
-
     const reponse = await openai.chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages: conversation,
       stream: true,
     });
-
+    
     const stream = OpenAIStream(reponse);
 
     return new StreamingTextResponse(stream);
