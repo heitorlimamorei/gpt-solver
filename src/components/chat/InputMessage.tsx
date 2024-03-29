@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Button from '../generic/Button';
 import Textarea from '../generic/Textarea';
 import { IconSend } from '../Icons';
+import ImageForm from './ImageForm';
 
 interface InputMessageProps {
   onSubmit: any;
@@ -43,6 +44,7 @@ export default function InputMessage(props: InputMessageProps) {
           style="bg-transparent w-full h-[3rem] outline-none p-2 resize-none"
         />
         <Button onClick={handleSubmit} icon={IconSend()} style="w-fit py-2" />
+        <ImageForm />
       </div>
     </div>
   );
