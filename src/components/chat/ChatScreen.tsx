@@ -18,9 +18,9 @@ interface IChatScreenProps {
 export default function ChatScreen({ resp }: IChatScreenProps) {
   const [generationStatus, setGenerationStatus] = useState<GenerationStates>('standby');
 
-  const handleIsGeneratioChange = (n: GenerationStates) => setGenerationStatus(n);
+  const handleIsGenerationChange = (n: GenerationStates) => setGenerationStatus(n);
 
-  const { addMessage, messages, addMessages } = useChat(handleIsGeneratioChange);
+  const { addMessage, messages, addMessages } = useChat(handleIsGenerationChange);
 
   useEffect(() => {
     if (resp?.messages) {
@@ -36,7 +36,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
     if (generationStatus == 'done') {
       const message = messages[messages.length - 1];
       HandleSenderMessage({
-        handleStatusChange: handleIsGeneratioChange,
+        handleStatusChange: handleIsGenerationChange,
         message,
         chatId: resp.chatId,
       });

@@ -28,13 +28,13 @@ export default async function ServerChat(props: IServerChatProps) {
 
   const { searchParams, params } = props;
 
-  const resps = await Promise.all([
+  const resp = await Promise.all([
     await axios.get<IMessageResp[]>(`${api}/v1/chat/${params.id}/messages`),
     await axios.get<IChatListItem[]>(`${api}/v1/chat/list/${searchParams.u}`),
   ]);
 
-  const messages = resps[0].data;
-  const chats = resps[1].data;
+  const messages = resp[0].data;
+  const chats = resp[1].data;
 
   return (
     <main className="flex flex-row bg-zinc-800 ">
