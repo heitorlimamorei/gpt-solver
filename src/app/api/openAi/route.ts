@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       messages: conversation,
       stream: true,
     });
-    
+
     const stream = OpenAIStream(reponse);
 
     return new StreamingTextResponse(stream);

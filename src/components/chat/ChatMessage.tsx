@@ -1,13 +1,12 @@
 import React from 'react';
 
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import { useFormat } from '@/hooks/useFormat';
 
 import Logo from '../../../public/ai.png';
-
 import { IMessage } from './Chat';
-import { useSession } from 'next-auth/react';
 
 export default function ChatMessage(message: IMessage) {
   const session = useSession();
