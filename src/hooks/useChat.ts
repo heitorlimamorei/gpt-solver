@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { GenerationStates } from '@/hooks/HandleSenderMessage';
+import ChatStream from '@/resources/stream';
 import { IMessage, IMessageResp } from '@/types/chat';
 import { firestoreTimestampToDate } from '@/utils/dateMethods';
 import _ from 'lodash';
@@ -11,6 +12,8 @@ interface IUseChatResp {
   addMessages(messages: IMessageResp[]): void;
   sortMessages(messages: IMessage[]): IMessage[];
 }
+
+type writterFunction = (message: string) => string;
 
 const getNewMessage = (role: string, content: string): IMessage => {
   return {
@@ -39,53 +42,45 @@ const systemMessage = getNewMessage('system', 'Olá eu sou o GPT-SOLVER, como po
 export default function useChat(handler: (n: GenerationStates) => void): IUseChatResp {
   const [messages, setMessages] = useState<IMessage[]>([systemMessage]);
 
+  function handleChunkChange(w: writterFunction) {
+    let i = _.findLastIndex(messages) + 2;
+    setMessages((prev) => {
+      let messages = [...prev];
+      let message = messages[i];
+
+      const result = w(message.content);
+
+      message.content = result;
+      messages[i] = message;
+
+      return messages;
+    });
+  }
+
   const sendToBff = async (message: IMessage) => {
     try {
       const conversation = prepareToOpenAi(sortMessages([...messages, message]));
-      //resolver questão de base_url
-      await fetch('http://localhost:3000/api/openAi', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          conversation: conversation,
-          model: 'gpt-4',
-        }),
-      }).then(async (reponse: any) => {
-        const reader = reponse.body?.getReader();
-        handler('writing');
-        setMessages((prev) => {
-          return [...prev, getNewMessage('assistant', '')];
-        });
 
-        let i = _.findLastIndex(messages) + 2;
-        let lastChuck = '';
+      handler('writing');
 
-        while (true) {
-          const { value, done } = await reader?.read();
-
-          if (done) {
-            break;
-          }
-
-          let currentChunck = new TextDecoder().decode(value);
-          if (currentChunck != null) {
-            setMessages((prev) => {
-              let messages = [...prev];
-              let message = messages[i];
-              if (currentChunck != lastChuck) {
-                message.content = message.content.concat(currentChunck);
-                messages[i] = message;
-              }
-              lastChuck = currentChunck;
-              return messages;
-            });
-          }
-        }
-        handler('done');
+      setMessages((prev) => {
+        return [...prev, getNewMessage('assistant', '')];
       });
+
+      await ChatStream({
+        conversation,
+        handleChange: handleChunkChange,
+        url: 'http://localhost:3000/api/openAi',
+      });
+
+      handler('done');
     } catch (err) {
+      setMessages((prev) => {
+        return prev.filter((c, i) => {
+          return i !== _.findLastIndex(prev);
+        });
+      });
+      handler('standby');
       console.log(err);
     }
   };
