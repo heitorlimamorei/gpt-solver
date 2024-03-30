@@ -1,14 +1,19 @@
 import React from 'react';
 
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 import { useFormat } from '@/hooks/useFormat';
 
 import Logo from '../../../public/ai.png';
-import Profile from '../../../public/profile.jpg';
 import { IMessage } from './Chat';
 
 export default function ChatMessage(message: IMessage) {
+  const session = useSession();
+
+  const image = session.data?.user?.image;
+  const name = session.data?.user?.name;
+
   const formattedContent = useFormat(message);
   return (
     <li className="flex flex-col w-full px-3 mt-7">
@@ -17,11 +22,11 @@ export default function ChatMessage(message: IMessage) {
           width={30}
           height={30}
           alt="Ai logo"
-          src={message.role === 'system' || message.role === 'assistant' ? Logo : Profile}
+          src={message.role === 'system' || message.role === 'assistant' ? Logo : image!}
           className="mr-5 rounded-full"
         />
         <div className="font-bold self-center bg-transparent">
-          {message.role === 'system' || message.role === 'assistant' ? 'AI' : 'Você'}
+          {message.role === 'system' || message.role === 'assistant' ? 'AI' : name}
         </div>
       </div>
       <ul className="mt-2 ml-[3rem] text-sm mx-2">

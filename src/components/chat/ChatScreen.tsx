@@ -1,16 +1,47 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import HandleSenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
 import useChat from '@/hooks/useChat';
+import { IMessageResp } from '@/types/chat';
 
-import Chat, { IMessage } from './Chat';
+import Chat from './Chat';
 import InputMessage from './InputMessage';
 
-export default function ChatScreen() {
-  const { addMessage, messages } = useChat();
+interface IChatScreenProps {
+  resp: {
+    messages: IMessageResp[];
+    chatId: string;
+  };
+}
+
+export default function ChatScreen({ resp }: IChatScreenProps) {
+  const [generationStatus, setGenerationStatus] = useState<GenerationStates>('standby');
+
+  const handleIsGenerationChange = (n: GenerationStates) => setGenerationStatus(n);
+
+  const { addMessage, messages, addMessages } = useChat(handleIsGenerationChange);
+
+  useEffect(() => {
+    if (resp?.messages) {
+      addMessages(resp.messages);
+    }
+  }, [resp?.messages]);
+
   const handleSubmit = async (message: string) => {
     await addMessage(message);
   };
+
+  useEffect(() => {
+    if (generationStatus == 'done') {
+      const message = messages[messages.length - 1];
+      HandleSenderMessage({
+        handleStatusChange: handleIsGenerationChange,
+        message,
+        chatId: resp.chatId,
+      });
+    }
+  }, [generationStatus, messages]);
 
   return (
     <div className="flex flex-col w-full h-screen">
