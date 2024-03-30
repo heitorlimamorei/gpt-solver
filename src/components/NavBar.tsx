@@ -3,11 +3,8 @@
 
 import React, { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { IChatListItem } from '@/types/chat';
 import axios from 'axios';
-import { error } from 'console';
 
 import Button from '@/components/generic/Button';
 
@@ -22,12 +19,13 @@ interface INavBarProps {
   };
 }
 
-export default function NavBar({ resp }: INavBarProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+const api = 'https://gpt-solver-backend.onrender.com';
 
-  const router = useRouter();
+export default function NavBar({ resp }: INavBarProps) {
   const { chats, currentChat, u } = resp;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [displyedChats, setDisplayedChats] = useState<IChatListItem[]>(chats);
 
   const handleChatChange = (chatId: string) => {
     if (chatId != currentChat) {
@@ -35,23 +33,23 @@ export default function NavBar({ resp }: INavBarProps) {
     }
   };
 
-  const handleShowDelete = () => {
-    setShowDelete(!showDelete);
-  };
-
   const handleChatDelete = async (id: string) => {
-    let api = 'https://gpt-solver-backend.onrender.com';
-    if (chats.length > 1) {
+    if (displyedChats.length > 1) {
       try {
         const response = await axios.delete(`${api}/v1/chat/${id}`);
-        router.push(`/chat/${chats[0].id}?u=${u}`);
+
+        setDisplayedChats((prev) => prev.filter((chat) => chat.id != id));
+
+        if (id == currentChat) {
+          handleChatChange(displyedChats[0].id);
+        }
 
         console.log('Dados deletados com sucesso. Status:', response.status);
       } catch (error) {
         console.error('Erro ao deletar:', error);
       }
     } else {
-      throw new Error('Não é possível deletar o ultimo chat');
+      console.error('Não é possível deletar o ultimo chat');
     }
   };
 
@@ -78,7 +76,7 @@ export default function NavBar({ resp }: INavBarProps) {
           Outros Chats
         </label>
 
-        {chats.map((chat) => (
+        {displyedChats.map((chat) => (
           <div
             key={chat.id}
             className="flex flex-row hover:bg-zinc-800 rounded-xl mt-3 px-3 py-2 w-[90%] h-fit items-center justify-between border-opacity-15 border-zinc-700 border">
