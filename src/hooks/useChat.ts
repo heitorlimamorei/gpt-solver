@@ -70,7 +70,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
       await ChatStream({
         conversation,
         handleChange: handleChunkChange,
-        url: 'http://localhost:3000/api/openAi',
+        url: 'https://gpt-solver-editor.vercel.app/api/openAi',
       });
 
       handler('done');
