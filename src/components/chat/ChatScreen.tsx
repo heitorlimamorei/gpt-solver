@@ -29,7 +29,13 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   }, [resp?.messages]);
 
   const handleSubmit = async (message: string) => {
-    await addMessage(message);
+   await addMessage(message, async (m) => {
+     await HandleSenderMessage({
+       handleStatusChange: handleIsGenerationChange,
+       message: m,
+       chatId: resp.chatId,
+     });
+   });
   };
 
   useEffect(() => {
