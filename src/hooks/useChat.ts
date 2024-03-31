@@ -6,9 +6,11 @@ import { IMessage, IMessageResp } from '@/types/chat';
 import { firestoreTimestampToDate } from '@/utils/dateMethods';
 import _ from 'lodash';
 
+type sF = (m: IMessage) => Promise<void>;
+
 interface IUseChatResp {
   messages: IMessage[];
-  addMessage(message: string): Promise<void>;
+  addMessage(message: string, h: sF): Promise<void>;
   addMessages(messages: IMessageResp[]): void;
   sortMessages(messages: IMessage[]): IMessage[];
 }
@@ -85,7 +87,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     }
   };
 
-  const addMessage = async (message: string) => {
+  const addMessage = async (message: string, h: sF): Promise<void> => {
     handler('writing');
 
     const messageF = getNewMessage('user', message);
@@ -94,7 +96,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
     handler('done');
 
-    await sendToBff(messageF);
+    await Promise.all([h(messageF), sendToBff(messageF)]);
   };
 
   const sortMessages = (messages: IMessage[]) => {
