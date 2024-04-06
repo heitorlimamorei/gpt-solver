@@ -62,7 +62,7 @@ export default function NavBar({ resp }: INavBarProps) {
       />
       <nav className="bg-zinc-900 lg:hidden p-2 pt-5">{IconChat()}</nav>
       <nav
-        className=" hidden lg:flex flex-col px-4 h-screen w-[15%] 
+        className=" hidden lg:flex flex-col px-4 h-screen w-[25%] 
       bg-zinc-900 items-start">
         <Button
           onClick={() => setIsOpen(true)}

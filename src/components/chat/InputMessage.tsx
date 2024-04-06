@@ -34,7 +34,7 @@ export default function InputMessage(props: InputMessageProps) {
     setInputValue(event.target.value);
   };
   return (
-    <div className="w-full px-3 sm:px-20 lg:px-72">
+    <div className="w-full px-3 sm:px-20 lg:px-40">
       <div className=" flex flex-row self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
         <Textarea
           onKeyPress={handleKeyPress}
