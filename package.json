@@ -13,6 +13,7 @@
     "ace-builds": "^1.32.7",
     "ai": "^3.0.12",
     "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
     "lodash": "^4.17.21",
     "next": "14.1.0",
     "next-auth": "^4.24.7",
@@ -23,6 +24,7 @@
     "react-textarea-autosize": "^8.5.3"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.35",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20",
     "@types/react": "^18",
