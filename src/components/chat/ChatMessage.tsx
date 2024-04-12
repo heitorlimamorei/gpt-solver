@@ -22,7 +22,11 @@ export default function ChatMessage(message: IMessage) {
           width={30}
           height={30}
           alt="Ai logo"
-          src={message.role === 'system' || message.role === 'assistant' ? Logo : image!}
+          src={
+            message.role === 'system' || message.role === 'assistant'
+              ? Logo
+              : image || '../../../../public/Profile.png'
+          }
           className="mr-5 rounded-full"
         />
         <div className="font-bold self-center bg-transparent">
