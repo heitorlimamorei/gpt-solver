@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 'use client';
 
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 
 import { IChatListItem } from '@/types/chat';
 import axios from 'axios';
@@ -9,7 +8,7 @@ import axios from 'axios';
 import Button from '@/components/generic/Button';
 
 import ChatList from './chat/ChatList';
-import { IconArrowLeft, IconChat, IconNewChat, IconTrash } from './Icons';
+import { IconArrowLeft, IconChat, IconNewChat } from './Icons';
 import DarkModal from './Modal';
 
 interface INavBarProps {
@@ -36,7 +35,7 @@ export default function NavBar({ resp }: INavBarProps) {
   };
 
   const handleOpenNavBar = () => {
-    setNavIsOpen(!navIsOpen);
+    setNavIsOpen((c) => !c);
   };
 
   const handleChatDelete = async (id: string) => {
@@ -61,19 +60,14 @@ export default function NavBar({ resp }: INavBarProps) {
 
   return (
     <>
-      <DarkModal
-        isOpen={isOpen}
-        toggle={() => setIsOpen(false)}
-        onSave={() => {}}
-      />
-      <nav
-        className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
+      <DarkModal isOpen={isOpen} toggle={() => setIsOpen(false)} onSave={() => {}} />
+      <nav className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
         className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px] lg:w-[225px]
       bg-zinc-900`}>
-        <div className='flex flex-row items-start w-[96%]'>
+        <div className="flex flex-row items-start w-[96%]">
           <div className="flex flex-col lg:px-5 h-screen w-full">
             <Button
               onClick={() => setIsOpen(true)}
@@ -83,9 +77,7 @@ export default function NavBar({ resp }: INavBarProps) {
               text="Novo Chat"
             />
 
-            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">
-              Outros Chats
-            </label>
+            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">Outros Chats</label>
             <ChatList
               displayedChats={displyedChats}
               handleChatChange={handleChatChange}
