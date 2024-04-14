@@ -7,9 +7,9 @@ import axios from 'axios';
 
 import Button from '@/components/generic/Button';
 
+import CreateChatModal from '../components/CreateChatModal';
 import ChatList from './chat/ChatList';
 import { IconArrowLeft, IconChat, IconNewChat } from './Icons';
-import CreateChatModal from '../components/CreateChatModal';
 
 interface INavBarProps {
   resp: {
@@ -65,7 +65,7 @@ export default function NavBar({ resp }: INavBarProps) {
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
-        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px] lg:w-[225px]
+        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-fit
       bg-zinc-900`}>
         <div className="flex flex-row items-start w-[96%]">
           <div className="flex flex-col lg:px-5 h-screen w-full">
