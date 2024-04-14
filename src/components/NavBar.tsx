@@ -8,8 +8,8 @@ import axios from 'axios';
 import Button from '@/components/generic/Button';
 
 import ChatList from './chat/ChatList';
-import CreateChatModal from './CreateChatModal';
 import { IconArrowLeft, IconChat, IconNewChat } from './Icons';
+import CreateChatModal from '../components/CreateChatModal';
 
 interface INavBarProps {
   resp: {
@@ -61,7 +61,9 @@ export default function NavBar({ resp }: INavBarProps) {
   return (
     <>
       <CreateChatModal isOpen={isOpen} toggle={() => setIsOpen(false)} />
-      <nav className="bg-zinc-900 lg:hidden p-2 pt-5">{IconChat()}</nav>
+      <nav className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
+        <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
+      </nav>
       <nav
         className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px] lg:w-[225px]
       bg-zinc-900`}>
