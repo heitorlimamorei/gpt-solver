@@ -8,8 +8,8 @@ import axios from 'axios';
 
 import Button from '@/components/generic/Button';
 
+import CreateChatModal from './CreateChatModal';
 import { IconChat, IconNewChat, IconTrash } from './Icons';
-import DarkModal from './Modal';
 
 interface INavBarProps {
   resp: {
@@ -55,10 +55,9 @@ export default function NavBar({ resp }: INavBarProps) {
 
   return (
     <>
-      <DarkModal
+      <CreateChatModal
         isOpen={isOpen}
         toggle={() => setIsOpen(false)}
-        onSave={() => {}}
       />
       <nav className="bg-zinc-900 lg:hidden p-2 pt-5">{IconChat()}</nav>
       <nav
