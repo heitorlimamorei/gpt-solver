@@ -1,15 +1,16 @@
 /* eslint-disable prettier/prettier */
 'use client';
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 
 import { IChatListItem } from '@/types/chat';
 import axios from 'axios';
 
 import Button from '@/components/generic/Button';
 
-import { IconChat, IconNewChat, IconTrash } from './Icons';
+import { IconArrowLeft, IconChat, IconNewChat, IconTrash } from './Icons';
 import DarkModal from './Modal';
+import ChatList from './chat/ChatList';
 
 interface INavBarProps {
   resp: {
@@ -26,11 +27,16 @@ export default function NavBar({ resp }: INavBarProps) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [displyedChats, setDisplayedChats] = useState<IChatListItem[]>(chats);
+  const [navIsOpen, setNavIsOpen] = useState<boolean>(false);
 
   const handleChatChange = (chatId: string) => {
     if (chatId != currentChat) {
       window.location.href = `/chat/${chatId}?u=${u}`;
     }
+  };
+
+  const handleOpenNavBar = () => {
+    setNavIsOpen(!navIsOpen);
   };
 
   const handleChatDelete = async (id: string) => {
@@ -60,38 +66,37 @@ export default function NavBar({ resp }: INavBarProps) {
         toggle={() => setIsOpen(false)}
         onSave={() => {}}
       />
-      <nav className="bg-zinc-900 lg:hidden p-2 pt-5">{IconChat()}</nav>
       <nav
-        className=" hidden lg:flex flex-col px-4 h-screen w-[15%] 
-      bg-zinc-900 items-start">
-        <Button
-          onClick={() => setIsOpen(true)}
-          style="w-[90%] font-bold h-fit px-3 py-2 mt-5 hover:bg-zinc-800 
+        className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
+        <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
+      </nav>
+      <nav
+        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px]
+      bg-zinc-900`}>
+        <div className='flex flex-row items-start'>
+          <div className="flex flex-col lg:px-5 w-[90%]">
+            <Button
+              onClick={() => setIsOpen(true)}
+              style="w-[90%] font-bold h-fit py-2 mt-5 hover:bg-zinc-800 
           text-sm rounded-xl"
-          icon={IconNewChat()}
-          text="Novo Chat"
-        />
-
-        <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">
-          Outros Chats
-        </label>
-
-        {displyedChats.map((chat) => (
-          <div
-            key={chat.id}
-            className="flex flex-row hover:bg-zinc-800 rounded-xl mt-3 px-3 py-2 w-[90%] h-fit items-center justify-between border-opacity-15 border-zinc-700 border">
-            <Button
-              onClick={() => handleChatChange(chat.id)}
-              text={chat.name}
-              style=""
+              icon={IconNewChat()}
+              text="Novo Chat"
             />
-            <Button
-              onClick={() => handleChatDelete(chat.id)}
-              style={'hover:text-red-600 ml-3'}
-              icon={IconTrash()}
+
+            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">
+              Outros Chats
+            </label>
+            <ChatList
+              displayedChats={displyedChats}
+              handleChatChange={handleChatChange}
+              handleChatDelete={handleChatDelete}
             />
           </div>
-        ))}
+          <Button
+            style="h-screen bg-transparent flex flex-col items-center justify-center pr-1 w-[10%]"
+            onClick={handleOpenNavBar}
+            icon={IconArrowLeft()}></Button>
+        </div>
       </nav>
     </>
   );
