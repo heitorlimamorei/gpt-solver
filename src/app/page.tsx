@@ -20,46 +20,38 @@ interface IUser {
 export default function Home() {
   const { data: session } = useSession();
   const email = session?.user?.email;
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-
-    async function fetchData() {
+    const fetchData = async (email: string, attempts: number = 0) => {
       try {
-        if (email) {
-          setLoading(true);
-          const result = await axios.get<IUser>(
-            `https://gpt-solver-backend.onrender.com/v1/user?email=${email}`,
-          );
-          setUserData(result.data);
+        const result = await axios.get<IUser>(
+          `https://gpt-solver-backend.onrender.com/v1/user?email=${email}`,
+        );
+        setLoading(false);
 
-          // Redireciona imediatamente se chats estão disponíveis
-          if (result.data?.chats?.length > 0) {
-            // Define o timeout antes de redirecionar para evitar o redirecionamento imediato.
-            timeout = setTimeout(() => {
-              console.log('Tentativa de redirecionamento demorou muito. Tentando novamente...');
-              router.push(`/chat/${result.data.chats[0]}?u=${result.data.id}`);
-            }, 10000); // Aguarda 10s antes de tentar redirecionar novamente.
-
-            router.push(`/chat/${result.data.chats[0]}?u=${result.data.id}`);
-          }
+        if (result.data?.chats?.length > 0) {
+          router.push(`/chat/${result.data.chats[0]}?u=${result.data.id}`);
         }
+        return;
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
+        if (attempts < 1) {
+          setTimeout(() => fetchData(email, attempts + 1), 10000);
+        } else {
+          setLoading(false);
+        }
       }
+    };
+
+    if (email) {
+      fetchData(email);
+    } else {
+      setLoading(false);
     }
 
-    fetchData();
-
     return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+      setLoading(false);
     };
   }, [email, router]);
 

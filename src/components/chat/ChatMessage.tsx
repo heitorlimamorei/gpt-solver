@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useFormat } from '@/hooks/useFormat';
 
 import Logo from '../../../public/ai.png';
+import profileImage from '../../../public/Profile.png';
 import { IMessage } from './Chat';
 
 export default function ChatMessage(message: IMessage) {
@@ -23,9 +24,7 @@ export default function ChatMessage(message: IMessage) {
           height={30}
           alt="Ai logo"
           src={
-            message.role === 'system' || message.role === 'assistant'
-              ? Logo
-              : image || '../../../../public/Profile.png'
+            message.role === 'system' || message.role === 'assistant' ? Logo : image || profileImage
           }
           className="mr-5 rounded-full"
         />
