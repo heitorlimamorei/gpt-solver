@@ -8,9 +8,9 @@ import axios from 'axios';
 
 import Button from '@/components/generic/Button';
 
+import ChatList from './chat/ChatList';
 import { IconArrowLeft, IconChat, IconNewChat, IconTrash } from './Icons';
 import DarkModal from './Modal';
-import ChatList from './chat/ChatList';
 
 interface INavBarProps {
   resp: {
@@ -71,10 +71,10 @@ export default function NavBar({ resp }: INavBarProps) {
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
-        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px]
+        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px] lg:w-[225px]
       bg-zinc-900`}>
-        <div className='flex flex-row items-start'>
-          <div className="flex flex-col lg:px-5 w-[90%]">
+        <div className='flex flex-row items-start w-[96%]'>
+          <div className="flex flex-col lg:px-5 h-screen w-full">
             <Button
               onClick={() => setIsOpen(true)}
               style="w-[90%] font-bold h-fit py-2 mt-5 hover:bg-zinc-800 
@@ -93,7 +93,7 @@ export default function NavBar({ resp }: INavBarProps) {
             />
           </div>
           <Button
-            style="h-screen bg-transparent flex flex-col items-center justify-center pr-1 w-[10%]"
+            style="h-screen bg-transparent flex flex-col items-center justify-center pr-1 w-[4%] self-end"
             onClick={handleOpenNavBar}
             icon={IconArrowLeft()}></Button>
         </div>
