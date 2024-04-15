@@ -65,7 +65,7 @@ export default function NavBar({ resp }: INavBarProps) {
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
-        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-[200px] lg:w-[225px]
+        className={`${navIsOpen ? 'lg:flex absolute' : 'hidden'} h-screen w-fit
       bg-zinc-900`}>
         <div className="flex flex-row items-start w-[96%]">
           <div className="flex flex-col lg:px-5 h-screen w-full">
