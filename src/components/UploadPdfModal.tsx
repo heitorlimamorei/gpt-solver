@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+
 import BaseModal from './BaseModal';
 
 interface IUploadPdfModalProps {
   toggle(): void;
   isOpen: boolean;
-  handleSubmit() : void;
+  handleSubmit(): void;
 }
 
 const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }) => {
@@ -19,7 +20,7 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }
 
   return (
     <BaseModal toggle={toggle} handleSubmit={handleSubmit}>
-      <h1 className='text-2xl font-bold mb-5'>Adicione o arquivo aqui:</h1>
+      <h1 className="text-2xl font-bold mb-5">Adicione o arquivo aqui:</h1>
       {fileName && (
         <div className="mb-5 text-sm font-medium text-green-600">
           Arquivo selecionado: {fileName}
@@ -34,12 +35,11 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }
       />
       <label
         htmlFor="file-upload"
-        className="cursor-pointer inline-block bg-blue-700 hover:bg-blue-500 text-white font-bold p-1 rounded focus:outline-none focus:shadow-outline"
-      >
+        className="cursor-pointer inline-block bg-blue-700 hover:bg-blue-500 text-white font-bold p-1 rounded focus:outline-none focus:shadow-outline">
         Escolher arquivo
       </label>
     </BaseModal>
   );
-}
+};
 
 export default UploadPdfModal;

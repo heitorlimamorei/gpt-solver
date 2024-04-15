@@ -11,7 +11,7 @@ interface InputMessageProps {
 
 export default function InputMessage(props: InputMessageProps) {
   const [inputValue, setInputValue] = useState('');
-  const [isPdfOpen, setIsPdfOpen] = useState(true)
+  const [isPdfOpen, setIsPdfOpen] = useState(true);
 
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -39,7 +39,7 @@ export default function InputMessage(props: InputMessageProps) {
     <div className="w-full px-3 sm:px-20 lg:px-72">
       <UploadPdfModal toogle={() => setIsPdfOpen(false)} isOpen={isPdfOpen}></UploadPdfModal>
       <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
-        <Button style='' icon={IconUploadFile()}></Button>
+        <Button style="" icon={IconUploadFile()}></Button>
         <Textarea
           onKeyPress={handleKeyPress}
           value={inputValue}
