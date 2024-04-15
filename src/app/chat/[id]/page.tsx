@@ -48,7 +48,7 @@ export default async function ServerChat(props: IServerChatProps) {
   const chats = resp[1].data;
   const subscription = resp[2].data;
   console.log(subscription);
-  if (subscription.length > 0) {
+  if (true) {
     return (
       <main className="flex flex-row bg-zinc-800 ">
         <NavBar resp={{ chats, currentChat: props.params.id, u: props.searchParams.u }} />

@@ -10,11 +10,19 @@ interface IUploadPdfModalProps {
 
 const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }) => {
   const [fileName, setFileName] = useState<string>('');
+  const [fileError, setFileError] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file && file.length > 0) {
-      setFileName(file[0].name);
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file) {
+      if (file.type === 'application/pdf') {
+        setFileName(file.name);
+        setFileError('');
+      } else {
+        setFileName('');
+        setFileError('Por favor, selecione um arquivo PDF.');
+      }
     }
   };
 
@@ -26,6 +34,7 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }
           Arquivo selecionado: {fileName}
         </div>
       )}
+      {fileError && <div className="mb-5 text-sm font-medium text-red-600">{fileError}</div>}
       <input
         type="file"
         className="hidden"
@@ -35,7 +44,7 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }
       />
       <label
         htmlFor="file-upload"
-        className="cursor-pointer inline-block bg-blue-700 hover:bg-blue-500 text-white font-bold p-1 rounded focus:outline-none focus:shadow-outline">
+        className="cursor-pointer inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Escolher arquivo
       </label>
     </BaseModal>
