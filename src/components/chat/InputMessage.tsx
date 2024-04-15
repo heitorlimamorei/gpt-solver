@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 import Button from '../generic/Button';
 import Textarea from '../generic/Textarea';
-import { IconSend } from '../Icons';
+import { IconSend, IconUploadFile } from '../Icons';
+import UploadPdfModal from '../UploadPdfModal';
 
 interface InputMessageProps {
   onSubmit: any;
@@ -10,6 +11,7 @@ interface InputMessageProps {
 
 export default function InputMessage(props: InputMessageProps) {
   const [inputValue, setInputValue] = useState('');
+  const [isPdfOpen, setIsPdfOpen] = useState(true)
 
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -35,7 +37,9 @@ export default function InputMessage(props: InputMessageProps) {
   };
   return (
     <div className="w-full px-3 sm:px-20 lg:px-72">
-      <div className=" flex flex-row self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+      <UploadPdfModal toogle={() => setIsPdfOpen(false)} isOpen={isPdfOpen}></UploadPdfModal>
+      <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+        <Button style='' icon={IconUploadFile()}></Button>
         <Textarea
           onKeyPress={handleKeyPress}
           value={inputValue}
