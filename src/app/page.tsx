@@ -58,7 +58,9 @@ export default function Home() {
     return (
       <div className="w-screen h-screen bg-zinc-800 flex items-center justify-center">
         <div className="w-[40%] h-[40%] bg-zinc-700 rounded-xl flex flex-col items-center justify-center">
-          <h1 className="font-bold text-2xl">Por favor, aguarde. <br/> Redirecionando...</h1>
+          <h1 className="font-bold text-2xl">
+            Por favor, aguarde. <br /> Redirecionando...
+          </h1>
           <Image width={50} height={50} src={loadingGif} alt="Gif de loading" />
         </div>
       </div>
