@@ -87,17 +87,38 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     }
   };
 
+  const setChatPDF = (messages: IMessage[]) => {
+    const systemMessage = getNewMessage('system', 'Sou um assistente GPT, capaz de receber textos extraidos de arquivos PDFs e realizar as operações solicitadas pelo usuário.');
+
+    const initialMesage = messages.findIndex((m) => m.role === 'system');
+
+    let msgs = messages;
+
+    msgs[initialMesage] = systemMessage;
+    
+    setMessages(msgs);
+  };
+
   const addMessage = async (message: string, h: sF): Promise<void> => {
     handler('writing');
 
+    const chatPDF = true;
+
     const messageF = getNewMessage('user', message);
 
-    setMessages((c) => [...c, messageF]);
+    const msgs = [...messages, messageF];
+
+    if (chatPDF) {
+      setChatPDF(msgs);
+    } else {
+      setMessages(msgs);
+    }
 
     handler('done');
 
     await Promise.all([h(messageF), sendToBff(messageF)]);
   };
+
 
   const sortMessages = (messages: IMessage[]) => {
     let mReady = messages.map((m) => {

@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 
 import BaseModal from './BaseModal';
+import usePDF from '@/hooks/usePDF';
 
 interface IUploadPdfModalProps {
   toggle(): void;
   isOpen: boolean;
-  handleSubmit(): void;
+  handleTextChange(t: string): void;
 }
 
-const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }) => {
+const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleTextChange, isOpen }) => {
   const [fileName, setFileName] = useState<string>('');
   const [fileError, setFileError] = useState<string>('');
+  const [file, setFile] = useState<File | null>(null);
 
+  const { ExtractText } = usePDF();
+
+  if (!isOpen) return;
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
 
@@ -19,11 +25,33 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleSubmit }
       if (file.type === 'application/pdf') {
         setFileName(file.name);
         setFileError('');
+        setFile(file);
+
       } else {
         setFileName('');
         setFileError('Por favor, selecione um arquivo PDF.');
       }
     }
+  };
+
+  const handleSubmit = async () => {
+    if (!file) {
+      setFileError('Por favor, selecione um arquivo PDF.');
+      return;
+    }
+
+    const text = await ExtractText(file);
+
+    if (!text) {
+      setFileError('Ocorreu um erro ao extrair os dados do PDF, tente novamente.');
+      setFile(null);
+      return;
+    }
+
+    handleTextChange(text);
+    setFile(null);
+    setFileName('');
+    toggle();
   };
 
   return (
