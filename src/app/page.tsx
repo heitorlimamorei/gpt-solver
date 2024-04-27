@@ -2,15 +2,13 @@
 import { useEffect, useState } from 'react';
 
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import axios from 'axios';
 
 import LeftPanel from '@/components/home/LeftPanel';
+import { Loading } from '@/components/home/Loading';
 import RightPanel from '@/components/home/RightPanel';
-
-import loadingGif from '../../public/loading.gif';
 
 interface IUser {
   id: string;
@@ -54,17 +52,28 @@ export default function Home() {
     };
   }, [email, router]);
 
+  const loadingPhrases = [
+    'Aguarde um momento...',
+    'Carregando experiências...',
+    'Preparando tudo para você...',
+    'Isso vai valer a pena, prometemos!',
+    'Um momento de paciência vale por uma de alegria...',
+    'Reunindo os melhores conteúdos para você...',
+    'A mágica está acontecendo...',
+    'Quase lá...',
+    'Obrigado por sua paciência!',
+    'Tornando tudo perfeito para você...',
+    'Aproximando você do saber...',
+    'Pegue um café e relaxe enquanto cuidamos de tudo...',
+    'Fazendo a mágica acontecer...',
+    'Transformando bytes em maravilhas...',
+    'Cultivando ideias...',
+    'Conectando com o universo de possibilidades...',
+    'Nos bastidores, a magia está sendo tecida...',
+    'Enquanto você espera, sonhe acordado...',
+  ];
   if (loading) {
-    return (
-      <div className="w-screen h-screen bg-zinc-800 flex items-center justify-center">
-        <div className="w-[40%] h-[40%] bg-zinc-700 rounded-xl flex flex-col items-center justify-center">
-          <h1 className="font-bold text-2xl">
-            Por favor, aguarde. <br /> Redirecionando...
-          </h1>
-          <Image width={50} height={50} src={loadingGif} alt="Gif de loading" />
-        </div>
-      </div>
-    );
+    return <Loading phrases={loadingPhrases} />;
   }
 
   return (
