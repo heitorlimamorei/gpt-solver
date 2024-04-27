@@ -20,20 +20,21 @@ interface IUser {
 export default function Home() {
   const { data: session } = useSession();
   const email = session?.user?.email;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     const fetchData = async (email: string, attempts: number = 0) => {
+      setLoading(true);
       try {
         const result = await axios.get<IUser>(
           `https://gpt-solver-backend.onrender.com/v1/user?email=${email}`,
         );
-        setLoading(false);
-
         if (result.data?.chats?.length > 0) {
           router.push(`/chat/${result.data.chats[0]}?u=${result.data.id}`);
+        } else {
+          setLoading(false);
         }
-        return;
       } catch (error) {
         console.error(error);
         if (attempts < 1) {
@@ -45,9 +46,7 @@ export default function Home() {
     };
 
     if (email) {
-      fetchData(email);
-    } else {
-      setLoading(false);
+      fetchData(email).catch(console.error);
     }
 
     return () => {
@@ -59,7 +58,7 @@ export default function Home() {
     return (
       <div className="w-screen h-screen bg-zinc-800 flex items-center justify-center">
         <div className="w-[40%] h-[40%] bg-zinc-700 rounded-xl flex flex-col items-center justify-center">
-          <h1 className="font-bold text-2xl">Redirecionando...</h1>
+          <h1 className="font-bold text-2xl">Por favor, aguarde. <br/> Redirecionando...</h1>
           <Image width={50} height={50} src={loadingGif} alt="Gif de loading" />
         </div>
       </div>
