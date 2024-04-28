@@ -52,7 +52,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   return (
     <div className="flex flex-col w-full h-screen">
       <Chat messages={messages}></Chat>
-      <InputMessage onSubmit={handleSubmit}></InputMessage>
+      <InputMessage sysMessage={messages[0].content} onSubmit={handleSubmit}></InputMessage>
     </div>
   );
 }

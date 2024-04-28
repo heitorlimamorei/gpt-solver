@@ -7,6 +7,7 @@ import UploadPdfModal from '../UploadPdfModal';
 
 interface InputMessageProps {
   onSubmit: any;
+  sysMessage: string;
 }
 
 export default function InputMessage(props: InputMessageProps) {
@@ -17,11 +18,8 @@ export default function InputMessage(props: InputMessageProps) {
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      // Substitua \n pela quebra de linha conforme o padrão do seu sistema
       setInputValue(inputValue + '\n');
     } else if (event.key === 'Enter' && event.shiftKey) {
-      // Caso o usuário pressione Shift+Enter, não impedimos o comportamento padrão
-      // e deixamos o navegador adicionar uma nova linha
     }
     if (event.key === 'Enter') {
       handleSubmit();
@@ -49,7 +47,14 @@ export default function InputMessage(props: InputMessageProps) {
         isOpen={isPdfOpen}
       />
       <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
-        <Button style="" icon={IconUploadFile()} onClick={() => setIsPdfOpen(true)}></Button>
+        <Button
+          style={
+            pdfText.length > 1
+              ? 'text-green-500'
+              : `${props.sysMessage == 'Olá, eu sou o GPT Solver, como posso ajudar?' ? 'hidden' : ''}`
+          }
+          icon={IconUploadFile()}
+          onClick={() => setIsPdfOpen(true)}></Button>
         <Textarea
           onKeyPress={handleKeyPress}
           value={inputValue}
