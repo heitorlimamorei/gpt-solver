@@ -26,7 +26,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
     if (resp?.messages) {
       addMessages(resp.messages);
     }
-  }, [resp?.messages]);
+  }, [resp?.messages, addMessages]);
 
   const handleSubmit = async (message: string) => {
     await addMessage(message, async (m) => {
@@ -47,7 +47,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
         chatId: resp.chatId,
       });
     }
-  }, [generationStatus, messages]);
+  }, [generationStatus, messages, resp.chatId]);
 
   return (
     <div className="flex flex-col w-full h-screen">

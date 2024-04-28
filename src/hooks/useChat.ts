@@ -88,14 +88,17 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
   };
 
   const setChatPDF = (messages: IMessage[]) => {
-    const systemMessage = getNewMessage('system', 'Sou um assistente GPT, capaz de receber textos extraidos de arquivos PDFs e realizar as operações solicitadas pelo usuário.');
+    const systemMessage = getNewMessage(
+      'system',
+      'Sou um assistente GPT, capaz de receber textos extraidos de arquivos PDFs e realizar as operações solicitadas pelo usuário.',
+    );
 
     const initialMesage = messages.findIndex((m) => m.role === 'system');
 
     let msgs = messages;
 
     msgs[initialMesage] = systemMessage;
-    
+
     setMessages(msgs);
   };
 
@@ -118,7 +121,6 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
     await Promise.all([h(messageF), sendToBff(messageF)]);
   };
-
 
   const sortMessages = (messages: IMessage[]) => {
     let mReady = messages.map((m) => {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-import BaseModal from './BaseModal';
 import usePDF from '@/hooks/usePDF';
+
+import BaseModal from './BaseModal';
 
 interface IUploadPdfModalProps {
   toggle(): void;
@@ -17,7 +18,6 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleTextChan
   const { ExtractText } = usePDF();
 
   if (!isOpen) return;
-  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
 
@@ -26,7 +26,6 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleTextChan
         setFileName(file.name);
         setFileError('');
         setFile(file);
-
       } else {
         setFileName('');
         setFileError('Por favor, selecione um arquivo PDF.');
@@ -62,6 +61,7 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleTextChan
           Arquivo selecionado: {fileName}
         </div>
       )}
+
       {fileError && <div className="mb-5 text-sm font-medium text-red-600">{fileError}</div>}
       <input
         type="file"

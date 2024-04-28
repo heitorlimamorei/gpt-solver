@@ -43,7 +43,11 @@ export default function InputMessage(props: InputMessageProps) {
 
   return (
     <div className="w-full px-3 sm:px-20 lg:px-72">
-      <UploadPdfModal handleTextChange={handlePDFTextChange} toggle={() => setIsPdfOpen(c => !c)} isOpen={isPdfOpen} />
+      <UploadPdfModal
+        handleTextChange={handlePDFTextChange}
+        toggle={() => setIsPdfOpen((c) => !c)}
+        isOpen={isPdfOpen}
+      />
       <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
         <Button style="" icon={IconUploadFile()} onClick={() => setIsPdfOpen(true)}></Button>
         <Textarea
