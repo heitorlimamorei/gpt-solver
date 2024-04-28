@@ -40,6 +40,7 @@ const UploadPdfModal: React.FC<IUploadPdfModalProps> = ({ toggle, handleTextChan
     }
 
     const text = await ExtractText(file);
+    console.log(text);
 
     if (!text) {
       setFileError('Ocorreu um erro ao extrair os dados do PDF, tente novamente.');
