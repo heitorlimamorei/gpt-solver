@@ -26,7 +26,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
     if (resp?.messages) {
       addMessages(resp.messages);
     }
-  }, [resp?.messages, addMessages]);
+  }, [resp?.messages]);
 
   const handleSubmit = async (message: string) => {
     await addMessage(message, async (m) => {
