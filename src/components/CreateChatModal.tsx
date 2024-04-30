@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -15,22 +15,47 @@ const api = 'https://gpt-solver-backend.onrender.com';
 
 const CreateChatModal = ({ isOpen, toggle }: IDarkModalProps) => {
   const [chatName, setChatName] = useState<string>('');
+  const [checked, setChecked] = useState(false);
+  const [plan, setPlan] = useState('');
   const searchParams = useSearchParams();
 
+  useEffect(() => {
+    const fetchPlan = async () => {
+      const ownerId = searchParams.get('u');
+      if (ownerId) {
+        const resp = await axios.get(`${api}/v1/subscription/?owid=${ownerId}`);
+        setPlan(resp.data[0].subscriptionType);
+      }
+    };
+
+    fetchPlan();
+  }, []);
   if (!isOpen) return null;
 
   const ownerId = searchParams.get('u');
 
   const handleSubmit = async () => {
     if (ownerId && chatName) {
-      const resp = await axios.post(`${api}/v1/chat`, {
-        name: chatName,
-        ownerId,
-      });
+      let resp;
+      if (checked) {
+        resp = await axios.post(`${api}/v1/chat`, {
+          name: chatName,
+          ownerId,
+        });
+      } else {
+        resp = await axios.post(`${api}/v1/chat/chatpdf`, {
+          name: chatName,
+          ownerId,
+        });
+      }
       const id = resp.data.id;
       window.location.href = `/chat/${id}?u=${ownerId}`;
       toggle();
     }
+  };
+
+  const handleCheckboxChange = () => {
+    setChecked((c) => !c);
   };
 
   return (
@@ -44,6 +69,20 @@ const CreateChatModal = ({ isOpen, toggle }: IDarkModalProps) => {
         value={chatName}
         onChange={(e) => setChatName(e.target.value)}
       />
+
+      <div className={plan == 'ultimate' ? 'flex flex-col' : 'hidden'}>
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={checked}
+          onChange={(e) => setChecked(e.target.checked)}
+        />
+        <label>Criar chat pdf?</label>
+        <div
+          className={`w-6 h-6 p-1 flex justify-center items-center mr-2 border ${
+            checked ? 'border-transparent bg-blue-600' : 'bg-white border-gray-400'
+          } rounded`}></div>
+      </div>
     </BaseModal>
   );
 };
