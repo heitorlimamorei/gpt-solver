@@ -132,13 +132,16 @@ function generateTextContent(content: string): React.ReactNode {
 }
 
 export function useFormat(message: IMessage): React.ReactNode[] {
-  const { content } = message;
+  let { content } = message;
 
   const codeRegex = /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
+  const pdfRegex = /```pdf(.*?)```/gs;
 
   let modifiedContent: React.ReactNode[] = [];
   let lastIndex = 0;
   let match;
+
+  content = content.replace(pdfRegex, '');
   while ((match = codeRegex.exec(content)) !== null) {
     const codeBlock = match[2].trim();
     const language = getLanguage(match);
