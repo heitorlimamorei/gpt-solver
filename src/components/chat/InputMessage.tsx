@@ -2,40 +2,59 @@ import React, { useState } from 'react';
 
 import Button from '../generic/Button';
 import Textarea from '../generic/Textarea';
-import { IconSend } from '../Icons';
+import { IconSend, IconUploadFile } from '../Icons';
+import UploadPdfModal from '../UploadPdfModal';
 
 interface InputMessageProps {
   onSubmit: any;
+  sysMessage: string;
 }
 
 export default function InputMessage(props: InputMessageProps) {
   const [inputValue, setInputValue] = useState('');
+  const [isPdfOpen, setIsPdfOpen] = useState<boolean>(false);
+  const [pdfText, setPdfText] = useState<string>('');
 
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      // Substitua \n pela quebra de linha conforme o padrão do seu sistema
       setInputValue(inputValue + '\n');
     } else if (event.key === 'Enter' && event.shiftKey) {
-      // Caso o usuário pressione Shift+Enter, não impedimos o comportamento padrão
-      // e deixamos o navegador adicionar uma nova linha
     }
     if (event.key === 'Enter') {
       handleSubmit();
     }
   }
 
+  const handlePDFTextChange = (text: string) => {
+    setPdfText(text);
+  };
+
   const handleSubmit = () => {
-    props.onSubmit(inputValue);
+    props.onSubmit(`${inputValue}  ${'```pdf'}${pdfText}${'```'}`);
     setInputValue('');
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
+
   return (
     <div className="w-full px-3 sm:px-20 lg:px-72">
-      <div className=" flex flex-row self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+      <UploadPdfModal
+        handleTextChange={handlePDFTextChange}
+        toggle={() => setIsPdfOpen((c) => !c)}
+        isOpen={isPdfOpen}
+      />
+      <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+        <Button
+          style={
+            pdfText.length > 1
+              ? 'text-green-500'
+              : `${props.sysMessage == 'Olá, eu sou o GPT Solver, como posso ajudar?' ? 'hidden' : ''}`
+          }
+          icon={IconUploadFile()}
+          onClick={() => setIsPdfOpen(true)}></Button>
         <Textarea
           onKeyPress={handleKeyPress}
           value={inputValue}
