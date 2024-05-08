@@ -72,7 +72,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
       await ChatStream({
         conversation,
         handleChange: handleChunkChange,
-        url: 'https://gpt-solver-editor.vercel.app/api/openAi',
+        url: 'https://gpt-solver-editor.vercel.app/api/openAi'
       });
 
       handler('done');
@@ -87,35 +87,14 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     }
   };
 
-  const setChatPDF = (messages: IMessage[]) => {
-    const systemMessage = getNewMessage(
-      'system',
-      'Sou um assistente GPT, capaz de receber textos extraidos de arquivos PDFs e realizar as operações solicitadas pelo usuário.',
-    );
-
-    const initialMesage = messages.findIndex((m) => m.role === 'system');
-
-    let msgs = messages;
-
-    msgs[initialMesage] = systemMessage;
-
-    setMessages(msgs);
-  };
-
   const addMessage = async (message: string, h: sF): Promise<void> => {
     handler('writing');
-
-    const chatPDF = true;
 
     const messageF = getNewMessage('user', message);
 
     const msgs = [...messages, messageF];
 
-    if (chatPDF) {
-      setChatPDF(msgs);
-    } else {
-      setMessages(msgs);
-    }
+    setMessages(msgs);
 
     handler('done');
 
