@@ -24,3 +24,12 @@ export interface IMessage {
   content: string;
   role: string;
 }
+
+export interface ISubscription {
+  id: string;
+  subscriptionType: string;
+  ownerId: string;
+  price: number;
+  endDate: firebaseTimesStampType;
+  createdAt: firebaseTimesStampType;
+}
