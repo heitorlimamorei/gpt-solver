@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { IChatListItem } from '@/types/chat';
+import { IChatListItem, ISubscription } from '@/types/chat';
 import axios from 'axios';
 
 import Button from '@/components/generic/Button';
@@ -14,6 +14,7 @@ import { IconArrowLeft, IconChat, IconNewChat } from './Icons';
 interface INavBarProps {
   resp: {
     chats: IChatListItem[];
+    subscription: ISubscription;
     currentChat: string;
     u: string;
   };
@@ -22,7 +23,7 @@ interface INavBarProps {
 const api = 'https://gpt-solver-backend.onrender.com';
 
 export default function NavBar({ resp }: INavBarProps) {
-  const { chats, currentChat, u } = resp;
+  const { chats, currentChat, u, subscription } = resp;
 
   const [isOpen, setIsOpen] = useState(false);
   const [displyedChats, setDisplayedChats] = useState<IChatListItem[]>(chats);
@@ -60,8 +61,13 @@ export default function NavBar({ resp }: INavBarProps) {
 
   return (
     <>
-      <CreateChatModal isOpen={isOpen} toggle={() => setIsOpen(false)} />
-      <nav className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
+      <CreateChatModal
+        isOpen={isOpen}
+        subscription={subscription}
+        toggle={() => setIsOpen(false)}
+      />
+      <nav
+        className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
@@ -77,7 +83,9 @@ export default function NavBar({ resp }: INavBarProps) {
               text="Novo Chat"
             />
 
-            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">Outros Chats</label>
+            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">
+              Outros Chats
+            </label>
             <ChatList
               displayedChats={displyedChats}
               handleChatChange={handleChatChange}

@@ -5,35 +5,26 @@ import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
 import BaseModal from './BaseModal';
+import { ISubscription } from '@/types/chat';
 
 interface IDarkModalProps {
   isOpen: boolean;
   toggle(): void;
+  subscription: ISubscription
 }
 
 const api = 'https://gpt-solver-backend.onrender.com';
 
-const CreateChatModal = ({ isOpen, toggle }: IDarkModalProps) => {
+const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
   const [chatName, setChatName] = useState<string>('');
   const [checked, setChecked] = useState(true);
-  const [plan, setPlan] = useState('');
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const fetchPlan = async () => {
-      const ownerId = searchParams.get('u');
-      if (ownerId) {
-        const resp = await axios.get(`${api}/v1/subscription/?owid=${ownerId}`);
-        setPlan(resp.data[0].subscriptionType);
-      }
-    };
-
-    fetchPlan();
-  }, []);
   if (!isOpen) return null;
 
   const ownerId = searchParams.get('u');
-
+  const plan = subscription?.subscriptionType;
+  
   const handleSubmit = async () => {
     if (ownerId && chatName) {
       let resp;
