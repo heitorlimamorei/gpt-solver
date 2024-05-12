@@ -31,9 +31,7 @@ export default async function ServerChat(props: IServerChatProps) {
   const resp = await Promise.all([
     await axios.get<IMessageResp[]>(`${api}/v1/chat/${params.id}/messages`),
     await axios.get<IChatListItem[]>(`${api}/v1/chat/list/${searchParams.u}`),
-    await axios.get<ISubscription[]>(
-      `${api}/v1/subscription?owid=${searchParams.u}`,
-    ),
+    await axios.get<ISubscription[]>(`${api}/v1/subscription?owid=${searchParams.u}`),
   ]);
 
   const messages = resp[0].data;
@@ -50,7 +48,7 @@ export default async function ServerChat(props: IServerChatProps) {
             chats,
             currentChat: props.params.id,
             u: props.searchParams.u,
-            subscription: subscription[0]
+            subscription: subscription[0],
           }}
         />
         <ChatScreen resp={{ messages, chatId: props.params.id }} />

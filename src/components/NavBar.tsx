@@ -66,8 +66,7 @@ export default function NavBar({ resp }: INavBarProps) {
         subscription={subscription}
         toggle={() => setIsOpen(false)}
       />
-      <nav
-        className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
+      <nav className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
       <nav
@@ -83,9 +82,7 @@ export default function NavBar({ resp }: INavBarProps) {
               text="Novo Chat"
             />
 
-            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">
-              Outros Chats
-            </label>
+            <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">Outros Chats</label>
             <ChatList
               displayedChats={displyedChats}
               handleChatChange={handleChatChange}

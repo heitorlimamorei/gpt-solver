@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
+import { ISubscription } from '@/types/chat';
 import axios from 'axios';
 
 import BaseModal from './BaseModal';
-import { ISubscription } from '@/types/chat';
 
 interface IDarkModalProps {
   isOpen: boolean;
   toggle(): void;
-  subscription: ISubscription
+  subscription: ISubscription;
 }
 
 const api = 'https://gpt-solver-backend.onrender.com';
@@ -24,7 +24,7 @@ const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
 
   const ownerId = searchParams.get('u');
   const plan = subscription?.subscriptionType;
-  
+
   const handleSubmit = async () => {
     if (ownerId && chatName) {
       let resp;
