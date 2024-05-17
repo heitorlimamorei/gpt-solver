@@ -31,9 +31,7 @@ export default function InputMessage(props: InputMessageProps) {
   };
 
   const handleSubmit = () => {
-    props.onSubmit(
-      `${inputValue}  ${pdfText ? '```pdf' : ''}${pdfText}${[pdfText ? '```' : '']}`,
-    );
+    props.onSubmit(`${inputValue}  ${pdfText ? '```pdf' : ''}${pdfText}${[pdfText ? '```' : '']}`);
     setInputValue('');
   };
 
