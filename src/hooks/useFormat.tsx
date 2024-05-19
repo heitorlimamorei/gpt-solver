@@ -10,6 +10,21 @@ import 'ace-builds/src-noconflict/mode-css';
 import 'ace-builds/src-noconflict/mode-xml';
 import 'ace-builds/src-noconflict/theme-monokai';
 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  LineChart,
+  Line
+} from 'recharts';
+
 import { IMessage } from '@/components/chat/Chat';
 
 enum Language {
@@ -131,8 +146,113 @@ function generateTextContent(content: string): React.ReactNode {
   return elements;
 }
 
+interface PieChartComponentProps {
+  data: ChartData[];
+}
+
+interface BarChartComponentProps {
+  data: ChartData[];
+}
+
+interface LineChartComponentProps {
+  data: ChartData[];
+}
+
+interface ChartData {
+  name: string;
+  value: number;
+}
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const PieChartComponent: React.FC<PieChartComponentProps> = ({ data }) => {
+  return (
+    <PieChart width={400} height={400}>
+      <Pie
+        data={data}
+        cx={200}
+        cy={200}
+        innerRadius={60}
+        outerRadius={80}
+        fill="#8884d8"
+        paddingAngle={5}
+        dataKey="value">
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  );
+};
+
+const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
+  return (
+    <BarChart width={600} height={300} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="value" fill="#8884d8" />
+    </BarChart>
+  );
+};
+
+const LineChartComponent: React.FC<LineChartComponentProps> = ({ data }) => {
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line type="monotone" dataKey="value" stroke="#8884d8" />
+    </LineChart>
+  );
+};
+
 export function useFormat(message: IMessage): React.ReactNode[] {
   let { content } = message;
+
+  if (message.role == 'assistant' && content.includes('chartjson')) {
+    let components: React.ReactNode[] = [];
+
+    const i = content.split('').findIndex((c) => c == '{');
+    const lastI = content.split('').findLastIndex((c) => c == '}');
+
+    if (lastI < 3) {
+      return components;
+    }
+
+    const jsonstring = content.substring(i, lastI + 1);
+
+    let json = JSON.parse(jsonstring);
+
+    const obj = Object.keys(json);
+
+    const chartData: ChartData[] = obj.map((key: string) => {
+      return {
+        name: key,
+        value: json[key],
+      };
+    });
+
+    if (content.split('-').slice(0, 3).includes('pizza')) {
+      components.push(<PieChartComponent data={chartData} />);
+    }
+
+    if (content.split('-').slice(0, 3).includes('barras')) {
+      components.push(<BarChartComponent data={chartData} />);
+    }
+
+    if (content.split('-').slice(0, 3).includes('linha')) {
+      components.push(<LineChartComponent data={chartData} />);
+    }
+
+    return components;
+  }
 
   const codeRegex = /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs;
   const pdfRegex = /```pdf(.*?)```/gs;
