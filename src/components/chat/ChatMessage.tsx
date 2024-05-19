@@ -28,11 +28,11 @@ export default function ChatMessage(message: IMessage) {
 
   function removingSystemPrompt(message: IMessage) {
     if (message.role == 'system' && chatProperties.mode == 'financial-assistant') {
-      let temp = {...message};
+      let temp = { ...message };
 
-      const lines = message.content.split('\n'); 
+      const lines = message.content.split('\n');
 
-      temp.content = lines.slice(0,1).join('\n');
+      temp.content = lines.slice(0, 1).join('\n');
       return temp;
     }
 
