@@ -26,7 +26,20 @@ export default function ChatMessage(message: IMessage) {
     financialControllerImage: financialControllerImage,
   };
 
-  const formattedContent = useFormat(message);
+  function removingSystemPrompt(message: IMessage) {
+    if (message.role == 'system' && chatProperties.mode == 'financial-assistant') {
+      let temp = {...message};
+
+      const lines = message.content.split('\n'); 
+
+      temp.content = lines.slice(0,1).join('\n');
+      return temp;
+    }
+
+    return message;
+  }
+
+  const formattedContent = useFormat(removingSystemPrompt(message));
 
   return (
     <li className="flex flex-col w-full px-3 mt-7">
