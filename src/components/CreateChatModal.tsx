@@ -17,7 +17,7 @@ const api = 'https://gpt-solver-backend.onrender.com';
 
 const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
   const [chatName, setChatName] = useState<string>('');
-  const [checked, setChecked] = useState(true);
+  const [chatType, setChatType] = useState<string>('');
   const searchParams = useSearchParams();
 
   if (!isOpen) return null;
@@ -28,13 +28,19 @@ const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
   const handleSubmit = async () => {
     if (ownerId && chatName) {
       let resp;
-      if (checked) {
+      if (chatType == 'normal') {
         resp = await axios.post(`${api}/v1/chat`, {
           name: chatName,
           ownerId,
         });
-      } else {
+      }
+      if (chatType == 'pdf') {
         resp = await axios.post(`${api}/v1/chat/chatpdf`, {
+          name: chatName,
+          ownerId,
+        });
+      } else {
+        resp = await axios.post(`${api}/v1/chat/financial-assistant`, {
           name: chatName,
           ownerId,
         });
@@ -44,38 +50,85 @@ const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
       toggle();
     }
   };
-
-  const handleCheckboxChange = () => {
-    setChecked(!checked);
-  };
-
-  return (
-    <>
-      <BaseModal toggle={toggle} handleSubmit={handleSubmit}>
-        <div className="flex flex-row w-full items-center justify-between mb-4">
-          <div
-            onClick={handleCheckboxChange}
-            className={
-              plan == 'ultimate'
-                ? `flex flex-col self-start justify-self-start ${checked ? 'bg-zinc-400' : 'bg-green-500'} rounded-2xl hover:cursor-pointer py-[0.5rem] px-[1.5rem]`
-                : 'hidden'
-            }>
-            <div className="font-bold">PDF</div>
+  if (plan == 'ultimate') {
+    return (
+      <>
+        <BaseModal
+          buttons={false}
+          className={`${chatType == '' ? 'flex' : 'hidden'}`}
+          toggle={toggle}
+          handleSubmit={handleSubmit}>
+          <div className={`${chatType == '' ? 'flex' : 'hidden'} flex-col w-full h-full`}>
+            <h1 className="font-bold text-lg">Escolha seu tipo de chat</h1>
+            <div className="p-2 w-full">
+              <div
+                className="w-full h-full hover:cursor-pointer rounded-xl p-4 border-2 border-gray-700 hover:border-blue-700 mb-2"
+                onClick={() => setChatType('pdf')}>
+                <h1 className="font-bold text-2lg">Chat PDF</h1>
+                <p className="text-justify">
+                  Chat capaz de analisar e estarir dados de PDFs formecidos pelo usuario
+                </p>
+              </div>
+              <div
+                className="w-full h-full hover:cursor-pointer rounded-xl p-4 border-2 border-gray-700 hover:border-blue-700 mb-2"
+                onClick={() => setChatType('normal')}>
+                <h1 className="font-bold text-2lg">Chat Padrão</h1>
+                <p className="text-justify">
+                  Um chat assistente pronto para oferecer auxílio em qualquer tópico.
+                </p>
+              </div>
+              <div
+                className="w-full h-full hover:cursor-pointer rounded-xl p-4 border-2 border-gray-700 hover:border-blue-700 mb-2"
+                onClick={() => setChatType('finance')}>
+                <h1 className="font-bold text-2lg">Financial Assistant</h1>
+                <p className="text-justify">
+                  Assistente financeiro capaz de analisar e gerar gráficos baseado em planilhas do
+                  Financial Controller.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="w-full flex items-center justify-center">
-            <h2 className="text-lg font-bold mr-14">Configurar novo Chat</h2>
+        </BaseModal>
+        <BaseModal
+          buttons={true}
+          className={`${chatType != '' ? 'flex' : 'hidden'}`}
+          toggle={toggle}
+          handleSubmit={handleSubmit}>
+          <div className={'flex-col'}>
+            <div className="flex flex-row w-full items-center justify-center mb-4">
+              <h2 className="text-lg font-bold">Nome do chat</h2>
+            </div>
+            <input
+              type="text"
+              className="w-full rounded-md bg-gray-700 mb-4 text-white px-4 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
+              placeholder="Insira aqui o nome do seu novo chat!"
+              value={chatName}
+              onChange={(e) => setChatName(e.target.value)}
+            />
           </div>
-        </div>
-        <input
-          type="text"
-          className="w-full rounded-md bg-gray-700 mb-4 text-white px-4 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
-          placeholder="Nome do Chat"
-          value={chatName}
-          onChange={(e) => setChatName(e.target.value)}
-        />
-      </BaseModal>
-    </>
-  );
+        </BaseModal>
+      </>
+    );
+  }
+  if (plan == 'basic') {
+    setChatType('normal');
+    return (
+      <>
+        <BaseModal toggle={toggle} handleSubmit={handleSubmit}>
+          <div className="flex flex-row w-full items-center justify-center mb-4">
+            <h2 className="text-lg font-bold">Nome do chat</h2>
+          </div>
+          <input
+            type="text"
+            className="w-full rounded-md bg-gray-700 mb-4 text-white px-4 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
+            placeholder="Insira aqui o nome do seu novo chat!"
+            value={chatName}
+            onChange={(e) => setChatName(e.target.value)}
+          />
+        </BaseModal>
+      </>
+    );
+  }
 };
 
 export default CreateChatModal;

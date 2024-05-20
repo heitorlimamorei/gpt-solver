@@ -40,7 +40,7 @@ export default async function ServerChat(props: IServerChatProps) {
 
   const isActive = subscription.length > 0;
 
-  if (isActive) {
+  if (true) {
     return (
       <main className="flex flex-row bg-zinc-800 ">
         <NavBar
