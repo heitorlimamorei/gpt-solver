@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { formatLineChartData } from '@/utils/formatLineChartData';
 import { uniqueId } from 'lodash';
 
 import BarChartComponent from '@/components/charts/BarChartComponent';
@@ -11,7 +12,6 @@ import CodeBlock from '../components/chat/CodeBlock';
 import FormattedText from '../components/chat/FormattedText';
 import { getLanguage } from '../utils/getLanguage';
 import { regexPatterns } from '../utils/regexPatterns';
-import { formatLineChartData } from '@/utils/formatLineChartData';
 
 export function useFormat(message: IMessage): React.ReactNode[] {
   let { content } = message;

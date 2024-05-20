@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+
 import { COLORS } from '@/utils/chartColors';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 interface TransformedDataEntry {
   [key: string]: string | number;
@@ -34,4 +35,3 @@ export default function LineChartComponent({ data }: LineChartComponentProps) {
     </LineChart>
   );
 }
-

@@ -21,10 +21,7 @@ export function formatLineChartData(data: Entry[]): TransformedEntry[] {
 
     if (Array.isArray(entry.value)) {
       entry.value.forEach((subEntry) => {
-        if (
-          typeof subEntry.name === 'string' &&
-          typeof subEntry.value === 'number'
-        ) {
+        if (typeof subEntry.name === 'string' && typeof subEntry.value === 'number') {
           const key = subEntry.name
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
