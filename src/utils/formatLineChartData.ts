@@ -1,21 +1,39 @@
-interface IDataLineChart {
-  name: string;
-  value: ILineChartItem[];
-}
+// dataTransformer.ts
 
-interface ILineChartItem {
+type EntryValue = {
   name: string;
   value: number;
-}
+};
 
-export default function formatLineChartData(data: IDataLineChart[]) {
-  return data.map((c) => {
-    const values = Object.values(c);
-    let obj = { name: values[0] };
-    values[1].forEach((item) => {
-      let itemKeyValue = Object.entries(item);
-      obj[itemKeyValue[0][1]] = itemKeyValue[1][1];
-    });
-    return obj;
+type Entry = {
+  name: string;
+  value: EntryValue[];
+};
+
+type TransformedEntry = {
+  [key: string]: string | number;
+  name: string;
+};
+
+export function formatLineChartData(data: Entry[]): TransformedEntry[] {
+  return data.map((entry) => {
+    const transformedEntry: TransformedEntry = { name: entry.name };
+
+    if (Array.isArray(entry.value)) {
+      entry.value.forEach((subEntry) => {
+        if (
+          typeof subEntry.name === 'string' &&
+          typeof subEntry.value === 'number'
+        ) {
+          const key = subEntry.name
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+          transformedEntry[key] = subEntry.value;
+        }
+      });
+    }
+
+    return transformedEntry;
   });
 }

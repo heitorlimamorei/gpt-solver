@@ -31,6 +31,7 @@ export function useFormat(message: IMessage): React.ReactNode[] {
 
     const chartType = chartJsonContent.type;
     const chartData = chartJsonContent.data;
+    const lineChartData = formatLineChartData(chartData);
 
     if (lastIndex !== match.index) {
       modifiedContent = modifiedContent.concat(
@@ -41,8 +42,8 @@ export function useFormat(message: IMessage): React.ReactNode[] {
       modifiedContent.push(<BarChartComponent data={chartData} />);
     } else if (chartType == 'pizza') {
       modifiedContent.push(<PieChartComponent data={chartData} />);
-    } else if (chartType == 'linha') {
-      <LineChartComponent data={chartData} />;
+    } else {
+      modifiedContent.push(<LineChartComponent data={lineChartData} />);
     }
 
     lastIndex = match.index + match[0].length;

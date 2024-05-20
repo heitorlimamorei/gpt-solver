@@ -1,5 +1,7 @@
 'use client';
+import React from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { COLORS } from '@/utils/chartColors';
 
 interface TransformedDataEntry {
   [key: string]: string | number;
@@ -11,8 +13,7 @@ interface LineChartComponentProps {
 }
 
 export default function LineChartComponent({ data }: LineChartComponentProps) {
-  const dataKeys = data.length > 0 ? Object.keys(data[0]).filter((key) => key !== 'name') : [];
-
+  const keys = Object.keys(data[0]).filter((key) => key !== 'name');
   return (
     <LineChart width={600} height={300} data={data}>
       <CartesianGrid strokeDasharray="3 3" />
@@ -20,10 +21,15 @@ export default function LineChartComponent({ data }: LineChartComponentProps) {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="transporte" stroke="#8884d8" name="transporte" />
-
-      {dataKeys.map((key) => (
-        <Line key={key} type="monotone" dataKey={key} stroke="#8884d8" name={key} />
+      {keys.map((key, index) => (
+        <Line
+          key={key}
+          type="monotone"
+          dataKey={key}
+          stroke={COLORS[index % COLORS.length]}
+          strokeWidth={3}
+          name={key}
+        />
       ))}
     </LineChart>
   );
