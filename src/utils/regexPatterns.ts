@@ -11,4 +11,5 @@ export const regexPatterns = {
   h3Regex: /^### (.*)/gm,
   codeRegex: /```(typescript|tsx|jsx|html|css|go|javascript|java|python|bash||)(.*?)```/gs,
   pdfRegex: /```pdf(.*?)```/gs,
+  chartJsonRegex: /```chartjson(.*?)```/gs,
 };
