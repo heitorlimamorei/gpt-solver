@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import HandleSenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
 import useChat from '@/hooks/useChat';
+import ChatModeProvider from '@/resources/contexts/chatmode';
 import { IMessageResp } from '@/types/chat';
 
 import Chat from './Chat';
@@ -51,8 +52,10 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
 
   return (
     <div className="flex flex-col w-full h-screen">
-      <Chat messages={messages}></Chat>
-      <InputMessage sysMessage={messages[0].content} onSubmit={handleSubmit}></InputMessage>
+      <ChatModeProvider>
+        <Chat messages={messages} />
+        <InputMessage sysMessage={messages[0].content} onSubmit={handleSubmit} />
+      </ChatModeProvider>
     </div>
   );
 }
