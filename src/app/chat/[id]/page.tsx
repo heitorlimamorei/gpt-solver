@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { firebaseTimesStampType, IChatListItem, IMessageResp, ISubscription } from '@/types/chat';
+import { IChatListItem, IMessageResp, ISubscription } from '@/types/chat';
 import axios from 'axios';
 
 import ChatScreen from '@/components/chat/ChatScreen';
@@ -40,7 +40,7 @@ export default async function ServerChat(props: IServerChatProps) {
 
   const isActive = subscription.length > 0;
 
-  if (true) {
+  if (isActive) {
     return (
       <main className="flex flex-row bg-zinc-800 ">
         <NavBar

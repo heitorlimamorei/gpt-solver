@@ -61,11 +61,9 @@ export default function NavBar({ resp }: INavBarProps) {
 
   return (
     <>
-      <CreateChatModal
-        isOpen={isOpen}
-        subscription={subscription}
-        toggle={() => setIsOpen(false)}
-      />
+      {isOpen && (
+        <CreateChatModal subscription={subscription} toggle={() => setIsOpen((c) => !c)} />
+      )}
       <nav className={`${!navIsOpen ? 'flex' : 'hidden'} bg-zinc-900 p-2 pt-5 h-screen`}>
         <Button style="" icon={IconChat()} onClick={handleOpenNavBar}></Button>
       </nav>
