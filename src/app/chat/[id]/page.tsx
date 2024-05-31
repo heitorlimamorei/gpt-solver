@@ -3,6 +3,7 @@ import React from 'react';
 import { IChatListItem, IMessageResp, ISubscription } from '@/types/chat';
 import axios from 'axios';
 
+import ChatModeWrapper from '@/components/chat/ChatModeWrapper';
 import ChatScreen from '@/components/chat/ChatScreen';
 import NavBar from '@/components/NavBar';
 
@@ -42,17 +43,19 @@ export default async function ServerChat(props: IServerChatProps) {
 
   if (isActive) {
     return (
-      <main className="flex flex-row bg-zinc-800 ">
-        <NavBar
-          resp={{
-            chats,
-            currentChat: props.params.id,
-            u: props.searchParams.u,
-            subscription: subscription[0],
-          }}
-        />
-        <ChatScreen resp={{ messages, chatId: props.params.id }} />
-      </main>
+      <ChatModeWrapper>
+        <main className="flex flex-row bg-zinc-800 ">
+          <NavBar
+            resp={{
+              chats,
+              currentChat: props.params.id,
+              u: props.searchParams.u,
+              subscription: subscription[0],
+            }}
+          />
+          <ChatScreen resp={{ messages, chatId: props.params.id }} />
+        </main>
+      </ChatModeWrapper>
     );
   } else {
     return (
