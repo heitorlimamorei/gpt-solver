@@ -24,21 +24,13 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   const { addMessage, messages, addMessages } = useChat(handleIsGenerationChange);
   const { setChatProperties } = useChatSettings();
 
+  const systemM = messages.find((m) => m.role === 'system');
+
   useEffect(() => {
     if (resp?.messages) {
       addMessages(resp.messages);
     }
   }, [resp?.messages]);
-
-  const handleSubmit = async (message: string) => {
-    await addMessage(message, async (m) => {
-      await HandleSenderMessage({
-        handleStatusChange: handleIsGenerationChange,
-        message: m,
-        chatId: resp.chatId,
-      });
-    });
-  };
 
   useEffect(() => {
     if (generationStatus == 'done') {
@@ -51,13 +43,21 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
     }
   }, [generationStatus, messages, resp.chatId]);
 
-  const systemM = messages.find((m) => m.role === 'system');
-
   useEffect(() => {
     if (systemM) {
       setChatProperties(systemM.content);
     }
   }, [systemM]);
+
+  const handleSubmit = async (message: string) => {
+    await addMessage(message, async (m) => {
+      await HandleSenderMessage({
+        handleStatusChange: handleIsGenerationChange,
+        message: m,
+        chatId: resp.chatId,
+      });
+    });
+  };
 
   return (
     <div className="flex flex-col w-full h-screen">
