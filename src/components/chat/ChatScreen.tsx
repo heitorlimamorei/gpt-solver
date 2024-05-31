@@ -12,6 +12,7 @@ import InputMessage from './InputMessage';
 interface IChatScreenProps {
   resp: {
     messages: IMessageResp[];
+    subscription: string;
     chatId: string;
   };
 }
@@ -22,7 +23,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   const handleIsGenerationChange = (n: GenerationStates) => setGenerationStatus(n);
 
   const { addMessage, messages, addMessages } = useChat(handleIsGenerationChange);
-  const { setChatProperties } = useChatSettings();
+  const { setChatProperties, mode } = useChatSettings();
 
   const systemM = messages.find((m) => m.role === 'system');
 
@@ -49,7 +50,11 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
     }
   }, [systemM]);
 
+  const shouldBlockDemo = resp.subscription === 'fcai-demo' && mode != 'financial-assistant';
+
   const handleSubmit = async (message: string) => {
+    if (shouldBlockDemo) return;
+
     await addMessage(message, async (m) => {
       await HandleSenderMessage({
         handleStatusChange: handleIsGenerationChange,

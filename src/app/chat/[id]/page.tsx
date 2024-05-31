@@ -53,7 +53,13 @@ export default async function ServerChat(props: IServerChatProps) {
               subscription: subscription[0],
             }}
           />
-          <ChatScreen resp={{ messages, chatId: props.params.id }} />
+          <ChatScreen
+            resp={{
+              messages,
+              chatId: props.params.id,
+              subscription: subscription[0].subscriptionType,
+            }}
+          />
         </main>
       </ChatModeWrapper>
     );
