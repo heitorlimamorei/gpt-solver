@@ -12,16 +12,25 @@ export interface IUser {
   plan: string;
 }
 
-export function useFetchUserData(email: string | null | undefined) {
+const api = 'https://gpt-solver-backend.onrender.com';
+
+export function useFetchUserData(
+  email?: string | null | undefined,
+  id?: string | null | undefined,
+) {
   const [userData, setUserData] = useState<IUser>();
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get(
-          `https://gpt-solver-backend.onrender.com/v1/user?email=${email}`,
-        );
-        setUserData(result.data);
+        if (email) {
+          const result = await axios.get(`${api}/v1/user?email=${email}`);
+          setUserData(result.data);
+        }
+        if (id) {
+          const result = await axios.get(`${api}/v1/user?id=${id}`);
+          setUserData(result.data);
+        }
       } catch (error) {
         console.error(error);
       }
