@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from "react";
-import BaseModal from "./BaseModal";
+import { useState } from 'react';
+
+import BaseModal from './BaseModal';
 
 interface ISubmitProps {
   path: string;
@@ -13,12 +14,12 @@ interface ISubmitProps {
 }
 
 interface ICreateNormalChatProps {
-    toggle(): void;
-    ownerId: string | null;
-    handleSubmit(props: ISubmitProps): Promise<void>;
+  toggle(): void;
+  ownerId: string | null;
+  handleSubmit(props: ISubmitProps): Promise<void>;
 }
 
-export default function   CreatePdfChat({ toggle, handleSubmit, ownerId }: ICreateNormalChatProps) {
+export default function CreatePdfChat({ toggle, handleSubmit, ownerId }: ICreateNormalChatProps) {
   const [name, setName] = useState<string>('');
 
   const saveChat = async () => {

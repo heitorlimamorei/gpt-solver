@@ -6,6 +6,7 @@ import { ISubscription } from '@/types/chat';
 import axios from 'axios';
 
 import BaseModal from './BaseModal';
+import CreateFinancialAssistant from './CreateFinancialAssistantModal';
 import CreateNormalChat from './CreateNormalChat';
 import CreatePdfChat from './CreatePdfChatModal';
 
@@ -39,7 +40,7 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
       if (!path) {
         throw new Error('Path is required');
       }
-
+      console.log(payload);
       if (!payload.name || !payload.ownerId) {
         throw new Error('Name and ownerId are required');
       }
@@ -50,12 +51,10 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
         }
       }
 
-      const resp = await axios.post(path, payload);
+      const resp = await axios.post(`${api}/v1/${path}`, payload);
 
       if (!(resp.status == 200 || resp.status == 201)) {
-        throw new Error(
-          `ERROR: Sheet select req failed with status ${resp.status}`,
-        );
+        throw new Error(`ERROR: Sheet select req failed with status ${resp.status}`);
       }
 
       const id = resp.data.id;
@@ -89,7 +88,7 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
       title: 'Financial Assistant',
       description: `Assistente financeiro capaz de analisar e gerar gráficos baseado
       em planilhas do Financial Controller.`,
-      ultimate: false,
+      ultimate: true,
       handler() {
         setChatType('financial-assistant');
       },
@@ -98,22 +97,24 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
 
   if (!chatType) {
     return (
-      <BaseModal
-        buttons={false}
-        className={''}
-        toggle={toggle}
-        handleSubmit={() => {}}>
-        <div
-          className={`${chatType == '' ? 'flex' : 'hidden'} flex-col w-full h-full`}>
+      <BaseModal buttons={false} className={''} toggle={toggle} handleSubmit={() => {}}>
+        <div className={`${chatType == '' ? 'flex' : 'hidden'} flex-col w-full h-full`}>
           <h1 className="font-bold text-lg">Escolha seu tipo de chat</h1>
           <div className="p-2 w-full">
             {chatOpts
               .filter((opt) => {
-                if (!opt.ultimate) return true
+                if (plan == 'fcai-demo') {
+                  if (opt.title == 'Financial Assistant') {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                if (!opt.ultimate) return true;
 
-                if (plan == 'ultimate') return true
+                if (plan == 'ultimate') return true;
 
-                return false
+                return false;
               })
               .map((opt) => (
                 <div
@@ -130,15 +131,10 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
     );
   }
 
-
   if (chatType == 'normal') {
     return (
       <>
-        <CreateNormalChat
-          ownerId={ownerId}
-          toggle={toggle}
-          handleSubmit={handleSubmit}
-        />
+        <CreateNormalChat ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
       </>
     );
   }
@@ -146,11 +142,15 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
   if (chatType == 'pdf') {
     return (
       <>
-        <CreatePdfChat
-          ownerId={ownerId}
-          toggle={toggle}
-          handleSubmit={handleSubmit}
-        />
+        <CreatePdfChat ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
+      </>
+    );
+  }
+
+  if (chatType == 'financial-assistant') {
+    return (
+      <>
+        <CreateFinancialAssistant ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
       </>
     );
   }
