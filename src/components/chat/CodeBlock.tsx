@@ -15,27 +15,34 @@ interface CodeBlockProps {
 
 export default function CodeBlock({ codeBlock, language }: CodeBlockProps) {
   const numberOfLines = codeBlock.split('\n').length;
+  const style = {
+    position: 'relative',
+    zIndex: 0,
+  };
 
   return (
-    <AceEditor
-      width="100%"
-      height={`calc(20px * ${numberOfLines} + 40px)`}
-      placeholder="Placeholder Text"
-      mode={language}
-      theme="monokai"
-      name="code-editor"
-      fontSize={12}
-      showPrintMargin={true}
-      showGutter={true}
-      highlightActiveLine={true}
-      value={codeBlock}
-      setOptions={{
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        enableSnippets: true,
-        showLineNumbers: true,
-        tabSize: 2,
-      }}
-    />
+    <div className="w-full">
+      <AceEditor
+        width="100%"
+        height={`calc(20px * ${numberOfLines} + 40px)`}
+        placeholder="Placeholder Text"
+        mode={language}
+        theme="monokai"
+        name="code-editor"
+        fontSize={12}
+        showPrintMargin={true}
+        showGutter={true}
+        highlightActiveLine={true}
+        value={codeBlock}
+        setOptions={{
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          showLineNumbers: true,
+          tabSize: 2,
+        }}
+        style={{ zIndex: 0 }}
+      />
+    </div>
   );
 }

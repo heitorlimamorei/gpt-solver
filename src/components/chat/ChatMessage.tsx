@@ -42,7 +42,7 @@ export default function ChatMessage(message: IMessage) {
   const formattedContent = useFormat(removingSystemPrompt(message));
 
   return (
-    <li className="flex flex-col w-full px-3 mt-7">
+    <li className="flex flex-col w-full px-3 mt-7 break-all">
       <div className="flex flex-row">
         <Image
           width={30}

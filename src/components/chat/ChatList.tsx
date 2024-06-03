@@ -17,11 +17,11 @@ export default function ChatList(props: IChatListProps) {
       {props.displayedChats.map((chat) => (
         <div
           key={chat.id}
-          className="flex flex-row hover:bg-zinc-800 p-2 rounded-xl h-fit items-center justify-between border-opacity-15 border-zinc-700 border">
+          className="flex flex-row hover:bg-zinc-800 p-2 rounded-xl h-fit items-center justify-between border-opacity-15 border-zinc-700 border max-w-52 break-all">
           <Button onClick={() => props.handleChatChange(chat.id)} text={chat.name} style="" />
           <Button
             onClick={() => props.handleChatDelete(chat.id)}
-            style={'hover:text-red-600'}
+            style={'hover:text-red-600 ml-[10px]'}
             icon={IconTrash()}
           />
         </div>
