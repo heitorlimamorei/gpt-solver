@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-
-import useChatSettings from '@/hooks/useChatSettings';
+import React from 'react';
 
 import ChatMessage from './ChatMessage';
 
@@ -14,16 +12,6 @@ interface IChatProps {
 }
 
 export default function Chat(props: IChatProps) {
-  const { setChatProperties } = useChatSettings();
-
-  const systemM = props.messages.find((m) => m.role === 'system');
-
-  useEffect(() => {
-    if (systemM) {
-      setChatProperties(systemM.content);
-    }
-  }, [systemM]);
-
   return (
     <ul className="flex flex-col items-center w-full h-full sm:px-20 lg:px-72 overflow-y-scroll">
       {props.messages.map((m, index) => (
