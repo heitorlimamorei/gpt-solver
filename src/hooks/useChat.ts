@@ -37,11 +37,17 @@ const prepareMessages = (messages: IMessageResp[]): IMessage[] => {
   });
 };
 
-const prepareToOpenAi = (m: IMessage[]) => m.map((c) => ({ role: c.role, content: c.content }));
+const prepareToOpenAi = (m: IMessage[]) =>
+  m.map((c) => ({ role: c.role, content: c.content }));
 
-const systemMessage = getNewMessage('system', 'Olá eu sou o GPT-SOLVER, como posso ajudar ?');
+const systemMessage = getNewMessage(
+  'system',
+  'Olá eu sou o GPT-SOLVER, como posso ajudar ?',
+);
 
-export default function useChat(handler: (n: GenerationStates) => void): IUseChatResp {
+export default function useChat(
+  handler: (n: GenerationStates) => void,
+): IUseChatResp {
   const [messages, setMessages] = useState<IMessage[]>([systemMessage]);
 
   function handleChunkChange(w: writterFunction) {
@@ -61,7 +67,9 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
   const sendToBff = async (message: IMessage) => {
     try {
-      const conversation = prepareToOpenAi(sortMessages([...messages, message]));
+      const conversation = prepareToOpenAi(
+        sortMessages([...messages, message]),
+      );
 
       handler('writing');
 
@@ -72,7 +80,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
       await ChatStream({
         conversation,
         handleChange: handleChunkChange,
-        url: 'http://localhost:3000/api/openAi',
+        url: 'https://gpt-solver-editor.vercel.app/api/openAi',
       });
 
       handler('done');
