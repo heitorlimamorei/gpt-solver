@@ -37,17 +37,11 @@ const prepareMessages = (messages: IMessageResp[]): IMessage[] => {
   });
 };
 
-const prepareToOpenAi = (m: IMessage[]) =>
-  m.map((c) => ({ role: c.role, content: c.content }));
+const prepareToOpenAi = (m: IMessage[]) => m.map((c) => ({ role: c.role, content: c.content }));
 
-const systemMessage = getNewMessage(
-  'system',
-  'Olá eu sou o GPT-SOLVER, como posso ajudar ?',
-);
+const systemMessage = getNewMessage('system', 'Olá eu sou o GPT-SOLVER, como posso ajudar ?');
 
-export default function useChat(
-  handler: (n: GenerationStates) => void,
-): IUseChatResp {
+export default function useChat(handler: (n: GenerationStates) => void): IUseChatResp {
   const [messages, setMessages] = useState<IMessage[]>([systemMessage]);
 
   function handleChunkChange(w: writterFunction) {
@@ -67,9 +61,7 @@ export default function useChat(
 
   const sendToBff = async (message: IMessage) => {
     try {
-      const conversation = prepareToOpenAi(
-        sortMessages([...messages, message]),
-      );
+      const conversation = prepareToOpenAi(sortMessages([...messages, message]));
 
       handler('writing');
 
