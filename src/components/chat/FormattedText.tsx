@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { uniqueId } from 'lodash';
+
 import { regexPatterns } from '../../utils/regexPatterns';
 
 interface FormattedTextProps {
@@ -59,5 +61,5 @@ export default function FormattedText({ content }: FormattedTextProps) {
     elements.push(<div dangerouslySetInnerHTML={{ __html: line }} />);
   });
 
-  return <>{elements}</>;
+  return elements.map((element) => <React.Fragment key={uniqueId()}>{element}</React.Fragment>);
 }

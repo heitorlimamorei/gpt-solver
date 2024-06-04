@@ -14,30 +14,24 @@ export interface IUser {
 
 const api = 'https://gpt-solver-backend.onrender.com';
 
-export function useFetchUserData(
-  email?: string | null | undefined,
-  id?: string | null | undefined,
-) {
-  const [userData, setUserData] = useState<IUser>();
+export function useFetchUserData() {
+  async function fetchByEmail(email: string): Promise<IUser> {
+    const resp = await axios.get<IUser>(`${api}/v1/user?email=${email}`);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        if (email) {
-          const result = await axios.get(`${api}/v1/user?email=${email}`);
-          setUserData(result.data);
-        }
-        if (id) {
-          const result = await axios.get(`${api}/v1/user?id=${id}`);
-          setUserData(result.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    if (resp.status !== 200) console.error('Error when fetching user data');
 
-    fetchData();
-  }, []);
+    return resp.data;
+  }
 
-  return userData;
+  async function fetchUser(id: string): Promise<IUser> {
+    const resp = await axios.get<IUser>(`${api}/v1/user?id=${id}`);
+
+    if (resp.status !== 200) console.error('Error when fetching user data');
+
+    return resp.data;
+  }
+  return {
+    fetchByEmail,
+    fetchUser,
+  };
 }

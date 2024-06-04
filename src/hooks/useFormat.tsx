@@ -15,9 +15,6 @@ import { regexPatterns } from '../utils/regexPatterns';
 
 export function useFormat(message: IMessage): React.ReactNode[] {
   let { content } = message;
-  if (message.role == 'system') {
-    return [];
-  }
 
   const { codeRegex, pdfRegex, chartJsonRegex } = regexPatterns;
   let modifiedContent: React.ReactNode[] = [];
@@ -26,27 +23,29 @@ export function useFormat(message: IMessage): React.ReactNode[] {
 
   content = content.replace(pdfRegex, '');
 
-  while ((match = chartJsonRegex.exec(content)) !== null) {
-    const chartJsonContent = JSON.parse(match[1].trim());
+  if (message.role === 'assistant') {
+    while ((match = chartJsonRegex.exec(content)) !== null) {
+      const chartJsonContent = JSON.parse(match[1].trim());
 
-    const chartType = chartJsonContent.type;
-    const chartData = chartJsonContent.data;
-    const lineChartData = formatLineChartData(chartData);
+      const chartType = chartJsonContent.type;
+      const chartData = chartJsonContent.data;
+      const lineChartData = formatLineChartData(chartData);
 
-    if (lastIndex !== match.index) {
-      modifiedContent = modifiedContent.concat(
-        <FormattedText key={uniqueId()} content={content.substring(lastIndex, match.index)} />,
-      );
+      if (lastIndex !== match.index) {
+        modifiedContent = modifiedContent.concat(
+          <FormattedText key={uniqueId()} content={content.substring(lastIndex, match.index)} />,
+        );
+      }
+      if (chartType == 'barras') {
+        modifiedContent.push(<BarChartComponent data={chartData} />);
+      } else if (chartType == 'pizza') {
+        modifiedContent.push(<PieChartComponent data={chartData} />);
+      } else {
+        modifiedContent.push(<LineChartComponent data={lineChartData} />);
+      }
+
+      lastIndex = match.index + match[0].length;
     }
-    if (chartType == 'barras') {
-      modifiedContent.push(<BarChartComponent data={chartData} />);
-    } else if (chartType == 'pizza') {
-      modifiedContent.push(<PieChartComponent data={chartData} />);
-    } else {
-      modifiedContent.push(<LineChartComponent data={lineChartData} />);
-    }
-
-    lastIndex = match.index + match[0].length;
   }
 
   content = content.substring(lastIndex);
