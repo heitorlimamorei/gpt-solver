@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -6,76 +6,154 @@ import { ISubscription } from '@/types/chat';
 import axios from 'axios';
 
 import BaseModal from './BaseModal';
+import CreateFinancialAssistant from './CreateFinancialAssistantModal';
+import CreateNormalChat from './CreateNormalChat';
+import CreatePdfChat from './CreatePdfChatModal';
+
+type ChatType = 'normal' | 'financial-assistant' | 'pdf' | '';
 
 interface IDarkModalProps {
-  isOpen: boolean;
   toggle(): void;
   subscription: ISubscription;
 }
 
+interface ISubmitProps {
+  path: string;
+  payload: {
+    ownerId: string;
+    name: string;
+    sheetId?: string;
+  };
+}
+
 const api = 'https://gpt-solver-backend.onrender.com';
 
-const CreateChatModal = ({ isOpen, toggle, subscription }: IDarkModalProps) => {
-  const [chatName, setChatName] = useState<string>('');
-  const [checked, setChecked] = useState(true);
+const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
+  const [chatType, setChatType] = useState<ChatType>('');
   const searchParams = useSearchParams();
-
-  if (!isOpen) return null;
 
   const ownerId = searchParams.get('u');
   const plan = subscription?.subscriptionType;
 
-  const handleSubmit = async () => {
-    if (ownerId && chatName) {
-      let resp;
-      if (checked) {
-        resp = await axios.post(`${api}/v1/chat`, {
-          name: chatName,
-          ownerId,
-        });
-      } else {
-        resp = await axios.post(`${api}/v1/chat/chatpdf`, {
-          name: chatName,
-          ownerId,
-        });
+  const handleSubmit = async ({ path, payload }: ISubmitProps) => {
+    try {
+      if (!path) {
+        throw new Error('Path is required');
       }
+      console.log(payload);
+      if (!payload.name || !payload.ownerId) {
+        throw new Error('Name and ownerId are required');
+      }
+
+      if (path == 'financial-assistant') {
+        if (!payload.sheetId) {
+          throw new Error('SheetId is required');
+        }
+      }
+
+      const resp = await axios.post(`${api}/v1/${path}`, payload);
+
+      if (!(resp.status == 200 || resp.status == 201)) {
+        throw new Error(`ERROR: Sheet select req failed with status ${resp.status}`);
+      }
+
       const id = resp.data.id;
-      window.location.href = `/chat/${id}?u=${ownerId}`;
+      window.location.href = `/chat/${id}?u=${payload.ownerId}`;
       toggle();
+    } catch (e) {
+      console.log(`ERROR: Sheet select error: ${e}`);
     }
   };
 
-  const handleCheckboxChange = () => {
-    setChecked(!checked);
-  };
+  const chatOpts = [
+    {
+      title: 'Chat PDF',
+      description: `Chat capaz de analisar e estarir dados de PDFs formecidos pelo
+      usuario`,
+      ultimate: true,
+      handler() {
+        setChatType('pdf');
+      },
+    },
+    {
+      title: 'Chat GPT',
+      description: `Um chat assistente pronto para oferecer auxílio em qualquer
+      tópico.`,
+      ultimate: false,
+      handler() {
+        setChatType('normal');
+      },
+    },
+    {
+      title: 'Financial Assistant',
+      description: `Assistente financeiro capaz de analisar e gerar gráficos baseado
+      em planilhas do Financial Controller.`,
+      ultimate: true,
+      handler() {
+        setChatType('financial-assistant');
+      },
+    },
+  ];
 
-  return (
-    <>
-      <BaseModal toggle={toggle} handleSubmit={handleSubmit}>
-        <div className="flex flex-row w-full items-center justify-between mb-4">
-          <div
-            onClick={handleCheckboxChange}
-            className={
-              plan == 'ultimate'
-                ? `flex flex-col self-start justify-self-start ${checked ? 'bg-zinc-400' : 'bg-green-500'} rounded-2xl hover:cursor-pointer py-[0.5rem] px-[1.5rem]`
-                : 'hidden'
-            }>
-            <div className="font-bold">PDF</div>
-          </div>
-          <div className="w-full flex items-center justify-center">
-            <h2 className="text-lg font-bold mr-14">Configurar novo Chat</h2>
+  if (!chatType) {
+    return (
+      <BaseModal buttons={false} className={''} toggle={toggle} handleSubmit={() => {}}>
+        <div className={`${chatType == '' ? 'flex' : 'hidden'} flex-col w-full h-full`}>
+          <h1 className="font-bold text-lg">Escolha seu tipo de chat</h1>
+          <div className="p-2 w-full">
+            {chatOpts
+              .filter((opt) => {
+                if (plan == 'fcai-demo') {
+                  if (opt.title == 'Financial Assistant') {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }
+                if (!opt.ultimate) return true;
+
+                if (plan == 'ultimate') return true;
+
+                return false;
+              })
+              .map((opt) => (
+                <div
+                  key={opt.title}
+                  className="w-full h-full hover:cursor-pointer rounded-xl p-4 border-2 border-gray-700 hover:border-blue-700 mb-2"
+                  onClick={opt.handler}>
+                  <h1 className="font-bold text-2lg">{opt.title}</h1>
+                  <p className="text-justify">{opt.description}</p>
+                </div>
+              ))}
           </div>
         </div>
-        <input
-          type="text"
-          className="w-full rounded-md bg-gray-700 mb-4 text-white px-4 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
-          placeholder="Nome do Chat"
-          value={chatName}
-          onChange={(e) => setChatName(e.target.value)}
-        />
       </BaseModal>
-    </>
-  );
+    );
+  }
+
+  if (chatType == 'normal') {
+    return (
+      <>
+        <CreateNormalChat ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
+      </>
+    );
+  }
+
+  if (chatType == 'pdf') {
+    return (
+      <>
+        <CreatePdfChat ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
+      </>
+    );
+  }
+
+  if (chatType == 'financial-assistant') {
+    return (
+      <>
+        <CreateFinancialAssistant ownerId={ownerId} toggle={toggle} handleSubmit={handleSubmit} />
+      </>
+    );
+  }
 };
 
 export default CreateChatModal;

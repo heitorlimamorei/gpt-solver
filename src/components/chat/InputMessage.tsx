@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import useChatSettings from '@/hooks/useChatSettings';
+
 import Button from '../generic/Button';
 import Textarea from '../generic/Textarea';
 import { IconSend, IconUploadFile } from '../Icons';
@@ -14,6 +16,7 @@ export default function InputMessage(props: InputMessageProps) {
   const [inputValue, setInputValue] = useState('');
   const [isPdfOpen, setIsPdfOpen] = useState<boolean>(false);
   const [pdfText, setPdfText] = useState<string>('');
+  const { mode } = useChatSettings();
 
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -47,14 +50,13 @@ export default function InputMessage(props: InputMessageProps) {
         isOpen={isPdfOpen}
       />
       <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
-        <Button
-          style={
-            pdfText.length > 1
-              ? 'text-green-500'
-              : `${props.sysMessage == 'Olá, eu sou o GPT Solver, como posso ajudar?' ? 'hidden' : ''}`
-          }
-          icon={IconUploadFile()}
-          onClick={() => setIsPdfOpen(true)}></Button>
+        {mode == 'chatpdf' && (
+          <Button
+            style={pdfText.length > 1 ? 'text-green-500' : ''}
+            icon={IconUploadFile()}
+            onClick={() => setIsPdfOpen(true)}
+          />
+        )}
         <Textarea
           onKeyPress={handleKeyPress}
           value={inputValue}
