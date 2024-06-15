@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
-import { useFetchUserData } from '@/hooks/useFetchUserData';
-import useFetchUserFinanceData from '@/hooks/useFetchUserFinanceData';
 import { ISubscription } from '@/types/chat';
 import axios from 'axios';
 
@@ -30,8 +28,7 @@ interface ISubmitProps {
 
 const api = 'https://gpt-solver-backend.onrender.com';
 
-
-const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
+export default function CreateChatModal({ toggle, subscription }: IDarkModalProps) {
   const [chatType, setChatType] = useState<ChatType>('');
   const searchParams = useSearchParams();
 

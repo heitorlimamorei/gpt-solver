@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const api = 'https://fianancial-assistant-backend.onrender.com/api';
 
-
 export interface UserFinanceData {
   id: string;
   sheetIds: string[];
