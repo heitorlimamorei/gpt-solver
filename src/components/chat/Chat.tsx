@@ -13,7 +13,7 @@ interface IChatProps {
 
 export default function Chat(props: IChatProps) {
   return (
-    <ul className="flex flex-col md:items-center w-full h-full px-3 sm:px-20 md:px-72 overflow-y-scroll">
+    <ul className="flex flex-col items-center w-full h-full sm:px-20 lg:px-72 overflow-y-scroll">
       {props.messages.map((m, index) => (
         <ChatMessage key={index} content={m.content} role={m.role} />
       ))}

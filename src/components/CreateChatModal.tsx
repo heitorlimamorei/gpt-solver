@@ -28,7 +28,7 @@ interface ISubmitProps {
 
 const api = 'https://gpt-solver-backend.onrender.com';
 
-const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
+export default function CreateChatModal({ toggle, subscription }: IDarkModalProps) {
   const [chatType, setChatType] = useState<ChatType>('');
   const searchParams = useSearchParams();
 
@@ -154,6 +154,4 @@ const CreateChatModal = ({ toggle, subscription }: IDarkModalProps) => {
       </>
     );
   }
-};
-
-export default CreateChatModal;
+}
