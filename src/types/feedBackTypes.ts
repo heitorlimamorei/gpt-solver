@@ -13,6 +13,7 @@ export interface IFeedBackItemProps {
 
 export interface INewFeedBackProps {
   user_name: string;
+  email: string;
   user_url: string;
   stars: number;
   text: string;
@@ -26,6 +27,7 @@ export interface INewFeedBackProps {
 export interface surveyFeedBackSubmitProps {
   stars: number;
   text: string;
+  email: string;
   featuresImprovement: string;
   appHasBeenShared: boolean;
   continued_using: boolean;
