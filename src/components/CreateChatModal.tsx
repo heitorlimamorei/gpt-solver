@@ -68,8 +68,7 @@ export default function CreateChatModal({ toggle, subscription }: IDarkModalProp
   const chatOpts = [
     {
       title: 'Chat PDF',
-      description: `Chat capaz de analisar e estarir dados de PDFs formecidos pelo
-      usuario`,
+      description: `Chat capaz de analisar e extrair dados de PDFs fornecidos pelo usuário.`,
       ultimate: true,
       handler() {
         setChatType('pdf');
@@ -77,7 +76,7 @@ export default function CreateChatModal({ toggle, subscription }: IDarkModalProp
     },
     {
       title: 'Chat GPT',
-      description: `Um chat assistente pronto para oferecer auxílio em qualquer
+      description: `Um assistente pronto para oferecer auxílio em qualquer
       tópico.`,
       ultimate: false,
       handler() {
@@ -86,8 +85,8 @@ export default function CreateChatModal({ toggle, subscription }: IDarkModalProp
     },
     {
       title: 'Financial Assistant',
-      description: `Assistente financeiro capaz de analisar e gerar gráficos baseado
-      em planilhas do Financial Controller.`,
+      description: `Assistente financeiro capaz de analisar e gerar gráficos baseados
+      em suas planilhas do Financial Controller.`,
       ultimate: true,
       handler() {
         setChatType('financial-assistant');
