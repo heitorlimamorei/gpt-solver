@@ -68,7 +68,7 @@ export default function CreateChatModal({ toggle, subscription }: IDarkModalProp
   const chatOpts = [
     {
       title: 'Chat PDF',
-      description: `Chat capaz de analisar e extrair dados de PDFs fornecidos pelo usuário.`,
+      description: 'Chat capaz de analisar e extrair dados de PDFs fornecidos pelo usuário.',
       ultimate: true,
       handler() {
         setChatType('pdf');
