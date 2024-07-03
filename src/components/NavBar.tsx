@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { IChatListItem, ISubscription } from '@/types/chat';
 import axios from 'axios';
 
@@ -25,6 +27,7 @@ const api = 'https://gpt-solver-backend.onrender.com';
 export default function NavBar({ resp }: INavBarProps) {
   const { chats, currentChat, u, subscription } = resp;
 
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [displyedChats, setDisplayedChats] = useState<IChatListItem[]>(chats);
   const [navIsOpen, setNavIsOpen] = useState<boolean>(false);
@@ -79,6 +82,15 @@ export default function NavBar({ resp }: INavBarProps) {
           text-sm rounded-xl"
               icon={IconNewChat()}
               text="Novo Chat"
+            />
+            <Button
+              onClick={() => {
+                router.push('/survey');
+              }}
+              style="w-[90%] font-bold h-fit items-center justify-center border-2 py-2 mt-5 hover:bg-zinc-800 
+          text-sm rounded-xl"
+              icon={undefined}
+              text="Tarefa"
             />
 
             <label className="self-start ml-3 mt-5 text-sm text-gray-400 px-">Outros Chats</label>
