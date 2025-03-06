@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export type GenerationStates = 'standby' | 'writing' | 'done';
 
-const api = 'https://gpt-solver-backend.onrender.com';
+const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface IUseSenderMessageProps {
   chatId: string;

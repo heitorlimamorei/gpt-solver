@@ -12,7 +12,7 @@ export interface IUser {
   plan: string;
 }
 
-const api = 'https://gpt-solver-backend.onrender.com';
+const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export function useFetchUserData() {
   async function fetchByEmail(email: string): Promise<IUser> {

@@ -26,8 +26,6 @@ interface ISubmitProps {
   };
 }
 
-const api = 'https://gpt-solver-backend.onrender.com';
-
 export default function CreateChatModal({ toggle, subscription }: IDarkModalProps) {
   const [chatType, setChatType] = useState<ChatType>('');
   const searchParams = useSearchParams();
@@ -51,7 +49,7 @@ export default function CreateChatModal({ toggle, subscription }: IDarkModalProp
         }
       }
 
-      const resp = await axios.post(`${api}/v1/${path}`, payload);
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/${path}`, payload);
 
       if (!(resp.status == 200 || resp.status == 201)) {
         throw new Error(`ERROR: Sheet select req failed with status ${resp.status}`);

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import HandleSenderMessage, { GenerationStates } from '@/hooks/HandleSenderMessage';
 import useChat from '@/hooks/useChat';
 import useChatSettings from '@/hooks/useChatSettings';
+import { AImodels } from '@/types/aimodels';
 import { IMessageResp } from '@/types/chat';
 
 import Chat from './Chat';
@@ -19,6 +20,7 @@ interface IChatScreenProps {
 
 export default function ChatScreen({ resp }: IChatScreenProps) {
   const [generationStatus, setGenerationStatus] = useState<GenerationStates>('standby');
+  const [model, setModel] = useState<AImodels>('gpt-4o');
 
   const handleIsGenerationChange = (n: GenerationStates) => setGenerationStatus(n);
 
@@ -55,7 +57,7 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   const handleSubmit = async (message: string) => {
     if (shouldBlockDemo) return;
 
-    await addMessage(message, async (m) => {
+    await addMessage(message, model, async (m) => {
       await HandleSenderMessage({
         handleStatusChange: handleIsGenerationChange,
         message: m,
@@ -67,7 +69,12 @@ export default function ChatScreen({ resp }: IChatScreenProps) {
   return (
     <div className="flex flex-col w-full h-screen">
       <Chat messages={messages} />
-      <InputMessage sysMessage={messages[0].content} onSubmit={handleSubmit} />
+      <InputMessage
+        model={model}
+        onModelChange={(c) => setModel(c)}
+        sysMessage={messages[0].content}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }

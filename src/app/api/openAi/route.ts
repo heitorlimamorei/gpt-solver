@@ -1,3 +1,5 @@
+import modelsMap from '@/data/models';
+import { AImodels } from '@/types/aimodels';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import OpenAI from 'openai';
 
@@ -31,32 +33,26 @@ const checkConversation = (messages: IMessage[]): boolean => {
   return result;
 };
 
-const checkGPTModel = (model: string): boolean => {
-  if (model == 'gpt-4-turbo-preview' || model == 'gpt-4' || model == 'gpt-3.5-turbo-0125') {
-    return true;
-  }
-  return false;
-};
-
 export async function POST(request: Request) {
   try {
-    const { conversation, model, userId } = await request.json();
-
-    if (!checkGPTModel(model)) {
-      throw new Error('Error: Recived invalid GPT model');
-    }
+    const { conversation, model } = await request.json();
 
     if (conversation.length == 0) {
       throw new Error('Error: No conversation found');
     }
+
+    let temp = conversation.map((c: any) => ({
+      ...c,
+      role: c.role == 'system' ? 'user' : c.role,
+    }));
 
     if (!checkConversation(conversation)) {
       throw new Error('Error: Conversation invalid: (malformed body)');
     }
 
     const reponse = await openai.chat.completions.create({
-      model: 'gpt-4o-2024-05-13',
-      messages: conversation,
+      model: modelsMap[model as AImodels].model,
+      messages: model == 'o1' || model == 'o1 mini' ? temp : conversation,
       stream: true,
     });
 

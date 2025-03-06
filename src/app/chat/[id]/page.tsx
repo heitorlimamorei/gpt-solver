@@ -16,7 +16,7 @@ interface IServerChatProps {
   };
 }
 
-const api = 'https://gpt-solver-backend.onrender.com';
+const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function ServerChat(props: IServerChatProps) {
   if (!props.params.id) {

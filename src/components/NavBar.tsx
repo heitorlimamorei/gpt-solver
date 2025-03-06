@@ -22,7 +22,7 @@ interface INavBarProps {
   };
 }
 
-const api = 'https://gpt-solver-backend.onrender.com';
+const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function NavBar({ resp }: INavBarProps) {
   const { chats, currentChat, u, subscription } = resp;

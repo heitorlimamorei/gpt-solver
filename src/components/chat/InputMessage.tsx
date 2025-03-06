@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 
 import useChatSettings from '@/hooks/useChatSettings';
+import { AImodels } from '@/types/aimodels';
 
 import Button from '../generic/Button';
 import Textarea from '../generic/Textarea';
 import { IconSend, IconUploadFile } from '../Icons';
 import UploadPdfModal from '../UploadPdfModal';
+import ModelSelector from './ModelSelector';
 
 interface InputMessageProps {
   onSubmit: any;
   sysMessage: string;
+  model: AImodels;
+  onModelChange(c: AImodels): void;
 }
 
 export default function InputMessage(props: InputMessageProps) {
@@ -43,6 +47,8 @@ export default function InputMessage(props: InputMessageProps) {
     setInputValue(event.target.value);
   };
 
+  const availableModels: AImodels[] = ['gpt-4o', 'gpt-4o mini', 'o1', 'o1 mini'];
+
   return (
     <div className="w-full px-3 sm:px-20 lg:px-72">
       <UploadPdfModal
@@ -50,7 +56,12 @@ export default function InputMessage(props: InputMessageProps) {
         toggle={() => setIsPdfOpen((c) => !c)}
         isOpen={isPdfOpen}
       />
-      <div className=" flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+      <div className="flex flex-row items-center self-end mb-6 w-full rounded-2xl border-[1px] p-3 border-zinc-600">
+        <ModelSelector
+          models={availableModels}
+          selectedModel={props.model}
+          onSelect={props.onModelChange}
+        />
         {mode == 'chatpdf' && (
           <Button
             style={pdfText.length > 1 ? 'text-green-500' : ''}

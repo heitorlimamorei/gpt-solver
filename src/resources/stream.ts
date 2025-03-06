@@ -1,3 +1,5 @@
+import { AImodels } from '@/types/aimodels';
+
 interface IRequestMessage {
   role: string;
   content: string;
@@ -9,9 +11,10 @@ interface IChatStream {
   conversation: IRequestMessage[];
   handleChange(w: writterFunction): void;
   url: string;
+  model: AImodels;
 }
 
-export default async function ChatStream({ conversation, handleChange, url }: IChatStream) {
+export default async function ChatStream({ conversation, handleChange, url, model }: IChatStream) {
   const resp = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +22,7 @@ export default async function ChatStream({ conversation, handleChange, url }: IC
     method: 'POST',
     body: JSON.stringify({
       conversation: conversation,
-      model: 'gpt-4',
+      model: model,
     }),
   });
 

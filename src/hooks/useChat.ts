@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { GenerationStates } from '@/hooks/HandleSenderMessage';
 import ChatStream from '@/resources/stream';
+import { AImodels } from '@/types/aimodels';
 import { IMessage, IMessageResp } from '@/types/chat';
 import { firestoreTimestampToDate } from '@/utils/dateMethods';
 import _ from 'lodash';
@@ -10,7 +11,7 @@ type sF = (m: IMessage) => Promise<void>;
 
 interface IUseChatResp {
   messages: IMessage[];
-  addMessage(message: string, h: sF): Promise<void>;
+  addMessage(message: string, model: AImodels, h: sF): Promise<void>;
   addMessages(messages: IMessageResp[]): void;
   sortMessages(messages: IMessage[]): IMessage[];
 }
@@ -59,7 +60,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     });
   }
 
-  const sendToBff = async (message: IMessage) => {
+  const sendToBff = async (message: IMessage, model: AImodels) => {
     try {
       const conversation = prepareToOpenAi(sortMessages([...messages, message]));
 
@@ -71,8 +72,9 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
       await ChatStream({
         conversation,
+        model,
         handleChange: handleChunkChange,
-        url: 'https://gpt-solver-editor.vercel.app/api/openAi',
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/openAi`,
       });
 
       handler('done');
@@ -87,7 +89,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
     }
   };
 
-  const addMessage = async (message: string, h: sF): Promise<void> => {
+  const addMessage = async (message: string, model: AImodels, h: sF): Promise<void> => {
     handler('writing');
 
     const messageF = getNewMessage('user', message);
@@ -98,7 +100,7 @@ export default function useChat(handler: (n: GenerationStates) => void): IUseCha
 
     handler('done');
 
-    await Promise.all([h(messageF), sendToBff(messageF)]);
+    await Promise.all([h(messageF), sendToBff(messageF, model)]);
   };
 
   const sortMessages = (messages: IMessage[]) => {
